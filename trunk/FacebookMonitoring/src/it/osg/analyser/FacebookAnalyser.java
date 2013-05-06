@@ -1,9 +1,11 @@
 package it.osg.analyser;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
+import java.util.TimeZone;
 
 import it.osg.utils.JSONObjectUtil;
 
@@ -13,12 +15,12 @@ import org.json.simple.JSONValue;
 
 public class FacebookAnalyser {
 	
-	public static ArrayList<Hashtable<String, String>> likeTalkAnalysis(String jsonString) {
-		ArrayList<Hashtable<String, String>> result = new ArrayList<Hashtable<String, String>>();
+	public static ArrayList<Hashtable<String, Object>> likeTalkAnalysis(String jsonString) {
+		ArrayList<Hashtable<String, Object>> result = new ArrayList<Hashtable<String, Object>>();
 		Object objJson = JSONValue.parse(jsonString);
 		JSONObject json =(JSONObject) objJson;
 		
-		Hashtable<String, String> currRow = new Hashtable<String, String>();
+		Hashtable<String, Object> currRow = new Hashtable<String, Object>();
 		
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
@@ -28,16 +30,33 @@ public class FacebookAnalyser {
 		currRow.put("like_count", likeCount);
 		currRow.put("talking_about_count", talkingAboutCount);
 		
-		long unixTime = System.currentTimeMillis();
-		Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(unixTime);
-        Date date = cal.getTime();
-        String unixTimeString = String.valueOf(unixTime);
-		String simpleTimeString = date.toString();
-        currRow.put("timestamp", unixTimeString);
-        currRow.put("date", simpleTimeString);
+//		long unixTime = System.currentTimeMillis();
+//		TimeZone cestTZ= TimeZone.getTimeZone("CEST");
+//		Calendar cestCal= Calendar.getInstance(cestTZ);
+//		cestCal.setTimeInMillis(unixTime);
+//		
+//		SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+//		sdf.setTimeZone(cestTZ);
+//		Date cestDate= cestCal.getTime();
+//		sdf.format(cestDate);
+//		
+//		Calendar cal = Calendar.getInstance();
+//      cal.setTimeInMillis(unixTime);
+//      Date date = cal.getTime();
+//        long unixTimeCest = cestCal.getTimeInMillis();
+//		String simpleTimeString = sdf.format(cestDate);
         
-        System.out.println(unixTimeString + " " + simpleTimeString);
+		
+		Calendar cal= Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.add(Calendar.HOUR_OF_DAY, TimeZone.getTimeZone("CEST").getRawOffset());
+		SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Date cestDate= cal.getTime();
+		
+		currRow.put("timestamp", cal.getTimeInMillis());
+        currRow.put("date", cestDate);
+        
+        System.out.println(cal.getTimeInMillis() + " " + sdf.format(cestDate));
 		
         result.add(currRow);
 		
