@@ -27,16 +27,16 @@ public class MonitoringBallaroServlet extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
 		String jsonString = FacebookSourceGenerator.retrieveJson(url);
-		ArrayList<Hashtable<String, String>> analisi = FacebookAnalyser.likeTalkAnalysis(jsonString);
+		ArrayList<Hashtable<String, Object>> analisi = FacebookAnalyser.likeTalkAnalysis(jsonString);
 		
-		Iterator<Hashtable<String, String>> iter = analisi.iterator();
+		Iterator<Hashtable<String, Object>> iter = analisi.iterator();
 		while(iter.hasNext()){
 			Entity currEntity = new Entity("ballaro");
-			Hashtable<String, String> currRow = iter.next();
+			Hashtable<String, Object> currRow = iter.next();
 			Enumeration<String> enumer = currRow.keys();
 			while (enumer.hasMoreElements()){
 				String currKey = enumer.nextElement();
-				String currValue = currRow.get(currKey);
+				Object currValue = currRow.get(currKey);
 				currEntity.setProperty(currKey, currValue);
 				System.out.println(currKey + " " + currValue);
 			}
