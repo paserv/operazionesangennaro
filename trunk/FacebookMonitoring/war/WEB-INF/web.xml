@@ -9,26 +9,36 @@
 		<servlet-name>MonitoringServlet</servlet-name>
 		<url-pattern>/facebook/monitoring</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-        <servlet-name>MonitoringBallaroServlet</servlet-name>
-        <servlet-class>it.osg.servlet.MonitoringBallaroServlet</servlet-class>
-    </servlet>
+		<servlet-name>MonitoringBallaroServlet</servlet-name>
+		<servlet-class>it.osg.servlet.MonitoringBallaroServlet</servlet-class>
+	</servlet>
 
-    <servlet-mapping>
-        <servlet-name>MonitoringBallaroServlet</servlet-name>
-        <url-pattern>/facebook/monitoring/ballaro</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>RetrieveDataServlet</servlet-name>
-        <servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
-    </servlet>
+	<servlet-mapping>
+		<servlet-name>MonitoringBallaroServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/ballaro</url-pattern>
+	</servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>RetrieveDataServlet</servlet-name>
-        <url-pattern>/facebook/monitoring/data</url-pattern>
-    </servlet-mapping>
+	<servlet>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/data</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Bulk Upload</servlet-name>
+		<servlet-class>it.osg.servlet.BulkUploaderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Bulk Upload</servlet-name>
+		<url-pattern>/bulk/bulkupload</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
