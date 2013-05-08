@@ -27,25 +27,8 @@ public class FacebookAnalyser {
 		
 		System.out.println(likeCount + " " + talkingAboutCount);
 		
-		currRow.put("like_count", likeCount);
-		currRow.put("talking_about_count", talkingAboutCount);
-		
-//		long unixTime = System.currentTimeMillis();
-//		TimeZone cestTZ= TimeZone.getTimeZone("CEST");
-//		Calendar cestCal= Calendar.getInstance(cestTZ);
-//		cestCal.setTimeInMillis(unixTime);
-//		
-//		SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-//		sdf.setTimeZone(cestTZ);
-//		Date cestDate= cestCal.getTime();
-//		sdf.format(cestDate);
-//		
-//		Calendar cal = Calendar.getInstance();
-//      cal.setTimeInMillis(unixTime);
-//      Date date = cal.getTime();
-//        long unixTimeCest = cestCal.getTimeInMillis();
-//		String simpleTimeString = sdf.format(cestDate);
-        
+		currRow.put("like_count", Integer.parseInt(likeCount));
+		currRow.put("talking_about_count", Integer.parseInt(talkingAboutCount));
 		
 		Calendar cal= Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
@@ -56,7 +39,7 @@ public class FacebookAnalyser {
 		currRow.put("timestamp", cal.getTimeInMillis());
         currRow.put("date", cestDate);
         
-        System.out.println(cal.getTimeInMillis() + " " + sdf.format(cestDate));
+        //System.out.println(cal.getTimeInMillis() + " " + sdf.format(cestDate));
 		
         result.add(currRow);
 		
