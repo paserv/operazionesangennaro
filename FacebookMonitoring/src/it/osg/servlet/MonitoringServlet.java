@@ -3,16 +3,11 @@ package it.osg.servlet;
 import it.osg.analyser.FacebookAnalyser;
 import it.osg.datasource.FacebookSourceGenerator;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Properties;
-import java.util.Scanner;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings("serial")
 public class MonitoringServlet extends HttpServlet {
@@ -28,13 +25,12 @@ public class MonitoringServlet extends HttpServlet {
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
-		Scanner scan = new Scanner(new File("facebook_page.conf"));
-		while (scan.hasNext()) {
-			String currRowConf = scan.next();
-			String[] split = currRowConf.split(",");
-			String entityName = split[0];
-			String currUrl = split[1];
-			
+		Hashtable<String, String> conf = getConfPage("pages");
+		
+		Enumeration<String> en = conf.keys();
+		while (en.hasMoreElements()){
+			String entityName = en.nextElement();
+			String currUrl = conf.get(entityName);
 			
 			String jsonString = FacebookSourceGenerator.retrieveJson(currUrl);
 			ArrayList<Hashtable<String, Object>> analisi = FacebookAnalyser.likeTalkAnalysis(jsonString);
@@ -55,12 +51,26 @@ public class MonitoringServlet extends HttpServlet {
 			}
 		}
 		
-		
-		
-		
 	}
 	
 	
+	private Hashtable<String, String> getConfPage(String entityName) {
+		Hashtable<String, String> result = new Hashtable<String, String>();
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query(entityName);
+		PreparedQuery pq = datastore.prepare(q);
+		
+		for (Entity res : pq.asIterable()) {
+			  String id = res.getKey().getName();
+			  String url = (String) res.getProperty("url");
+			  
+			  result.put(id, url);
+			}
+		return result;
+		
+	}
+
+
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 		doGet(req, resp);

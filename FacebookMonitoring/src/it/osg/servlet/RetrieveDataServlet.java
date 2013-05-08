@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -44,14 +45,14 @@ public class RetrieveDataServlet extends HttpServlet {
 			PreparedQuery pq = datastore.prepare(q);
 			
 			for (Entity result : pq.asIterable()) {
-				  String date = (String) result.getProperty("date");
+				  Date date = (Date) result.getProperty("date");
 				  String like_count = (String) result.getProperty("like_count");
 				  String talking_about_count = (String) result.getProperty("talking_about_count");
-				  String timestamp = (String) result.getProperty("timestamp");
+				  long timestamp = (Long) result.getProperty("timestamp");
 
 				  out.println(entityName + "," + date + "," + like_count + "," + talking_about_count + "," + timestamp + "</br>");
 
-				  System.out.println(entityName + "," + date + "," + like_count + "," + talking_about_count + "," + timestamp);
+				  //System.out.println(entityName + "," + date + "," + like_count + "," + talking_about_count + "," + timestamp);
 				}
 			
 		}
