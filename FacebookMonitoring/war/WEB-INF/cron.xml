@@ -2,7 +2,7 @@
 <cronentries>
   <cron>
     <url>/facebook/monitoring/ballaro</url>
-    <description>Monitor Facebook Pages in facebook_page.conf every 30 minutes</description>
+    <description>Monitor Facebook Pages in table pages every X minutes</description>
     <schedule>every 5 minutes synchronized</schedule>
   </cron>
 </cronentries>
