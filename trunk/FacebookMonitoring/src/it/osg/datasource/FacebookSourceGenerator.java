@@ -23,7 +23,7 @@ public class FacebookSourceGenerator {
 			try {
 				BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 				jsonString = readAll(rd);
-				System.out.println(jsonString);
+				//System.out.println(jsonString);
 			} finally {
 				is.close();
 			}
