@@ -32,7 +32,7 @@ public class FacebookAnalyser {
 		
 		Calendar cal= Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
-		cal.add(Calendar.HOUR_OF_DAY, TimeZone.getTimeZone("CEST").getRawOffset());
+		cal.add(Calendar.HOUR_OF_DAY, 2);
 		SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Date cestDate= cal.getTime();
 		
