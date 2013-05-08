@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/facebook/monitoring/ballaro</url>
+    <url>/facebook/monitoring</url>
     <description>Monitor Facebook Pages in table pages every X minutes</description>
     <schedule>every 5 minutes synchronized</schedule>
   </cron>
