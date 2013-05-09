@@ -2,6 +2,7 @@ package it.osg.service.rest.impl;
 
 import java.util.ArrayList;
 
+import it.osg.service.converter.ConfConverter;
 import it.osg.service.model.Conf;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -28,8 +29,8 @@ public class ConfResource {
 	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Path("/conf")
-	public ArrayList<Conf> getConf() {
-		ArrayList<Conf> result = new ArrayList<Conf>();
+	public ArrayList<ConfConverter> getConf() {
+		ArrayList<ConfConverter> result = new ArrayList<ConfConverter>();
 
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -46,7 +47,7 @@ public class ConfResource {
 			conf.setUrl(url);
 			conf.setDatastoreId(key);
 			conf.setId(key.getName());
-			result.add(conf);
+			result.add(new ConfConverter(conf));
 			System.out.println(conf.toString());
 
 
