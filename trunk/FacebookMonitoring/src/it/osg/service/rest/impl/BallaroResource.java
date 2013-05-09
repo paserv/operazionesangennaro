@@ -1,9 +1,10 @@
 package it.osg.service.rest.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-import it.osg.service.converter.ConfConverter;
-import it.osg.service.model.Conf;
+import it.osg.service.converter.BallaroDataConverter;
+import it.osg.service.model.BallaroData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -21,34 +22,40 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
 
-@Path("/config/")
-public class ConfResource {
+@Path("/resource/")
+public class BallaroResource {
 
-	private static String conf_tablename = "pages";
+	private static String ballaro_tablename = "ballaro";
 	
 	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	@Path("/conf")
-	public ArrayList<ConfConverter> getConf() {
-		ArrayList<ConfConverter> result = new ArrayList<ConfConverter>();
+	@Path("/ballaro")
+	public ArrayList<BallaroDataConverter> getConf() {
+		ArrayList<BallaroDataConverter> result = new ArrayList<BallaroDataConverter>();
 
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query(conf_tablename);
+		Query q = new Query(ballaro_tablename);
 
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
 
 		for (Entity ent : pq.asIterable()) {
-			String url = (String) ent.getProperty("url");
-
+			Date date = (Date) ent.getProperty("date");
+			String likeCount = (String) ent.getProperty("like_count");
+			String talkingAboutCount = (String) ent.getProperty("talking_about_count");
+			long timestamp = (Long) ent.getProperty("timestamp");
 			Key key = ent.getKey();
-			Conf conf = new Conf();
-			conf.setUrl(url);
-			conf.setDatastoreId(key);
-			conf.setId(key.getName());
-			result.add(new ConfConverter(conf));
-			System.out.println(conf.toString());
+			
+			BallaroData curr = new BallaroData();
+			curr.setDate(date);
+			curr.setId(key.getName());
+			curr.setDatastoreId(key);
+			curr.setLikeCount(likeCount);
+			curr.setTalkingAboutCount(talkingAboutCount);
+			curr.setTimestamp(timestamp);
+			result.add(new BallaroDataConverter(curr));
+			System.out.println(curr.toString());
 
 
 		}
