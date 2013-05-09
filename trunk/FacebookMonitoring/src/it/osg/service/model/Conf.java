@@ -10,7 +10,6 @@ public class Conf {
 	private String url;
 
 
-
 	public Conf() {
 
 	}
@@ -18,7 +17,6 @@ public class Conf {
 	public Conf(Key datastoreId, String id, String domandaDeploy) {
 
 	}
-
 
 
 	public Key getDatastoreId() {
