@@ -41,15 +41,13 @@ public class BallaroResource {
 
 		for (Entity ent : pq.asIterable()) {
 			Date date = (Date) ent.getProperty("date");
-			String likeCount = "";
-			if (ent.getProperty("like_count") instanceof String) {
-				likeCount = (String) ent.getProperty("like_count");
-			}
+			Long likeCount = (Long) ent.getProperty("like_count");
+//			String likeCount = "";
+//			if (ent.getProperty("like_count") instanceof String) {
+//				likeCount = (String) ent.getProperty("like_count");
+//			}
 			
-			String talkingAboutCount = "";
-			if (ent.getProperty("talking_about_count") instanceof String) {
-				talkingAboutCount = (String) ent.getProperty("talking_about_count");
-			}
+			Long talkingAboutCount = (Long) ent.getProperty("talking_about_count");
 			long timestamp = (Long) ent.getProperty("timestamp");
 			Key key = ent.getKey();
 			
