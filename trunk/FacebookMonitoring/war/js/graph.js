@@ -24,25 +24,23 @@ function search(searchKey) {
 }
 
 function findAll() {
-	alert('findAll');
-	console.log('findAll');
 	$.ajax({
 		type: 'GET',
 		url: rootURL,
 		dataType: "json", // data type of response
-		success: renderlist
+		success: function(data) {
+            renderList(data);
+        }
 	});
 }
 
 
 function renderList(data) {
 	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
-	alert('renderList');
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
 	$('#searchList li').remove();
 	$.each(list, function(index, data) {
-		alert(data);
-		$('#searchList').append('<li><a href="#" data-identity="' + data.id + '">'+data.name+'</a></li>');
+		$('#searchList').append('<li>' + data.ballaro.likeCount +'</li>');
 	});
 }
