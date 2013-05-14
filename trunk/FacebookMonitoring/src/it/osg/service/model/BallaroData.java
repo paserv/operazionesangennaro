@@ -2,8 +2,11 @@ package it.osg.service.model;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.google.appengine.api.datastore.Key;
 
+@XmlRootElement(name = "ballaro")
 public class BallaroData {
 
 	private Key datastoreId;
