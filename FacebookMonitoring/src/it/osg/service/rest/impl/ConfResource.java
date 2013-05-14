@@ -56,19 +56,19 @@ public class ConfResource {
 		return result;
 	}
 
-	@POST
-	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	@Path("/polldomanda")
-	public Response putDomanda(@FormParam("id") int id, @FormParam("descrizione") String descr, @FormParam("costs") boolean costs) {
-		Entity currEntity = new Entity("");
-		currEntity.setProperty("id", id);
-		currEntity.setProperty("descrizione", descr);
-		currEntity.setProperty("costs", costs);
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(currEntity);
-		return Response.status(201).entity(descr).build();
-
-	}
+//	@POST
+//	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+//	@Path("/polldomanda")
+//	public Response putDomanda(@FormParam("id") int id, @FormParam("descrizione") String descr, @FormParam("costs") boolean costs) {
+//		Entity currEntity = new Entity("");
+//		currEntity.setProperty("id", id);
+//		currEntity.setProperty("descrizione", descr);
+//		currEntity.setProperty("costs", costs);
+//
+//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//		datastore.put(currEntity);
+//		return Response.status(201).entity(descr).build();
+//
+//	}
 
 }

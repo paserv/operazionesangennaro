@@ -3,7 +3,6 @@ package it.osg.service.rest.impl;
 import java.util.ArrayList;
 import java.util.Date;
 
-import it.osg.service.converter.BallaroDataConverter;
 import it.osg.service.model.BallaroData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -30,8 +29,8 @@ public class BallaroResource {
 	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Path("/ballaro")
-	public ArrayList<BallaroDataConverter> getConf() {
-		ArrayList<BallaroDataConverter> result = new ArrayList<BallaroDataConverter>();
+	public ArrayList<BallaroData> getBallaroData() {
+		ArrayList<BallaroData> result = new ArrayList<BallaroData>();
 
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -61,7 +60,7 @@ public class BallaroResource {
 			curr.setLikeCount(likeCount);
 			curr.setTalkingAboutCount(talkingAboutCount);
 			curr.setTimestamp(timestamp);
-			result.add(new BallaroDataConverter(curr));
+			result.add(curr);
 			System.out.println(curr.toString());
 
 
