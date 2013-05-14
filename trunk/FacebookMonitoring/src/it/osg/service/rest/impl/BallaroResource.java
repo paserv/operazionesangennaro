@@ -42,8 +42,15 @@ public class BallaroResource {
 
 		for (Entity ent : pq.asIterable()) {
 			Date date = (Date) ent.getProperty("date");
-			String likeCount = (String) ent.getProperty("like_count");
-			String talkingAboutCount = (String) ent.getProperty("talking_about_count");
+			String likeCount = "";
+			if (ent.getProperty("like_count") instanceof String) {
+				likeCount = (String) ent.getProperty("like_count");
+			}
+			
+			String talkingAboutCount = "";
+			if (ent.getProperty("talking_about_count") instanceof String) {
+				talkingAboutCount = (String) ent.getProperty("talking_about_count");
+			}
 			long timestamp = (Long) ent.getProperty("timestamp");
 			Key key = ent.getKey();
 			
@@ -63,19 +70,19 @@ public class BallaroResource {
 		return result;
 	}
 
-	@POST
-	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	@Path("/polldomanda")
-	public Response putDomanda(@FormParam("id") int id, @FormParam("descrizione") String descr, @FormParam("costs") boolean costs) {
-		Entity currEntity = new Entity("");
-		currEntity.setProperty("id", id);
-		currEntity.setProperty("descrizione", descr);
-		currEntity.setProperty("costs", costs);
-
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		datastore.put(currEntity);
-		return Response.status(201).entity(descr).build();
-
-	}
+//	@POST
+//	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+//	@Path("/polldomanda")
+//	public Response putDomanda(@FormParam("id") int id, @FormParam("descrizione") String descr, @FormParam("costs") boolean costs) {
+//		Entity currEntity = new Entity("");
+//		currEntity.setProperty("id", id);
+//		currEntity.setProperty("descrizione", descr);
+//		currEntity.setProperty("costs", costs);
+//
+//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//		datastore.put(currEntity);
+//		return Response.status(201).entity(descr).build();
+//
+//	}
 
 }
