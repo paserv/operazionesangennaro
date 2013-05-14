@@ -13,8 +13,8 @@ public class BallaroData {
 
 	private String id;
 	private Date date;
-	private String likeCount;
-	private String talkingAboutCount;
+	private long likeCount;
+	private long talkingAboutCount;
 	private long timestamp;
 
 
@@ -50,26 +50,25 @@ public class BallaroData {
 		this.date = date;
 	}
 
-
 	
 
-
-	public String getLikeCount() {
+	
+	public long getLikeCount() {
 		return likeCount;
 	}
 
 
-	public void setLikeCount(String likeCount) {
+	public void setLikeCount(long likeCount) {
 		this.likeCount = likeCount;
 	}
 
 
-	public String getTalkingAboutCount() {
+	public long getTalkingAboutCount() {
 		return talkingAboutCount;
 	}
 
 
-	public void setTalkingAboutCount(String talkingAboutCount) {
+	public void setTalkingAboutCount(long talkingAboutCount) {
 		this.talkingAboutCount = talkingAboutCount;
 	}
 
