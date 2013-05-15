@@ -1,5 +1,6 @@
 // The root URL for the RESTful services
 var rootURL = "http://localhost:8888/rest/resource/";
+//var rootURL = "http://01-monitorfacebookpages.appspot.com/rest/resource/";
 
 //Register listeners
 $('#btnSearch').click(function() {
