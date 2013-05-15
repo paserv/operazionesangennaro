@@ -2,6 +2,8 @@ package it.osg.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +55,13 @@ public class BulkUploaderServlet extends HttpServlet {
 					System.out.println("BOOLEANO");
 				}
 				
+//				try {
+//					value = Date.parse(currRow[i]);
+//					isString = false;
+//					System.out.println("Date");
+//				} catch (Exception e) {
+//					
+//				}
 								
 				if(isString) {
 					currEntity.setProperty(headers[i], currRow[i]);
