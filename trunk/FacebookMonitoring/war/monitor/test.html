@@ -9,8 +9,14 @@
 
 
 <div class="header">
-	<input type="text" id="searchKey"/>
-	<button id="btnSearch">Search</button>
+	<label for="graphType">Graph Type</label>
+	<select id="graphType">
+		<option value="line">line</option>
+  		<option value="bar">bar</option>
+	</select>
+	<label for="transmission">Transmission</label>
+	<input type="text" id="transmission"/>
+	<button id="btnSearch">Get Likes</button>
 </div>
 
 
@@ -29,36 +35,6 @@
 <script src="../js/jquery-1.7.1.min.js"></script>
 <script src="../js/graph.js"></script>
 <script src="../js/highcharts.js"></script>
-
-<script>
-$(function () { 
-    $('#container').highcharts({
-        chart: {
-            type: 'line'
-        },
-        title: {
-            text: 'Fruit Consumption'
-        },
-        xAxis: {
-            categories: ['Apples', 'Bananas', 'Oranges']
-        },
-        yAxis: {
-            title: {
-                text: 'Fruit eaten'
-            }
-        },
-        series: [{
-            name: 'Jane',
-            data: [1, 0, 4]
-        }, {
-            name: 'John',
-            data: [5, 7, 3]
-        }]
-    });
-});
-</script>
-
-
 
 </body>
 </html>
