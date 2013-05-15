@@ -1,6 +1,8 @@
 package it.osg.service.rest.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import it.osg.service.model.BallaroData;
@@ -19,6 +21,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 
 @Path("/resource/")
@@ -34,13 +37,25 @@ public class BallaroResource {
 
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query(ballaro_tablename);
+		Query q = new Query(ballaro_tablename).addSort("timestamp", SortDirection.ASCENDING);;
 
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
 
 		for (Entity ent : pq.asIterable()) {
-			Date date = (Date) ent.getProperty("date");
+			
+			Date date = new Date();
+			
+			Object dt = ent.getProperty("date");
+			if (dt instanceof Date) {
+				date = (Date) dt;
+			} else {
+				Calendar cal= Calendar.getInstance();
+				cal.setTimeInMillis(System.currentTimeMillis());
+				cal.add(Calendar.HOUR_OF_DAY, 2);
+				SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				Date cestDate= cal.getTime();
+			}
 			
 			long likeCount = 0L;
 			
