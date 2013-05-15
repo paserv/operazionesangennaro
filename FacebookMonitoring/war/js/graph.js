@@ -40,7 +40,9 @@ function renderList(data) {
 	var list = data == null ? [] : (data instanceof Array ? data : [data]);
 
 	$('#searchList li').remove();
-	$.each(list, function(index, data) {
-		$('#searchList').append('<li>' + data.ballaro.likeCount +'</li>');
+	$.each(data, function() {
+		$.each(this, function(key, value) {
+			$('#searchList').append('<li>' + this.likeCount +'</li>');
+		});
 	});
 }
