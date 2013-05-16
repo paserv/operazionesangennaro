@@ -42,7 +42,7 @@ public class BallaroResource {
 
 	}
 
-	@GET
+	@POST
 	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
 	@Path("/ballarotimeinterval")
