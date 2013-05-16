@@ -13,6 +13,7 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,11 +43,10 @@ public class BallaroResource {
 
 	}
 
-	@POST
-	@Consumes({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
+	@GET
 	@Produces({MediaType.APPLICATION_XML,MediaType.APPLICATION_JSON})
-	@Path("/ballarotimeinterval")
-	public ArrayList<TransmissionData> getBallaroDataFilter(@FormParam("from") String from, @FormParam("to") String to) {
+	@Path("/ballarotimeinterval/{from}/{to}")
+	public ArrayList<TransmissionData> getBallaroDataFilter(@PathParam("from") String from, @PathParam("to") String to) {
 		ArrayList<TransmissionData> result = new ArrayList<TransmissionData>();
 		
 		try {
