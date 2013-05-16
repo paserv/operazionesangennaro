@@ -19,16 +19,16 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class DataStoreAO {
 
-	public static ArrayList<TransmissionData> getTransmissionData(String transmission, long from, long to) {
+	public static ArrayList<TransmissionData> getTransmissionData(String transmission, Date from, Date to) {
 		ArrayList<TransmissionData> result = new ArrayList<TransmissionData>();
 
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
-		Filter fromFilter = new FilterPredicate("timestamp", FilterOperator.GREATER_THAN_OR_EQUAL, 1368047700600L);
-		Filter toFilter = new FilterPredicate("timestamp", FilterOperator.LESS_THAN_OR_EQUAL, 1368045900649L);
+		Filter fromFilter = new FilterPredicate("date", FilterOperator.GREATER_THAN_OR_EQUAL, from);
+		Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, to);
 		Filter fromToFilter = CompositeFilterOperator.and(fromFilter, toFilter);
-		Query q = new Query(transmission).setFilter(fromToFilter);
+		Query q = new Query(transmission).setFilter(fromToFilter).addSort("date", SortDirection.ASCENDING);
 		
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
