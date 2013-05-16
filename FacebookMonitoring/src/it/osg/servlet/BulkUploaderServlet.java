@@ -1,5 +1,7 @@
 package it.osg.servlet;
 
+import it.osg.utils.DateUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,9 +44,9 @@ public class BulkUploaderServlet extends HttpServlet {
 				Object value = null;
 				boolean isString = true;
 				try {
-					value = Integer.parseInt(currRow[i]);
+					value = Long.parseLong(currRow[i]);
 					isString = false;
-					System.out.println("INTERO");
+					System.out.println("LONG");
 				} catch (Exception e) {
 					
 				}
@@ -55,13 +57,13 @@ public class BulkUploaderServlet extends HttpServlet {
 					System.out.println("BOOLEANO");
 				}
 				
-//				try {
-//					value = Date.parse(currRow[i]);
-//					isString = false;
-//					System.out.println("Date");
-//				} catch (Exception e) {
-//					
-//				}
+				try {
+					value = DateUtils.parseDateAndTime(currRow[i]);
+					isString = false;
+					System.out.println("DATE");
+				} catch (Exception e) {
+					
+				}
 								
 				if(isString) {
 					currEntity.setProperty(headers[i], currRow[i]);
