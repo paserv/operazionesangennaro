@@ -18,33 +18,32 @@ public class TestRESTClient {
 	public static void main(String[] args) {
 
 		//TEST POST
-//		Form form = new Form();
-//		form.add("id", 4);
-//		form.add("descrizione", "DKSJKLDJS");
-//		form.add("costs", true);
-//		
-//		Client clientpost = Client.create();
-//		WebResource resource = clientpost.resource("http://localhost:8080/rest/resource/polldomanda");
-//		
-//		ClientResponse response = resource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, form);
-//
-//		if (response.getClientResponseStatus().getFamily() == Family.SUCCESSFUL) {
-//			System.out.println("Success! " + response.getStatus());
-//			System.out.println(response.getEntity(String.class));
-//		} else {
-//			System.out.println("ERROR! " + response.getStatus());    
-//			System.out.println(response.getEntity(String.class));
-//		}
+		Form form = new Form();
+		form.add("from", "15-05-2013 10:30:00");
+		form.add("to", "15-05-2013 11:30:00");
+		
+		Client clientpost = Client.create();
+		WebResource resource = clientpost.resource("http://localhost:8888/rest/resource/ballarotimeinterval");
+		
+		ClientResponse response = resource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, form);
+
+		if (response.getClientResponseStatus().getFamily() == Family.SUCCESSFUL) {
+			System.out.println("Success! " + response.getStatus());
+			System.out.println(response.getEntity(String.class));
+		} else {
+			System.out.println("ERROR! " + response.getStatus());    
+			System.out.println(response.getEntity(String.class));
+		}
 		
 		        
 //		ClientConfig config = new DefaultClientConfig();
 //		Client clientget = Client.create(config);
-
-		Client clientget = createClient();
-		
-		WebResource service = clientget.resource("http://localhost:8080/");
-		// Get XML
-		System.out.println(service.path("rest").path("resource").path("domande").accept(MediaType.APPLICATION_XML).get(String.class));
+//
+//		Client clientget = createClient();
+//		
+//		WebResource service = clientget.resource("http://localhost:8080/");
+//		// Get XML
+//		System.out.println(service.path("rest").path("resource").path("domande").accept(MediaType.APPLICATION_XML).get(String.class));
 		
 	}
         
