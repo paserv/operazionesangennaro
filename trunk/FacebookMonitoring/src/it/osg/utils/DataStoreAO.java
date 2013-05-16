@@ -10,6 +10,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -23,10 +25,10 @@ public class DataStoreAO {
 		// Get the Datastore Service
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
-		Filter fromFilter = new FilterPredicate("timestamp", FilterOperator.GREATER_THAN_OR_EQUAL, from);
-		Filter toFilter = new FilterPredicate("timestamp", FilterOperator.LESS_THAN_OR_EQUAL, to);
-		
-		Query q = new Query(transmission).addSort("timestamp", SortDirection.ASCENDING);
+		Filter fromFilter = new FilterPredicate("timestamp", FilterOperator.GREATER_THAN_OR_EQUAL, 1368047700600L);
+		Filter toFilter = new FilterPredicate("timestamp", FilterOperator.LESS_THAN_OR_EQUAL, 1368045900649L);
+		Filter fromToFilter = CompositeFilterOperator.and(fromFilter, toFilter);
+		Query q = new Query(transmission).setFilter(fromToFilter);
 		
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
