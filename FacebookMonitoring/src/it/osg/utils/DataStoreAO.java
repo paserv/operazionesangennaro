@@ -10,7 +10,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -29,6 +28,7 @@ public class DataStoreAO {
 		Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, to);
 		Filter fromToFilter = CompositeFilterOperator.and(fromFilter, toFilter);
 		Query q = new Query(transmission).setFilter(fromToFilter).addSort("date", SortDirection.ASCENDING);
+		//Query q = new Query(transmission).addSort("date", SortDirection.ASCENDING);
 		
 		// Use PreparedQuery interface to retrieve results
 		PreparedQuery pq = datastore.prepare(q);
