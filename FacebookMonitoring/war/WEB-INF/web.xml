@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<!-- Servlets -->
+	
+	
+	<!-- MONITORING -->
 	<servlet>
 		<servlet-name>MonitoringServlet</servlet-name>
 		<servlet-class>it.osg.servlet.MonitoringServlet</servlet-class>
@@ -9,16 +12,33 @@
 		<servlet-name>MonitoringServlet</servlet-name>
 		<url-pattern>/facebook/monitoring</url-pattern>
 	</servlet-mapping>
+    <!-- FINE MONITORING -->
 
-	<servlet>
-		<servlet-name>RetrieveDataServlet</servlet-name>
-		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
-	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>RetrieveDataServlet</servlet-name>
-		<url-pattern>/facebook/monitoring/data</url-pattern>
-	</servlet-mapping>
+
+<!-- CONF -->
+    <servlet>
+        <servlet-name>Conf Time Likes Servlet</servlet-name>
+        <servlet-class>it.osg.servlet.conf.ConfTimeLikesServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Conf Time Likes Servlet</servlet-name>
+        <url-pattern>/conf/conftimelikes</url-pattern>
+    </servlet-mapping>
+<!-- FINE CONF -->
+
+
+<!-- VARIE -->
+    <servlet>
+        <servlet-name>RetrieveDataServlet</servlet-name>
+        <servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RetrieveDataServlet</servlet-name>
+        <url-pattern>/facebook/monitoring/data</url-pattern>
+    </servlet-mapping>
 
 	<servlet>
 		<servlet-name>Bulk Upload</servlet-name>
@@ -39,8 +59,11 @@
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
+<!-- FINE VARIE -->
 
 
+
+<!-- JERSEY -->
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -66,6 +89,9 @@
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
+<!-- FINE JERSEY -->
+
+
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
