@@ -3,7 +3,6 @@
 	<name>FacebookMonitoring</name>
 	<comment></comment>
 	<projects>
-		<project>PipelineEngine</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
