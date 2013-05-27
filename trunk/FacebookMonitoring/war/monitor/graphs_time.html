@@ -1,27 +1,33 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Test REST Ajax</title>
-<link rel="stylesheet" href="../css/styles.css" />
+<title>Time Graphs</title>
+<link rel="stylesheet" href="../css/styles_time.css" />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" href="../css/jquery-ui-timepicker-addon.css" />
 </head>
 <body>
 
 <select id="local">
-		<option value="local">local</option>
-		<option value="notlocal">notlocal</option>
+		<option value="notlocal">online</option>
+		<option value="local">debug</option>
 </select>
+
+
+
+
+
+<div class="topArea">
 
 <div class="header">
 	Graph Type: 
 	<select id="graphType">
 		<option value="line">line</option>
-  		<option value="bar">bar</option>
 	</select>
 	Transmission: 
 	<select id="transmission">
 		<option value="ballaro">ballaro</option>
+		<option value="che_tempo_che_fa">ctcf</option>
 	</select>
 	Monitored Entity: 
 	<select id="monitoredEntity">
@@ -35,28 +41,19 @@
 	<button id="btnSearch">Get Likes</button>
 </div>
 
-
-
-<div class="leftArea">
+<!-- 
 <ul id="searchList"></ul>
 </div>
-
+ -->
 
 <div class="mainArea">
 	<div id="container" style="width:100%; height:400px;"></div>
 </div>
 
-<!-- 
-<div class="rightArea">
-</div>
- -->
 
 <script type="text/javascript" src="../js/jquery-2.0.0.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1.10.3.js"></script>
-<script type="text/javascript" src="../js/graph.js"></script>
-<!-- 
-<script type="text/javascript" src="../js/highcharts.js"></script>
- -->
+<script type="text/javascript" src="../js/graph_time.js"></script>
 <script type="text/javascript" src="../js/highstock.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-timepicker-addon.js"></script>
 
