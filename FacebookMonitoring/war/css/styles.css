@@ -10,11 +10,10 @@
 .leftArea {
 	position: absolute;
 	left: 10px;
-	top: 110px;
+	top: 50px;
 	bottom: 20px;
 	width: 260px;
 	border:solid 1px #CCCCCC;
-	overflow-y: scroll;
 }
 
 .mainArea {
