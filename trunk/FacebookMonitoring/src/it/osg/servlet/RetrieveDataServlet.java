@@ -26,6 +26,7 @@ public class RetrieveDataServlet extends HttpServlet {
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+		//aggiustare questo pezzotto
 		Scanner scan = new Scanner(new File("facebook_page.conf"));
 		while (scan.hasNext()) {
 			String currRowConf = scan.next();
