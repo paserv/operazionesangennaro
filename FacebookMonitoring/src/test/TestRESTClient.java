@@ -15,15 +15,17 @@ public class TestRESTClient {
 
 		//TEST POST
 		Form form = new Form();
-		form.add("from", "15-05-2013 10:30:00");
-		form.add("to", "15-05-2013 11:30:00");
+		form.add("from", "15-08-2013 10:30:00");
+		form.add("to", "15-09-2013 11:30:00");
 		
 		Client clientpost = Client.create();
-		WebResource resource = clientpost.resource("http://localhost:8888/rest/resource/ballarotimeinterval").path("15-05-2013 10:30:00").path("15-05-2013 11:30:00");
+		//WebResource resource = clientpost.resource("http://localhost:8888/rest/resource/ballarotimeinterval").path("15-05-2013 10:30:00").path("15-05-2013 11:30:00");
+		WebResource resource = clientpost.resource("http://localhost:8888/rest/resource/likes/ballaro");
 		
-		//ClientResponse response = resource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, form);
+		
+		ClientResponse response = resource.type(MediaType.APPLICATION_JSON).post(ClientResponse.class, form);
 
-		ClientResponse response = resource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		//ClientResponse response = resource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
 		
 		if (response.getClientResponseStatus().getFamily() == Family.SUCCESSFUL) {
