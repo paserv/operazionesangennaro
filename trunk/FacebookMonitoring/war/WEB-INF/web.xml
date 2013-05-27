@@ -11,16 +11,6 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>MonitoringBallaroServlet</servlet-name>
-		<servlet-class>it.osg.servlet.MonitoringBallaroServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>MonitoringBallaroServlet</servlet-name>
-		<url-pattern>/facebook/monitoring/ballaro</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
 	</servlet>
@@ -39,6 +29,16 @@
 		<servlet-name>Bulk Upload</servlet-name>
 		<url-pattern>/bulk/bulkupload</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Test Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.TestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Test Servlet</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
 
 
 	<servlet>
@@ -48,14 +48,20 @@
 			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<param-value>it.osg.service.rest.impl</param-value>
 		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+    		<param-value>it.osg.security.ResponseCorsFilter</param-value>
+    	</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-
+	
+	<!-- 
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/resources/*</url-pattern>
 	</servlet-mapping>
-
+ 	-->
+	
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
