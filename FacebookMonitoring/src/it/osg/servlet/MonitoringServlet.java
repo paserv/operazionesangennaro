@@ -1,7 +1,7 @@
 package it.osg.servlet;
 
-import it.osg.analyser.FacebookAnalyser;
-import it.osg.datasource.FacebookSourceGenerator;
+import it.osg.datapicker.FacebookDataPicker;
+import it.osg.utils.JSONObjectUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ public class MonitoringServlet extends HttpServlet {
 			String entityName = en.nextElement();
 			String currUrl = conf.get(entityName);
 			
-			String jsonString = FacebookSourceGenerator.retrieveJson(currUrl);
-			ArrayList<Hashtable<String, Object>> analisi = FacebookAnalyser.likeTalkAnalysis(jsonString);
+			String jsonString = JSONObjectUtil.retrieveJson(currUrl);
+			ArrayList<Hashtable<String, Object>> analisi = FacebookDataPicker.likeTalkAnalysis(jsonString);
 			
 			Iterator<Hashtable<String, Object>> iter = analisi.iterator();
 			while(iter.hasNext()){
