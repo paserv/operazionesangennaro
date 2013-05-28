@@ -78,9 +78,9 @@ public class WordFrequencyCalculator extends SourceGenerator {
 			e.printStackTrace();
 		}
 
-		if (result.size() > 10) {
+		if (result.size() > limit) {
 			ArrayList<Graph> subList = new ArrayList<Graph>();
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < limit; i++) {
 				Graph currGraph = result.get(i);
 				subList.add(currGraph);
 			}
