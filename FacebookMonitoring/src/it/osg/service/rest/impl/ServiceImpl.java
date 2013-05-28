@@ -32,10 +32,10 @@ public class ServiceImpl extends Service {
 	
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	@Path("data/wordfrequency/{transmission}/{from}/{to}")
-	public Response getWordFrequencyCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
+	@Path("data/wordfrequency/{transmission}/{from}/{to}/{limit}")
+	public Response getWordFrequencyCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to, @PathParam("limit") String limit) {
 		
-		return Service.getGraphData("it.osg.datasource.facebook.data.WordFrequencyCalculator", new Object[]{transmission, from, to}, "DATA");
+		return Service.getGraphData("it.osg.datasource.facebook.data.WordFrequencyCalculator", new Object[]{transmission, from, to, limit}, "DATA");
 
 	}
 	
