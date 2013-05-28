@@ -34,8 +34,12 @@ public class PipelineEngine {
 	}
 	
 	
-	public ArrayList<String> run(ArrayList<PipeBlock> blocks) {
-		ArrayList<String> output = new ArrayList<String>();
+	public ArrayList<String> run(ArrayList<PipeBlock> blocks, ArrayList<String> input) {
+		ArrayList<String> output = new ArrayList<>();
+		if (input != null) {
+			output = input;
+		}
+		
 		ArrayList<String> temp = new ArrayList<String>();
 				
 		int size = blocks.size();
