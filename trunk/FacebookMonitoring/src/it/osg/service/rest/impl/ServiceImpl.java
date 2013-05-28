@@ -17,7 +17,7 @@ public class ServiceImpl extends Service {
 	@Path("time/likes/{transmission}/{from}/{to}")
 	public Response getLikesCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
 
-		return Service.getGraphData("it.osg.datasource.FacebookLikeTime", new Object[]{transmission, from, to, "date", "like_count"}, "DATA");
+		return Service.getGraphData("it.osg.datasource.facebook.time.Like", new Object[]{transmission, from, to, "date", "like_count"}, "TIME");
 
 	}
 
@@ -26,7 +26,16 @@ public class ServiceImpl extends Service {
 	@Path("time/commentcount/{transmission}/{from}/{to}")
 	public Response getCommentCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
 		
-		return Service.getGraphData("it.osg.datasource.FacebookCommentTime", new Object[]{transmission, from, to}, "DATA");
+		return Service.getGraphData("it.osg.datasource.facebook.time.Comment", new Object[]{transmission, from, to}, "TIME");
+
+	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	@Path("data/wordfrequency/{transmission}/{from}/{to}")
+	public Response getWordFrequencyCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
+		
+		return Service.getGraphData("it.osg.datasource.facebook.data.WordFrequencyCalculator", new Object[]{transmission, from, to}, "DATA");
 
 	}
 	
