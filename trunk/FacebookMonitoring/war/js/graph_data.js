@@ -39,7 +39,7 @@ function renderAll() {
 function renderTransmission() {
 	$.ajax({
 		type: 'GET',
-		url: rootURL + "data/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val(),
+		url: rootURL + "data/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val() + "/" + $('#limit').val(),
 		dataType: "json", // data type of response
 		//provare success: return data
 		success: function(data) {
