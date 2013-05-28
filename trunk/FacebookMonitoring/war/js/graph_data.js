@@ -50,7 +50,7 @@ function renderTransmission() {
 
 
 
-function renderHighGraph(data, graphType) { 
+function renderHighGraph(data) { 
     
 	var categ = [];
 	var values = [];
@@ -64,7 +64,7 @@ function renderHighGraph(data, graphType) {
 	
 	$('#container').highcharts({
         chart: {
-            type: graphType
+            type: $('#graphType').val()
         },
         title: {
             text: 'Word Frequency'
