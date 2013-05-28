@@ -20,6 +20,15 @@ public class ServiceImpl extends Service {
 		return Service.getGraphData("it.osg.datasource.facebook.time.Like", new Object[]{transmission, from, to, "date", "like_count"}, "TIME");
 
 	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	@Path("time/talkingabout/{transmission}/{from}/{to}")
+	public Response getTalkingAboutCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
+
+		return Service.getGraphData("it.osg.datasource.facebook.time.Like", new Object[]{transmission, from, to, "date", "talking_about_count"}, "TIME");
+
+	}
 
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
