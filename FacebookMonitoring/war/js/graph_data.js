@@ -32,89 +32,20 @@ function render(transmission) {
 		renderTransmission();
 }
 
-
+function renderAll() {
+	alert("render all non implementata");
+}
 
 function renderTransmission() {
 	$.ajax({
 		type: 'GET',
-		url: rootURL + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val(),
+		url: rootURL + "data/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val(),
 		dataType: "json", // data type of response
 		//provare success: return data
 		success: function(data) {
-            renderList(data);
-            renderStockGraph(data);
+            renderHighGraph(data);
         }
 	});
-}
-
-//per ora è la stessa di renderTransmission
-function renderAll() {
-	$.ajax({
-		type: 'GET',
-		url: rootURL + 'ballaro',
-		dataType: "json", // data type of response
-		//provare success: return data
-		success: function(data) {
-            renderList(data);
-            renderStockGraph(data);
-        }
-	});
-}
-
-
-
-/*
- * RENDERING FUNCTIONS
- */
-
-function renderList(data) {
-	// JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
-	var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
-	$('#searchList li').remove();
-	$.each(data, function() {
-		$.each(this, function(key, value) {
-			$('#searchList').append('<li>(' + this.axis +'): ' + this.ordinate + '</li>');
-		});
-	});
-}
-
-
-function renderStockGraph(data) { 
-	var jsonObj= [];
-	
-	var categ = [];
-	var values = [];
-	
-	$.each(data, function() {
-		$.each(this, function(key, value) {
-			//categ.push(new Date(this.axisDate).getTime());
-			//values.push(parseInt(this.ordinate));
-			jsonObj.push([new Date(this.axis).getTime(), parseInt(this.ordinate)]);
-		});
-	});
-	
-	$('#container').highcharts('StockChart', {
-
-		rangeSelector : {
-			selected : 1
-		},
-		
-        title: {
-            text: 'Andamento likes'
-        },
-        
-        yAxis: {
-            title: {
-                text: 'likes'
-            }
-        },
-        
-        series: [{
-            name: $('#transmission').val(),
-            data: jsonObj
-        }]
-    });
 }
 
 
@@ -126,8 +57,8 @@ function renderHighGraph(data, graphType) {
 	
 	$.each(data, function() {
 		$.each(this, function(key, value) {
-			categ.push(this.date);
-			values.push(parseInt(this.likeCount));
+			categ.push(this.axis);
+			values.push(parseInt(this.ordinate));
 		});
 	});
 	
@@ -136,14 +67,14 @@ function renderHighGraph(data, graphType) {
             type: graphType
         },
         title: {
-            text: 'Andamento likes'
+            text: 'Word Frequency'
         },
         xAxis: {
             categories: categ
         },
         yAxis: {
             title: {
-                text: 'likes'
+                text: 'Comments and Posts'
             }
         },
         series: [{
