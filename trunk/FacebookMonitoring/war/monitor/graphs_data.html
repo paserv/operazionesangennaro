@@ -9,24 +9,28 @@
 <body>
 
 <select id="local">
-		<option value="local">local</option>
-		<option value="notlocal">notlocal</option>
+		<option value="notlocal">online</option>
+		<option value="local">debug</option>
 </select>
 
-<div class="header">
+<div class="topArea">
+	<div class="header">
 	Graph Type: 
 	<select id="graphType">
 		<option value="line">line</option>
-  		<option value="bar">bar</option>
 	</select>
 	Transmission: 
 	<select id="transmission">
 		<option value="ballaro">ballaro</option>
+		<option value="che_tempo_che_fa">che_tempo che fa</option>
+		<option value="le_iene">le iene</option>
+		<option value="piazza_pulita">piazza pulita</option>
+		<option value="servizio_pubblico">servizio pubblico</option>
+		<option value="the_voice_ite">the_voice_ite</option>
 	</select>
 	Monitored Entity: 
 	<select id="monitoredEntity">
-		<option value="likes">likes</option>
-		<option value="commentcount">commentcount</option>
+		<option value="wordfrequency">wordfrequency</option>
 	</select>
 	From: 
 	<input type="text" id="from" />
@@ -34,13 +38,7 @@
 	<input type="text" id="to" />
 	<button id="btnSearch">Get Likes</button>
 </div>
-
-
-
-<div class="leftArea">
-<ul id="searchList"></ul>
 </div>
-
 
 <div class="mainArea">
 	<div id="container" style="width:100%; height:400px;"></div>
