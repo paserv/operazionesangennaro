@@ -9,7 +9,7 @@ public abstract class SourceGenerator extends PipeBlock {
 	public SourceGenerator(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
-
+	
 
 	public ArrayList<String> getOutput(ArrayList<String> input) {
 		input.addAll(add());

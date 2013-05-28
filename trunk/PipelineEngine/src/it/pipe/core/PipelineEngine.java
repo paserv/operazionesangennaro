@@ -24,9 +24,34 @@ public class PipelineEngine {
 		
 	}
 
+	public PipelineEngine() {
+
+	}
+	
 	public PipelineEngine(String path) {
 		setConfigFilePath(path);
 		allModules = getModules();
+	}
+	
+	
+	public ArrayList<String> run(ArrayList<PipeBlock> blocks) {
+		ArrayList<String> output = new ArrayList<String>();
+		ArrayList<String> temp = new ArrayList<String>();
+				
+		int size = blocks.size();
+		for (int i = 0; i < size; i++){
+			
+			PipeBlock currBlock = blocks.get(i);
+			System.out.println("Step " + i + ": " + currBlock.getModuleName());
+			System.out.println("\tInitial size: " + output.size());
+			temp = currBlock.getOutput(output);
+			output = temp;
+			System.out.println("\tFinal size: " + output.size());
+			
+		}
+		
+		System.out.println("Final size is " + output.size());
+		return output;
 	}
 	
 	public ArrayList<String> run() {
@@ -116,6 +141,9 @@ public class PipelineEngine {
 		PipelineEngine.allModules = allModules;
 	}
 	
+	public static void addAllModules(PipeModule module) {
+		PipelineEngine.allModules.add(module);
+	}
 	
 
 }
