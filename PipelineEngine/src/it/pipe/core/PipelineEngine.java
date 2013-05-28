@@ -35,7 +35,7 @@ public class PipelineEngine {
 	
 	
 	public ArrayList<String> run(ArrayList<PipeBlock> blocks, ArrayList<String> input) {
-		ArrayList<String> output = new ArrayList<>();
+		ArrayList<String> output = new ArrayList<String>();
 		if (input != null) {
 			output = input;
 		}
