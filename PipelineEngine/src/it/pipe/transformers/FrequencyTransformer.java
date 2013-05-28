@@ -29,7 +29,7 @@ public class FrequencyTransformer extends Transformer {
 				result.add(currOccurrence);
 			}
 		}
-		return null;
+		return result;
 	}
 	
 }
