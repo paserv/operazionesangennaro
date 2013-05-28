@@ -9,7 +9,7 @@ public abstract class Writer extends PipeBlock {
 	public Writer(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
-
+	
 
 	public ArrayList<String> getOutput(ArrayList<String> input) {
 		write(input);

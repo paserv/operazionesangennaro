@@ -12,14 +12,18 @@ public abstract class PipeBlock {
 	public String moduleName;
 	public String confPath;
 
-	public Hashtable<String, String> config;
+	public Hashtable<String, String> config = new Hashtable<String, String>();
 
 	public abstract ArrayList<String> getOutput(ArrayList<String> input);
 
+	
+	
 	public PipeBlock(String modName, String conFilePath) {
-		this.confPath = conFilePath;
+		if (conFilePath != null) {
+			this.confPath = conFilePath;
+			this.config = getConfig();
+		}
 		this.moduleName = modName;
-		this.config = getConfig();
 	}
 
 	public Hashtable<String, String> getConfig() {
@@ -57,7 +61,9 @@ public abstract class PipeBlock {
 	public void setConfPath(String confPath) {
 		this.confPath = confPath;
 	}
-
+	public void addConfiguration(String name, String prop) {
+		this.config.put(name, prop);
+	}
 
 
 }
