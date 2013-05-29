@@ -45,7 +45,7 @@ public class WordFrequencyCalculator extends SourceGenerator {
 				f = DateUtils.parseDateAndTime((String) objects[1]);
 				t = DateUtils.parseDateAndTime((String)objects[2]);
 			}
-			
+
 
 			//Istanzio e configuro il pipeline engine
 			PipelineEngine eng = new PipelineEngine();
@@ -62,8 +62,7 @@ public class WordFrequencyCalculator extends SourceGenerator {
 			FrequencyTransformer block4 = new FrequencyTransformer("FrequencyTransformer", null);
 			blocks.add(block4);
 
-			//TODO getFacebookPost
-			ArrayList<String> input = getFacebookCommentsAndPost(transmissionName, f, t, limit);
+			ArrayList<String> input = getFacebookCommentsAndPost(transmissionName, f, t);
 			//prendo il risultato della pipe
 			ArrayList<String> pipeResult = eng.run(blocks, input);
 
@@ -74,9 +73,9 @@ public class WordFrequencyCalculator extends SourceGenerator {
 				Graph currGraph = new Graph(splitted[0], Long.valueOf(splitted[1]));
 				result.add(currGraph);
 			}
-			
+
 			Collections.sort(result,new OrderComparator());
-			
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -89,49 +88,120 @@ public class WordFrequencyCalculator extends SourceGenerator {
 			}
 			return subList;
 		}
-		
+
 		return result;
-		
+
 	}
 
-	private ArrayList<String> getFacebookCommentsAndPost(String transmissionName, Date f, Date t, int limit) {
-		
+	private ArrayList<String> getFacebookCommentsAndPost(String transmissionName, Date f, Date t) {
+
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
-		facebook.setOAuthAccessToken(new AccessToken("156346967866710|gnswdSXw_ObP0RaWj5qqgK_HtCk", null));
-		
+		facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
+
 		try {
-			ResponseList<Post> facResults = facebook.getFeed(transmissionName, new Reading().since(f).until(t).limit(limit));
+			ResponseList<Post> facResults = facebook.getFeed(transmissionName, new Reading().since(f).until(t));
 			Iterator<Post> iter = facResults.iterator();
+			//Salvo i Post e relativi commenti
 			while (iter.hasNext()){
-				Post curr = iter.next();
-				String currText = curr.getMessage();
-				if (currText != null) {
-					result.add(currText.toLowerCase());
-				}
-				PagableList<Comment> comments = curr.getComments();
-				Iterator<Comment> iterComment = comments.iterator();
-				while (iterComment.hasNext()) {
-					Comment currComment = iterComment.next();
-					String currCommentMessage = currComment.getMessage();
-					if (currCommentMessage != null) {
-						result.add(currCommentMessage.toLowerCase());
-					}
-				}
-				
-				Paging<Comment> paging = comments.getPaging();
-				ResponseList<Comment> page2 = facebook.fetchNext(paging);
-				
-				
+				result.addAll(downloadPostWithComments(iter.next(), facebook, f, t));		
 			}
+			//Itero su tutti i post
+			Paging<Post> pagingPost = facResults.getPaging();
+			while (true) {
+				if (pagingPost != null) {
+					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
+					if (nextPosts != null) {
+						Post firstPost = nextPosts.get(0);
+						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
+							break;
+						}
+						Iterator<Post> itr = nextPosts.iterator();
+						while (itr.hasNext()) {
+							result.addAll(downloadPostWithComments(itr.next(), facebook, f, t));
+						}
+					} else {
+						break;
+					}
+					pagingPost = nextPosts.getPaging();
+				} else {
+					break;
+				}
+			}
+
 		} catch (FacebookException e) {
 			e.printStackTrace();
 		}
 
 		return result;
+	}
+
+	private ArrayList<String> downloadPostWithComments(Post curr, Facebook facebook, Date f, Date t) {
+
+		ArrayList<String> result = new ArrayList<String>();
+
+		if (curr.getCreatedTime().after(f) && curr.getCreatedTime().before(t)) {
+			String currText = curr.getMessage();
+			if (currText != null) {
+				result.add(currText);
+				System.out.println(currText);
+				System.out.println(curr.getId());
+				System.out.println(curr.getCreatedTime());
+			}
+
+			PagableList<Comment> comments = curr.getComments();
+			if (comments != null) {
+				Iterator<Comment> iterComment = comments.iterator();
+				//Salvo i Commenti
+				while (iterComment.hasNext()) {
+					Comment currComment = iterComment.next();
+					String currCommentMessage = currComment.getMessage();
+					if (currCommentMessage != null) {
+						result.add(currCommentMessage);
+					}
+					//TODO salvare le risposte ai commenti
+
+				}
+				//Itero sulla paginazione per salvare tutti i commenti
+				Paging<Comment> paging = comments.getPaging();
+				while (true) {
+					if (paging != null) {
+						ResponseList<Comment> nextPage;
+						try {
+							nextPage = facebook.fetchNext(paging);
+							if (nextPage != null) {
+								Iterator<Comment> itr = nextPage.iterator();
+								while (itr.hasNext()) {
+									Comment cmt = itr.next();
+									String curCmt = cmt.getMessage();
+									if (curCmt != null) {
+										result.add(curCmt);
+									}
+								}
+							} else {
+								break;
+							}
+							paging = nextPage.getPaging();
+						} catch (FacebookException e) {
+							e.printStackTrace();
+						}
+					} else {
+						break;
+					}
+
+				}
+			}
+
+		}
+		
+		
+		return result;
+
+
+
 	}
 
 
