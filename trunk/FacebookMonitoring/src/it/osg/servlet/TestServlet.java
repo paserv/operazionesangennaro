@@ -2,21 +2,21 @@ package it.osg.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
-import facebook4j.IdNameEntity;
 import facebook4j.PagableList;
+import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
-import facebook4j.Question.Option;
 import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
 
@@ -32,27 +32,53 @@ public class TestServlet extends HttpServlet {
 		facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
 		facebook.setOAuthAccessToken(new AccessToken("156346967866710|gnswdSXw_ObP0RaWj5qqgK_HtCk", null));
-		
+		int postCounter = 0;
+		int commentCounter = 0;
+		int commentCounterNext = 0;
 		try {
-			ResponseList<Post> results = facebook.getFeed("166115370094396", new Reading().until(new Date(2013, 05 ,25, 8, 00)).since(new Date(2013, 05 ,26, 8, 00)).limit(100));
-			Iterator<Post> iter = results.iterator();
+			ResponseList<Post> facResults = facebook.getFeed("Ballaro.Rai", new Reading().since("yesterday"));
+			Iterator<Post> iter = facResults.iterator();
 			while (iter.hasNext()){
 				Post curr = iter.next();
-				String currId = curr.getId();
-				String test = curr.getMessage();
-				out.println("Post: " + test);
-				
-				PagableList<IdNameEntity> likes = curr.getLikes();
-				
-				out.println("Likes: " + likes.size());
-				
-				Iterator<IdNameEntity> iterLikes = likes.iterator();
-				while (iterLikes.hasNext()){
-					IdNameEntity currNE = iterLikes.next();
-					out.println("ID likes: " + currNE.getId());
+				String currText = curr.getMessage();
+				if (currText != null) {
+					out.println("POST MESSAGE: " + currText + "<br>");
+					postCounter++;
 				}
 				
-				
+				PagableList<Comment> comments = curr.getComments();
+				Iterator<Comment> iterComment = comments.iterator();
+				while (iterComment.hasNext()) {
+					Comment currComment = iterComment.next();
+					String currCommentMessage = currComment.getMessage();
+					if (currCommentMessage != null) {
+						out.println("COMMENT: " + currCommentMessage + "<br>");
+						commentCounter++;
+					}
+					
+				}
+				Paging<Comment> paging = comments.getPaging();
+				while (true) {
+					if (paging != null) {
+						ResponseList<Comment> nextPage = facebook.fetchNext(paging);
+							if (nextPage != null) {
+								Iterator<Comment> itr = nextPage.iterator();
+								while (itr.hasNext()) {
+									Comment cmt = itr.next();
+									String curCmt = cmt.getMessage();
+									if (curCmt != null) {
+										out.println("FETCH COMMENT: " + commentCounterNext + "<br>");
+										commentCounterNext++;
+									}
+								}
+							} else {
+								break;
+							}						
+					} else {
+						break;
+					}
+				}
+								
 			}
 			
 			
@@ -61,7 +87,7 @@ public class TestServlet extends HttpServlet {
 		}
 		
 
-		out.println("CIAO");
+		out.println("POST COUNTER: " + postCounter + "<br>" + " COMMENT COUNTER: " + commentCounter + "<br>" + " PAGE 2 COMMENT: " + commentCounterNext + "<br>");
 	}
 	
 	
@@ -69,10 +95,6 @@ public class TestServlet extends HttpServlet {
 		doGet(req, resp);
 	}
 
-	
-
-	
-	
 	
 
 }
