@@ -31,7 +31,7 @@ public class TestServlet extends HttpServlet {
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
-		facebook.setOAuthAccessToken(new AccessToken("156346967866710|gnswdSXw_ObP0RaWj5qqgK_HtCk", null));
+		facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
 		int postCounter = 0;
 		int commentCounter = 0;
 		int commentCounterNext = 0;
@@ -56,6 +56,7 @@ public class TestServlet extends HttpServlet {
 						commentCounter++;
 					}
 					
+					
 				}
 				Paging<Comment> paging = comments.getPaging();
 				while (true) {
@@ -67,16 +68,21 @@ public class TestServlet extends HttpServlet {
 									Comment cmt = itr.next();
 									String curCmt = cmt.getMessage();
 									if (curCmt != null) {
-										out.println("FETCH COMMENT: " + commentCounterNext + "<br>");
+										out.println("FETCH COMMENT: " + curCmt + "<br>");
+										System.out.println(curCmt);
 										commentCounterNext++;
 									}
 								}
 							} else {
 								break;
-							}						
+							}
+							paging = nextPage.getPaging();
 					} else {
 						break;
 					}
+					
+					
+					
 				}
 								
 			}
