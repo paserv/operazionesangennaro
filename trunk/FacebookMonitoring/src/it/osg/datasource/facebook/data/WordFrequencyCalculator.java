@@ -1,8 +1,11 @@
 package it.osg.datasource.facebook.data;
 
+import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.PagableList;
+import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
@@ -54,7 +57,7 @@ public class WordFrequencyCalculator extends SourceGenerator {
 			blocks.add(block2);
 			RemoveRegex block3 = new RemoveRegex("RemoveRegex", null);
 			block3.addConfiguration("regex1", "^[0-9]+");
-			block3.addConfiguration("regex2", "^\\d+$");
+			block3.addConfiguration("regex2", "(\\d+)(\\.)(\\d+)");
 			blocks.add(block3);
 			FrequencyTransformer block4 = new FrequencyTransformer("FrequencyTransformer", null);
 			blocks.add(block4);
@@ -107,8 +110,22 @@ public class WordFrequencyCalculator extends SourceGenerator {
 				Post curr = iter.next();
 				String currText = curr.getMessage();
 				if (currText != null) {
-					result.add(currText);
+					result.add(currText.toLowerCase());
 				}
+				PagableList<Comment> comments = curr.getComments();
+				Iterator<Comment> iterComment = comments.iterator();
+				while (iterComment.hasNext()) {
+					Comment currComment = iterComment.next();
+					String currCommentMessage = currComment.getMessage();
+					if (currCommentMessage != null) {
+						result.add(currCommentMessage.toLowerCase());
+					}
+				}
+				
+				Paging<Comment> paging = comments.getPaging();
+				ResponseList<Comment> page2 = facebook.fetchNext(paging);
+				
+				
 			}
 		} catch (FacebookException e) {
 			e.printStackTrace();
