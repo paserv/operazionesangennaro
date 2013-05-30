@@ -21,7 +21,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
  * Preleva i dati direttamente da Facebook ed in base ai dati che si vuole tirar fuori restituisce un ArrayList<GraphData>
  */
 
-public class Like extends SourceGenerator {
+public class PickedData extends SourceGenerator {
 
 
 	@Override

@@ -17,7 +17,16 @@ public class ServiceImpl extends Service {
 	@Path("time/likes/{transmission}/{from}/{to}")
 	public Response getLikesCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
 
-		return Service.getGraphData("it.osg.datasource.facebook.time.Like", new Object[]{transmission, from, to, "date", "like_count"}, "TIME");
+		return Service.getGraphData("it.osg.datasource.facebook.time.PickedData", new Object[]{transmission, from, to, "date", "like_count"}, "TIME");
+
+	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	@Path("time/dlikes/{transmission}/{from}/{to}")
+	public Response getDLikesCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
+
+		return Service.getGraphData("it.osg.datasource.facebook.time.DPickedData", new Object[]{transmission, from, to, "date", "like_count"}, "TIME");
 
 	}
 	
@@ -26,7 +35,16 @@ public class ServiceImpl extends Service {
 	@Path("time/talkingabout/{transmission}/{from}/{to}")
 	public Response getTalkingAboutCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
 
-		return Service.getGraphData("it.osg.datasource.facebook.time.Like", new Object[]{transmission, from, to, "date", "talking_about_count"}, "TIME");
+		return Service.getGraphData("it.osg.datasource.facebook.time.PickedData", new Object[]{transmission, from, to, "date", "talking_about_count"}, "TIME");
+
+	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_JSON})
+	@Path("time/dtalkingabout/{transmission}/{from}/{to}")
+	public Response getDTalkingAboutCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
+
+		return Service.getGraphData("it.osg.datasource.facebook.time.DPickedData", new Object[]{transmission, from, to, "date", "talking_about_count"}, "TIME");
 
 	}
 
