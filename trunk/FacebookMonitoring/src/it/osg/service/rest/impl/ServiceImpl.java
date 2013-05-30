@@ -50,10 +50,10 @@ public class ServiceImpl extends Service {
 
 	@GET
 	@Produces({MediaType.APPLICATION_JSON})
-	@Path("time/commentcount/{transmission}/{from}/{to}")
+	@Path("time/post/{transmission}/{from}/{to}")
 	public Response getCommentCount(@PathParam("transmission") String transmission, @PathParam("from") String from, @PathParam("to") String to) {
 		
-		return Service.getGraphData("it.osg.datasource.facebook.time.Comment", new Object[]{transmission, from, to}, "TIME");
+		return Service.getGraphData("it.osg.datasource.facebook.time.PostCount", new Object[]{transmission, from, to}, "TIME");
 
 	}
 	
