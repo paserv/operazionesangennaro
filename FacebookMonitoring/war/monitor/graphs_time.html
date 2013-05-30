@@ -118,7 +118,16 @@ function renderStockGraph(data) {
         
         series: [{
             name: $('#transmission').val(),
-            data: jsonObj
+            data: jsonObj,
+            dataGrouping : {
+				units : [
+					['day', // unit name
+					[1] ]
+				
+				],
+				approximation : "sum",
+				forced : "true",	
+			},
         }]
     });
 }
