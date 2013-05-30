@@ -41,12 +41,20 @@ public class PostCount extends SourceGenerator {
 			
 			ArrayList<Post> posts = FacebookUtils.getAllPosts(facebook, (String)objects[0], f, t);
 			
-			Iterator<Post> iter = posts.iterator();
-			while (iter.hasNext()){
-				Post curr = iter.next();
+			
+			for (int i = posts.size() - 1; i >= 0; i--) {
+				Post curr = posts.get(i);
 				Graph gd = new Graph(DateUtils.formatDateAndTime(curr.getCreatedTime()), 1L);
 				result.add(gd);
 			}
+			
+			
+//			Iterator<Post> iter = posts.iterator();
+//			while (iter.hasNext()){
+//				Post curr = iter.next();
+//				Graph gd = new Graph(DateUtils.formatDateAndTime(curr.getCreatedTime()), 1L);
+//				result.add(gd);
+//			}
 			
 			
 		} catch (ParseException e) {
