@@ -3,25 +3,20 @@
   font-size: 12px;
 }
 
+
 .header {
-	padding-top: 5px;
-}
-
-.topArea {
-	left: 10px;
-	top: 100px;
-	bottom: 20px;
-	width: 90%;
+	width: 70%;
 	padding: 10px;
+	margin-left: 10px;
 	border:solid 1px #CCCCCC;
-
 }
+
+.header input {
+	width:140px;
+}
+
 
 .mainArea {
-	position: absolute;
-	top: 130px;
-	bottom: 20px;
-	left:10px;
 	width:90%;
 }
 
@@ -77,9 +72,4 @@ label {
 
 button {
 	padding:4px;
-}
-
-
-.header input {
-	width:140px;
 }

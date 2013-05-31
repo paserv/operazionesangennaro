@@ -8,31 +8,22 @@
 </head>
 <body>
 
-<select id="local">
-		<option value="notlocal">online</option>
-		<option value="local">debug</option>
-</select>
+<input type="checkbox" id="debug" style="margin-left:10px;"/> debug
 
-
-
-
-
-<div class="topArea">
+<div class="header">
+	Transmission: 
+	<input type="text" id="transmission" />
+	From: 
+	<input type="text" id="from" />
+	To: 
+	<input type="text" id="to" />
+	<button id="btnSearch">Get Graph</button>
+</div>
 
 <div class="header">
 	Graph Type: 
 	<select id="graphType">
 		<option value="line">line</option>
-	</select>
-	Transmission: 
-	<select id="transmission">
-		<option value="ballaro">ballaro</option>
-		<option value="Ballaro.Rai">Ballaro.Rai</option>
-		<option value="che_tempo_che_fa">che_tempo che fa</option>
-		<option value="le_iene">le iene</option>
-		<option value="piazza_pulita">piazza pulita</option>
-		<option value="servizio_pubblico">servizio pubblico</option>
-		<option value="the_voice_ite">the_voice_ite</option>
 	</select>
 	Monitored Entity: 
 	<select id="monitoredEntity">
@@ -42,16 +33,20 @@
 		<option value="dtalkingabout">dtalkingabout</option>
 		<option value="post">post</option>
 	</select>
-	From: 
-	<input type="text" id="from" />
-	To: 
-	<input type="text" id="to" />
-	<button id="btnSearch">Get Graph</button>
-</div>
-
-<!-- 
-<ul id="searchList"></ul>
- -->
+	Group Unit: 
+	<select id="groupingunit" onchange="groupGraph()">
+		<option value="none">None</option>
+		<option value="year">Year</option>
+		<option value="month">Month</option>
+		<option value="day">Day</option>
+		<option value="hour">Hour</option>
+		<option value="minute">Minute</option>
+	</select>
+	Approssimation: 
+	<select id="approssimazione" onchange="groupGraph()">
+		<option value="sum">Somma</option>
+		<option value="average">Media</option>
+	</select>
 </div>
 
 
@@ -62,92 +57,10 @@
 
 <script type="text/javascript" src="../js/jquery-2.0.0.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1.10.3.js"></script>
-<script type="text/javascript" src="../js/graph_common.js"></script>
+<script type="text/javascript" src="../js/graph_time.js"></script>
 <script type="text/javascript" src="../js/highstock.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-timepicker-addon.js"></script>
 
-<script>
-$(function() {
-	$('#from').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
-	$('#to').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
-});
 
-
-function render(rootURL) {
-    $.ajax({
-        type: 'GET',
-        url: rootURL + "time/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val(),
-        dataType: "json", // data type of response
-        //provare success: return data
-        success: function(data) {
-            renderStockGraph(data);
-        }
-    });
-}
-
-
-function renderStockGraph(data) { 
-    var jsonObj= [];
-    
-    $.each(data, function() {
-        $.each(this, function(key, value) {
-            var year = this.axis.substring(6,10);
-            var month = this.axis.substring(3,5);
-            var day = this.axis.substring(0,2);
-            var hour = this.axis.substring(11,13);
-            var min = this.axis.substring(14,16);           
-            jsonObj.push([new Date(year, --month, day, (++hour) + 1, min).getTime(), parseInt(this.ordinate)]);
-        });
-    });
-    
-    $('#container').highcharts('StockChart', {
-
-        rangeSelector : {
-            selected : 1
-        },
-        
-        title: {
-            text: 'Andamento ' + $('#monitoredEntity').val()
-        },
-        
-        yAxis: {
-            title: {
-                text: $('#monitoredEntity').val()
-            }
-        },
-        
-        series: [{
-            name: $('#transmission').val(),
-            data: jsonObj,
-            dataGrouping : {
-				units : [
-					['day', // unit name
-					[1] ]
-				
-				],
-				approximation : "sum",
-				forced : "true",	
-			},
-        }]
-    });
-}
-
-
-/*
- * VARIE
- */
-
-function renderList(data) {
-    // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
-    var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
-    $('#searchList li').remove();
-    $.each(data, function() {
-        $.each(this, function(key, value) {
-            $('#searchList').append('<li>(' + this.axis +'): ' + this.ordinate + '</li>');
-        });
-    });
-}
-</script>
 </body>
 </html>
