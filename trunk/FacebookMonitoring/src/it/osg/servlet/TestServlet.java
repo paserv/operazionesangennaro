@@ -46,7 +46,7 @@ public class TestServlet extends HttpServlet {
 
 		ResponseList<Post> facResults;
 		try {
-			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t).limit(10000));
+			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t));
 			Iterator<Post> it = facResults.iterator();
 			while(it.hasNext()){
 				Post cu = it.next();
@@ -64,31 +64,31 @@ public class TestServlet extends HttpServlet {
 			}			
 
 			//Fetching Post
-//			Paging<Post> pagingPost = facResults.getPaging();
-//			while (true) {
-//				if (pagingPost != null) {
-//					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
-//					if (nextPosts != null) {
-//						Post firstPost = nextPosts.get(0);
-//						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
-//							break;
-//						}
-//						Iterator<Post> itr = nextPosts.iterator();
-//						while (itr.hasNext()) {
-//							Post fetchPost = itr.next();
-//							if (fetchPost.getCreatedTime().after(t) || fetchPost.getCreatedTime().before(f)) {
-//								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
-//								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
-//							}
-//						}
-//					} else {
-//						break;
-//					}
-//					pagingPost = nextPosts.getPaging();
-//				} else {
-//					break;
-//				}
-//			}
+			Paging<Post> pagingPost = facResults.getPaging();
+			while (true) {
+				if (pagingPost != null) {
+					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
+					if (nextPosts != null) {
+						Post firstPost = nextPosts.get(0);
+						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
+							break;
+						}
+						Iterator<Post> itr = nextPosts.iterator();
+						while (itr.hasNext()) {
+							Post fetchPost = itr.next();
+							if (fetchPost.getCreatedTime().after(t) || fetchPost.getCreatedTime().before(f)) {
+								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
+								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
+							}
+						}
+					} else {
+						break;
+					}
+					pagingPost = nextPosts.getPaging();
+				} else {
+					break;
+				}
+			}
 		} catch (FacebookException e) {
 			e.printStackTrace();
 		}

@@ -1,11 +1,12 @@
 package it.osg.servlet;
 
-import java.io.File;
+import it.osg.utils.DateUtils;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.Scanner;
-
+import java.util.Enumeration;
+import java.util.Hashtable;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,21 +25,25 @@ public class RetrieveDataServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 
+		out.println("id,trasmissione,date,like_count,talking_about_count,timestamp" + "</br>");
+		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		//aggiustare questo pezzotto
-		Scanner scan = new Scanner(new File("facebook_page.conf"));
-		while (scan.hasNext()) {
-			String currRowConf = scan.next();
-			String[] split = currRowConf.split(",");
-			String entityName = split[0];
-
-			Query q = new Query(entityName);
+		Hashtable<String, String> conf = getConfPage("pages");
+		
+		Enumeration<String> en = conf.keys();
+		int counter = 0;
+		while (en.hasMoreElements()) {
+			String currTransmission = en.nextElement();
+			
+			Query q = new Query(currTransmission);
 			PreparedQuery pq = datastore.prepare(q);
-
+			
 			for (Entity result : pq.asIterable()) {
 				Date date = (Date) result.getProperty("date");
 
+				String myDate = DateUtils.formatDateAndTime(date);
+				
 				String like_count = "";
 				Object lk = result.getProperty("like_count");
 				if (lk instanceof String) {
@@ -62,22 +67,31 @@ public class RetrieveDataServlet extends HttpServlet {
 				} else {
 					timestamp = Long.valueOf((String) tm);
 				}
-
-				out.println(entityName + "," + date + "," + like_count + "," + talking_about_count + "," + timestamp + "</br>");
-
-				//System.out.println(entityName + "," + date + "," + like_count + "," + talking_about_count + "," + timestamp);
+				counter++;
+				out.println(counter + "," + currTransmission + "," + myDate + "," + like_count + "," + talking_about_count + "," + timestamp + "</br>");
 			}
-
 		}
-
-
-
-
-
-
+				
 	}
 
 
+	private Hashtable<String, String> getConfPage(String entityName) {
+		Hashtable<String, String> result = new Hashtable<String, String>();
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query q = new Query(entityName);
+		PreparedQuery pq = datastore.prepare(q);
+
+		for (Entity res : pq.asIterable()) {
+			String id = res.getKey().getName();
+			String url = (String) res.getProperty("url");
+
+			result.put(id, url);
+		}
+		return result;
+
+	}
+	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 		doGet(req, resp);
