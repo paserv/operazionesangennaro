@@ -1,9 +1,6 @@
 package it.osg.datasource.facebook.time;
 
-import facebook4j.Facebook;
-import facebook4j.FacebookFactory;
 import facebook4j.Post;
-import facebook4j.auth.AccessToken;
 import it.osg.datasource.SourceGenerator;
 import it.osg.service.model.Graph;
 import it.osg.utils.DateUtils;
@@ -12,7 +9,6 @@ import it.osg.utils.FacebookUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 
 
 /* 
@@ -26,20 +22,18 @@ public class PostCount extends SourceGenerator {
 	public ArrayList<Graph> getGraphData(Object[] objects) {
 		ArrayList<Graph> result = new ArrayList<Graph>();
 
+		String transmission = (String) objects[0];
+		
 		Date f = null;
 		Date t = null;
 		try {
-			if (objects[0] != null && objects[1] != null){
+			if (objects[1] != null && objects[2] != null){
 				f = DateUtils.parseDateAndTime((String) objects[1]);
 				t = DateUtils.parseDateAndTime((String)objects[2]);
 			}
 
-			Facebook facebook = new FacebookFactory().getInstance();
-			facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
-			//facebook.setOAuthPermissions(commaSeparetedPermissions);
-			facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
-			
-			ArrayList<Post> posts = FacebookUtils.getAllPosts(facebook, (String)objects[0], f, t);
+					
+			ArrayList<Post> posts = FacebookUtils.getAllPosts(transmission, f, t, new String[]{"id", "created_time"});
 			
 			//TODO Ordinare per data crescente i post in maniera meno pezzotta
 			for (int i = posts.size() - 1; i >= 0; i--) {
