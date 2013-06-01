@@ -76,7 +76,7 @@ public class TestServlet extends HttpServlet {
 						Iterator<Post> itr = nextPosts.iterator();
 						while (itr.hasNext()) {
 							Post fetchPost = itr.next();
-							if (fetchPost.getCreatedTime().after(t) || fetchPost.getCreatedTime().before(f)) {
+							if (fetchPost.getCreatedTime().after(f) && fetchPost.getCreatedTime().before(t)) {
 								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
 								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
 							}

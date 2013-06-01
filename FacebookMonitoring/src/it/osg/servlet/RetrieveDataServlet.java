@@ -4,9 +4,10 @@ import it.osg.utils.DateUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import com.google.appengine.api.datastore.Query;
 @SuppressWarnings("serial")
 public class RetrieveDataServlet extends HttpServlet {
 
+	private static String confTable = "pages";
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		resp.setContentType("text/html;charset=UTF-8");
@@ -29,12 +32,13 @@ public class RetrieveDataServlet extends HttpServlet {
 		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		Hashtable<String, String> conf = getConfPage("pages");
+		ArrayList<String> conf = getConfPage(confTable);
+
+		Iterator<String> iter = conf.iterator();
 		
-		Enumeration<String> en = conf.keys();
 		int counter = 0;
-		while (en.hasMoreElements()) {
-			String currTransmission = en.nextElement();
+		while (iter.hasNext()) {
+			String currTransmission = iter.next();
 			
 			Query q = new Query(currTransmission);
 			PreparedQuery pq = datastore.prepare(q);
@@ -75,8 +79,8 @@ public class RetrieveDataServlet extends HttpServlet {
 	}
 
 
-	private Hashtable<String, String> getConfPage(String entityName) {
-		Hashtable<String, String> result = new Hashtable<String, String>();
+	private ArrayList<String> getConfPage(String entityName) {
+		ArrayList<String> result = new ArrayList<String>();
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query q = new Query(entityName);
@@ -84,9 +88,8 @@ public class RetrieveDataServlet extends HttpServlet {
 
 		for (Entity res : pq.asIterable()) {
 			String id = res.getKey().getName();
-			String url = (String) res.getProperty("url");
-
-			result.put(id, url);
+			
+			result.add(id);
 		}
 		return result;
 
