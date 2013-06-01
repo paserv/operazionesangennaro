@@ -14,7 +14,6 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
@@ -25,13 +24,10 @@ public class ConfTimeLikesServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		
 		String transmission = req.getParameter("transmission");
-		String pageurl = req.getParameter("pageurl");
-		
+				
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Filter transFilter = new FilterPredicate("ID", FilterOperator.EQUAL, transmission);
-		Filter urlFilter = new FilterPredicate("url", FilterOperator.EQUAL, pageurl);
-		Filter compFilter = CompositeFilterOperator.or(transFilter, urlFilter);
-		Query q = new Query("pages").setFilter(compFilter);
+		Query q = new Query("pages").setFilter(transFilter);
 		
 		PreparedQuery pq = datastore.prepare(q);
 		
@@ -44,7 +40,6 @@ public class ConfTimeLikesServlet extends HttpServlet {
 			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			Date cestDate= cal.getTime();
 			Entity currEntity = new Entity("pages", transmission);
-			currEntity.setProperty("url", pageurl);
 			currEntity.setProperty("startingdate", cestDate);
 			
 			datastore.put(currEntity);
