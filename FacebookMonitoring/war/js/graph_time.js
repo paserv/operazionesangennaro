@@ -82,6 +82,7 @@ function renderStockGraph(data) {
     	        },
     	        
     	        series: [{
+    	        	type: $('#graphType').val(),
     	            name: $('#transmission').val(),
     	            data: jsonObj,
     	            dataGrouping : {
@@ -116,6 +117,7 @@ function renderStockGraph(data) {
 	        },
 	        
 	        series: [{
+	        	type: $('#graphType').val(),
 	            name: $('#transmission').val(),
 	            data: jsonObj,
 	            
