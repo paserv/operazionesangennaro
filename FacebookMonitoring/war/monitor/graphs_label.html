@@ -71,7 +71,7 @@ $(function() {
 function render(rootURL) {
     $.ajax({
         type: 'GET',
-        url: rootURL + "data/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val() + "/" + $('#limit').val(),
+        url: rootURL + "label/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val() + "/" + $('#limit').val(),
         dataType: "json", // data type of response
         //provare success: return data
         success: function(data) {
