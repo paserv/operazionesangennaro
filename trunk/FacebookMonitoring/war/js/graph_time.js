@@ -169,3 +169,19 @@ function renderList(data) {
         });
     });
 }
+
+
+function iterateExample(seriesOptions) {
+	$.each(seriesOptions, function() {
+		var graphData = this.data;
+		$.each(graphData, function() {
+			$.each(this, function(key, value) {
+				var year = this.axis.substring(6,10);
+				var month = this.axis.substring(3,5);
+				var day = this.axis.substring(0,2);
+				var hour = this.axis.substring(11,13);
+				var min = this.axis.substring(14,16);  
+			});
+		});
+	});
+}
