@@ -1,4 +1,6 @@
 var result;
+var rootURL;
+var jsonObj= [];
 
 $(function() {
 	$('#from').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
@@ -6,10 +8,9 @@ $(function() {
 });
 
 
-var rootURL;
+
 //Register listeners
 $('#btnSearch').click(function() {
-	
 	if ($('#container').highcharts() != null) {
 		$('#container').highcharts().destroy();
 	}
@@ -20,38 +21,38 @@ $('#btnSearch').click(function() {
 		rootURL = "http://01-monitorfacebookpages.appspot.com/rest/resource/";
 	}
 	
-	render(rootURL);
+	getServices(rootURL);
+//	renderData(result);
+//	createChart();
 	return false;
 });
 
 //Trigger search when pressing 'Return' on search key input field
 $('#transmission').keypress(function(e){
 	if(e.which == 13) {
-		render(rootURL);
+		getServices(rootURL);
 		e.preventDefault();
 		return false;
   }
 });
 
-function render(rootURL) {
+function getServices(rootURL) {
     $.ajax({
         type: 'GET',
         url: rootURL + "time/" + $('#monitoredEntity').val() + "/" + $('#transmission').val() + "/" + $('#from').val() + "/" + $('#to').val(),
         dataType: "json", // data type of response
         //provare success: return data
         success: function(data) {
-            renderStockGraph(data);
+        	result = data;
+        	renderData(data);
         }
     });
 }
 
 
-function renderStockGraph(data) { 
-    result = data;
-	
-	var jsonObj= [];
-    
-    $.each(data, function() {
+function renderData(res) { 
+		    
+    $.each(res, function() {
         $.each(this, function(key, value) {
             var year = this.axis.substring(6,10);
             var month = this.axis.substring(3,5);
@@ -61,7 +62,10 @@ function renderStockGraph(data) {
             jsonObj.push([new Date(year, --month, day, (++hour) + 1, min).getTime(), parseInt(this.ordinate)]);
         });
     });
-    
+    createChart(jsonObj);
+}
+
+function createChart(json) { 
     var groupingunit = $('#groupingunit').val();
     var approssimazione = $('#approssimazione').val();
     if (groupingunit != 'none') {
@@ -84,7 +88,7 @@ function renderStockGraph(data) {
     	        series: [{
     	        	type: $('#graphType').val(),
     	            name: $('#transmission').val(),
-    	            data: jsonObj,
+    	            data: json,
     	            dataGrouping : {
     					units : [
     						[groupingunit, // unit name
@@ -119,7 +123,7 @@ function renderStockGraph(data) {
 	        series: [{
 	        	type: $('#graphType').val(),
 	            name: $('#transmission').val(),
-	            data: jsonObj,
+	            data: json,
 	            
 	        }]
 	    });
@@ -130,10 +134,25 @@ function renderStockGraph(data) {
 
 
 function groupGraph() {
-	if (result != null) {
-	renderStockGraph(result);
+	if (jsonObj != null) {
+		createChart(jsonObj);
 	}
 }
+
+function getSelectValues(select) {
+	  var result = [];
+	  var options = select && select.options;
+	  var opt;
+
+	  for (var i=0, iLen=options.length; i<iLen; i++) {
+	    opt = options[i];
+
+	    if (opt.selected) {
+	      result.push(opt.value || opt.text);
+	    }
+	  }
+	  return result;
+	}
 
 /*
  * VARIE
