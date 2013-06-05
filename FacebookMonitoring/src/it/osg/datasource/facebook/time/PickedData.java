@@ -61,6 +61,8 @@ public class PickedData extends SourceGenerator {
 				Object datastoreAxis = ent.getProperty((String) objects[3]);
 				if (datastoreAxis instanceof Date) {
 					axisReturned = DateUtils.formatDateAndTime((Date) datastoreAxis);
+				} else {
+					axisReturned = datastoreAxis.toString();
 				}
 
 				Object datastoreOrdinate = ent.getProperty((String) objects[4]);
