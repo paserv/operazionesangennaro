@@ -25,7 +25,7 @@
 
 <div class="header">
 	Graph Type: 
-	<select id="graphType" onchange="groupGraph()">
+	<select id="graphType" onchange="render()">
 		<option value="line">line</option>
 		<option value="column">column</option>
 	</select>
@@ -38,7 +38,7 @@
 		<option value="post">post</option>
 	</select>
 	Group Unit: 
-	<select id="groupingunit" onchange="groupGraph()">
+	<select id="groupingunit" onchange="render()">
 		<option value="none">None</option>
 		<option value="year">Year</option>
 		<option value="month">Month</option>
@@ -61,7 +61,7 @@
 
 <script type="text/javascript" src="../js/jquery-2.0.0.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-1.10.3.js"></script>
-<script type="text/javascript" src="../js/graph_time.js"></script>
+<script type="text/javascript" src="../js/graph_time_multiple.js"></script>
 <script type="text/javascript" src="../js/highstock.js"></script>
 <script type="text/javascript" src="../js/jquery-ui-timepicker-addon.js"></script>
 
