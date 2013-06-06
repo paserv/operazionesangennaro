@@ -57,6 +57,17 @@ function getServices(rootURL) {
 					jsonObj[i] = {
 							name: $(selected).text(),
 							data: renderData(data),
+							dataGrouping : {
+								units : [
+								         [$('#groupingunit').val(),
+								          [1] ]
+
+								         ],
+								         approximation : $('#approssimazione').val(),
+								         forced : "true",
+
+
+							}
 					};
 				}
 				if (numSelected > 1 && counter == numSelected) {
