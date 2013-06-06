@@ -54,21 +54,40 @@ function getServices(rootURL) {
 					result = renderData(data);
 					createChart(result);
 				} else {
-					jsonObj[i] = {
-							name: $(selected).text(),
-							data: renderData(data),
-							dataGrouping : {
-								units : [
-								         [$('#groupingunit').val(),
-								          [1] ]
+					if ($('#groupingunit').val() != 'none') {
+						jsonObj[i] = {
+								name: $(selected).text(),
+								data: renderData(data),
+								dataGrouping : {
+									units : [
+									         [$('#groupingunit').val(),
+									          [1] ]
 
-								         ],
-								         approximation : $('#approssimazione').val(),
-								         forced : "true",
+									         ],
+									         approximation : $('#approssimazione').val(),
+									         forced : "true",
 
 
-							}
-					};
+								}
+						};
+					} else {
+						jsonObj[i] = {
+								name: $(selected).text(),
+								data: renderData(data),
+								dataGrouping : {
+									units : [
+									         ['day',
+									          [1] ]
+
+									         ],
+									         approximation : 'sum',
+									         forced : "true",
+
+
+								}
+						};
+					}
+					
 				}
 				if (numSelected > 1 && counter == numSelected) {
 					createMultipleChart();
