@@ -53,13 +53,14 @@ function getServices(rootURL) {
 				if (numSelected == 1) {
 					result = renderData(data);
 					createChart(result);
-				} else if (counter == numSelected) {
-					createMultipleChart();
 				} else {
 					jsonObj[i] = {
 							name: $(selected).text(),
 							data: renderData(data),
 					};
+				}
+				if (numSelected > 1 && counter == numSelected) {
+					createMultipleChart();
 				}
 			}
 		});
@@ -169,21 +170,7 @@ function createMultipleChart() {
 				color: 'silver'
 			}]
 		},
-		series: [{
-			data: jsonObj,
-			dataGrouping : {
-				units : [
-				         [groupingunit, // unit name
-				          [1] ]
-
-				         ],
-				         approximation : approssimazione,
-				         forced : "true",
-
-
-			},
-
-		}]
+		series: jsonObj
 	});
 }
 
