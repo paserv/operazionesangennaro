@@ -13,21 +13,26 @@ $(function() {
 
 //Register listeners
 $('#btnSearch').click(function() {
+	//Se è già presente un grafico eliminalo
 	if ($('#container').highcharts() != null) {
 		$('#container').highcharts().destroy();
 	}
 
+	//Prelevo il rootURL dei servizi
 	if ($('#debug').is(":checked"))	{
 		rootURL = "http://localhost:8888/rest/resource/";
 	} else {
 		rootURL = "http://01-monitorfacebookpages.appspot.com/rest/resource/";
 	}
+
+	//Calcolo il numero di trasmissioni selezionate
 	numSelected = 0;
 	counter = 0;
 	$('#transmission :selected').each(function(i, selected) {
 		numSelected++;
 	});
 
+	//invoco i servizi
 	getServices(rootURL);
 
 	return false;
@@ -36,61 +41,71 @@ $('#btnSearch').click(function() {
 //Trigger search when pressing 'Return' on search key input field
 $('#transmission').keypress(function(e){
 	if(e.which == 13) {
+		//Se è già presente un grafico eliminalo
+		if ($('#container').highcharts() != null) {
+			$('#container').highcharts().destroy();
+		}
+
+		//Prelevo il rootURL dei servizi
+		if ($('#debug').is(":checked"))	{
+			rootURL = "http://localhost:8888/rest/resource/";
+		} else {
+			rootURL = "http://01-monitorfacebookpages.appspot.com/rest/resource/";
+		}
+
+		//Calcolo il numero di trasmissioni selezionate
+		numSelected = 0;
+		counter = 0;
+		$('#transmission :selected').each(function(i, selected) {
+			numSelected++;
+		});
+
+		//invoco i servizi
 		getServices(rootURL);
-		e.preventDefault();
+
 		return false;
 	}
 });
 
+
+
 function getServices(rootURL) {
+	//Per ogni trasmissione selezionata invoco il servizio che restituisce i dati da graficare
 	$('#transmission :selected').each(function(i, selected) {
 		$.ajax({
 			type: 'GET',
 			url: rootURL + "time/" + $('#monitoredEntity').val() + "/" + $(selected).val() + "/" + $('#from').val() + "/" + $('#to').val(),
 			dataType: "json",
 			success: function(data) {
+				//Contatore che indica quante volte è stato invocato il servizio
 				counter++;
-				if (numSelected == 1) {
-					result = renderData(data);
-					createChart(result);
+
+				if ($('#groupingunit').val() != 'none') {
+					jsonObj[i] = {
+							name: $(selected).text(),
+							data: buildData(data),
+							dataGrouping : {
+								units : [
+								         [$('#groupingunit').val(),
+								          [1] ]
+
+								         ],
+								         approximation : $('#approssimazione').val(),
+								         forced : "true",
+							}
+					};
+
+					//Se non è specificato un grouping per i dati
 				} else {
-					if ($('#groupingunit').val() != 'none') {
-						jsonObj[i] = {
-								name: $(selected).text(),
-								data: renderData(data),
-								dataGrouping : {
-									units : [
-									         [$('#groupingunit').val(),
-									          [1] ]
-
-									         ],
-									         approximation : $('#approssimazione').val(),
-									         forced : "true",
-
-
-								}
-						};
-					} else {
-						jsonObj[i] = {
-								name: $(selected).text(),
-								data: renderData(data),
-								dataGrouping : {
-									units : [
-									         ['day',
-									          [1] ]
-
-									         ],
-									         approximation : 'sum',
-									         forced : "true",
-
-
-								}
-						};
-					}
-					
+					jsonObj[i] = {
+							name: $(selected).text(),
+							data: buildData(data),
+					};
 				}
-				if (numSelected > 1 && counter == numSelected) {
-					createMultipleChart();
+
+				// se il numero di volte che ho invocato il servizio è pari al numero di trasmissioni selezionate allora crea il grafico
+				if (counter == numSelected) {
+					createChart();
 				}
 			}
 		});
@@ -99,8 +114,8 @@ function getServices(rootURL) {
 
 }
 
-
-function renderData(res) {
+//costruisce l'array json con le coppie data-valore
+function buildData(res) {
 	var temp = [];
 	$.each(res, function() {
 		$.each(this, function(key, value) {
@@ -115,76 +130,8 @@ function renderData(res) {
 	return temp;
 }
 
-function createChart(res) { 
-	var groupingunit = $('#groupingunit').val();
-	var approssimazione = $('#approssimazione').val();
-	if (groupingunit != 'none') {
-		$('#container').highcharts('StockChart', {
 
-			rangeSelector : {
-				selected : 1
-			},
-
-			title: {
-				text: 'Andamento ' + $('#monitoredEntity').val()
-			},
-
-			yAxis: {
-				title: {
-					text: $('#monitoredEntity').val()
-				}
-			},
-
-			series: [{
-				type: $('#graphType').val(),
-				name: $('#transmission').val(),
-				data: res,
-				dataGrouping : {
-					units : [
-					         [groupingunit, // unit name
-					          [1] ]
-
-					         ],
-					         approximation : approssimazione,
-					         forced : "true",
-
-
-				},
-
-			}]
-		});
-	} else {
-		$('#container').highcharts('StockChart', {
-
-			rangeSelector : {
-				selected : 1
-			},
-
-			title: {
-				text: 'Andamento ' + $('#monitoredEntity').val()
-			},
-
-			yAxis: {
-				title: {
-					text: $('#monitoredEntity').val()
-				}
-			},
-
-			series: [{
-				type: $('#graphType').val(),
-				name: $('#transmission').val(),
-				data: res,
-
-			}]
-		});
-	}
-
-
-}
-
-
-
-function createMultipleChart() {
+function createChart() {
 	$('#container').highcharts('StockChart', {
 		chart: {
 		},
@@ -200,21 +147,48 @@ function createMultipleChart() {
 				color: 'silver'
 			}]
 		},
-		series: jsonObj
+		series: jsonObj,
+		
+		exporting: {
+	        enabled: true
+	    }
 	});
 }
 
-function render() {
+
+function reRender() {
 	if (jsonObj.lenght != 0) {
-		if (numSelected == 1) {
-			if (result != undefined) {
-				createChart(result);
+		if (numSelected != undefined && counter == numSelected) {
+			if ($('#groupingunit').val() != 'none') {
+				$.each(jsonObj, function(index, value) {
+					jsonObj[index] = {
+							name: value.name,
+							data: value.data,
+							dataGrouping : {
+								units : [
+								         [$('#groupingunit').val(),
+								          [1] ]
+
+								         ],
+								         approximation : $('#approssimazione').val(),
+								         forced : "true",
+							},
+					};
+				});
+
+			} else {
+				jsonObj[index] = {
+						name: value.name,
+						data: value.data,
+				};
 			}
-		} else if (numSelected != undefined && counter == numSelected) {
-			createMultipleChart();
+			createChart();
 		}
 	}
 }
+
+
+
 /*
  * VARIE
  */
