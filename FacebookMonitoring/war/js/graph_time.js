@@ -148,10 +148,7 @@ function createChart() {
 			}]
 		},
 		series: jsonObj,
-		
-		exporting: {
-	        enabled: true
-	    }
+
 	});
 }
 
