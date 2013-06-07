@@ -19,6 +19,7 @@
         <option value="The-Voice-Italia">The Voice</option>
         <option value="chetempochefa">Che Tempo Che Fa</option>
         <option value="servpubblico">Servizio Pubblico</option>
+        <option value="ballaro">Test</option>
     </select>
 	From: 
 	<input type="text" id="from" />
@@ -29,7 +30,7 @@
 
 <div class="header">
 	Graph Type: 
-	<select id="graphType" onchange="render()">
+	<select id="graphType" onchange="reRender()">
 		<option value="line">line</option>
 		<option value="column">column</option>
 	</select>
@@ -42,7 +43,7 @@
 		<option value="post">post</option>
 	</select>
 	Group Unit: 
-	<select id="groupingunit" onchange="render()">
+	<select id="groupingunit" onchange="reRender()">
 		<option value="none">None</option>
 		<option value="year">Year</option>
 		<option value="month">Month</option>
