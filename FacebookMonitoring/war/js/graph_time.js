@@ -28,6 +28,7 @@ $('#btnSearch').click(function() {
 	//Calcolo il numero di trasmissioni selezionate
 	numSelected = 0;
 	counter = 0;
+	jsonObj= [];
 	$('#transmission :selected').each(function(i, selected) {
 		numSelected++;
 	});
