@@ -75,6 +75,10 @@ public class RetrieveDataServlet extends HttpServlet {
 				out.println(counter + "," + currTransmission + "," + myDate + "," + like_count + "," + talking_about_count + "," + timestamp + "</br>");
 			}
 		}
+		
+		
+
+		
 				
 	}
 
