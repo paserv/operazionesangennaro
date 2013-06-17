@@ -1,7 +1,5 @@
 package it.osg.datasource;
 
-import it.osg.service.model.Graph;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,12 +7,12 @@ import java.util.ArrayList;
 
 
 
-public abstract class SourceGenerator {
+public abstract class TableSourceGenerator {
 
-	public abstract ArrayList<Graph> getGraphData(Object[] objects);
+	public abstract ArrayList<String> getTableData(Object[] objects);
 	
-	public static ArrayList<Graph> getData(String className, Object[] objects) {
-		ArrayList<Graph> result = new ArrayList<Graph>();
+	public static ArrayList<String> getData(String className, Object[] objects) {
+		ArrayList<String> result = new ArrayList<String>();
 		
 		Class currClass;
 		try {
@@ -27,9 +25,9 @@ public abstract class SourceGenerator {
 			Method[] met = currClass.getMethods();
 			for (int j=0; j < met.length; j++) {
 				Method currMet = met[j];
-				if (currMet.getName().equalsIgnoreCase("getGraphData")) {
+				if (currMet.getName().equalsIgnoreCase("getTableData")) {
 					//System.out.println("Invoking " + getName.invoke(currObj));
-					result = (ArrayList<Graph>) currMet.invoke(currObj, (Object)objects);
+					result = (ArrayList<String>) currMet.invoke(currObj, (Object)objects);
 				}
 			}
 		} catch (ClassNotFoundException e) {

@@ -4,7 +4,7 @@ import it.osg.service.model.Graph;
 
 import java.util.ArrayList;
 
-public class TestGenerator extends SourceGenerator {
+public class TestGenerator extends GraphSourceGenerator {
 
 	@Override
 	public ArrayList<Graph> getGraphData(Object[] objects) {
