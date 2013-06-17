@@ -10,7 +10,7 @@ import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
-import it.osg.datasource.SourceGenerator;
+import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
 import it.osg.utils.DateUtils;
 import it.osg.utils.OrderComparator;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 
-public class WordFrequencyCalculator extends SourceGenerator {
+public class WordFrequencyCalculator extends GraphSourceGenerator {
 
 	@Override
 	public ArrayList<Graph> getGraphData(Object[] objects) {
