@@ -1,6 +1,6 @@
 package it.osg.datasource.facebook.time;
 
-import it.osg.datasource.SourceGenerator;
+import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
 import it.osg.utils.DateUtils;
 import java.text.ParseException;
@@ -21,7 +21,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
  * Preleva i dati direttamente da Facebook ed in base ai dati che si vuole tirar fuori restituisce un ArrayList<GraphData>
  */
 
-public class PickedData extends SourceGenerator {
+public class PickedData extends GraphSourceGenerator {
 
 
 	@Override

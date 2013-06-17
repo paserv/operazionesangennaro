@@ -1,6 +1,6 @@
 package it.osg.datasource.facebook.time;
 
-import it.osg.datasource.SourceGenerator;
+import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Preleva i dati direttamente da Facebook ed in base ai dati che si vuole tirar fuori restituisce un ArrayList<GraphData>
  */
 
-public class DPickedData extends SourceGenerator {
+public class DPickedData extends GraphSourceGenerator {
 
 
 	@Override
