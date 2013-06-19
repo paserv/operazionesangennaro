@@ -59,6 +59,16 @@
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Sindaci Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.SindaciServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Sindaci Servlet</servlet-name>
+		<url-pattern>/sindaci</url-pattern>
+	</servlet-mapping>
 <!-- FINE VARIE -->
 
 
