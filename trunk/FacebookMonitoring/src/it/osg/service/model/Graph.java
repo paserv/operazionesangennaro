@@ -7,6 +7,7 @@ public class Graph {
 
 	String axis;
 	Long ordinate;
+	double ordinateD;
 
 	public Graph () {
 
@@ -15,6 +16,11 @@ public class Graph {
 	public Graph (String axisIn, Long ordIn) {
 		setAxis(axisIn);
 		setOrdinate(ordIn);
+	}
+	
+	public Graph (String axisIn, double ordIn) {
+		setAxis(axisIn);
+		setOrdinateD(ordIn);
 	}
 
 	public String getAxis() {
@@ -32,6 +38,16 @@ public class Graph {
 	}
 	public void setOrdinate(Long ordinate) {
 		this.ordinate = ordinate;
+	}
+
+	
+	
+	public double getOrdinateD() {
+		return ordinateD;
+	}
+
+	public void setOrdinateD(double ordinateD) {
+		this.ordinateD = ordinateD;
 	}
 
 	@Override
