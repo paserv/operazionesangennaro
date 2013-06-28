@@ -6,21 +6,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Graph {
 
 	String axis;
-	Long ordinate;
-	double ordinateD;
+	double ordinate;
 
 	public Graph () {
 
 	}
 
-	public Graph (String axisIn, Long ordIn) {
-		setAxis(axisIn);
-		setOrdinate(ordIn);
-	}
-	
+		
 	public Graph (String axisIn, double ordIn) {
 		setAxis(axisIn);
-		setOrdinateD(ordIn);
+		setOrdinate(ordIn);
 	}
 
 	public String getAxis() {
@@ -33,26 +28,19 @@ public class Graph {
 	}
 
 
-	public Long getOrdinate() {
+
+	
+	public double getOrdinate() {
 		return ordinate;
 	}
-	public void setOrdinate(Long ordinate) {
+
+	public void setOrdinate(double ordinate) {
 		this.ordinate = ordinate;
-	}
-
-	
-	
-	public double getOrdinateD() {
-		return ordinateD;
-	}
-
-	public void setOrdinateD(double ordinateD) {
-		this.ordinateD = ordinateD;
 	}
 
 	@Override
 	public String toString() {
-		return axis.toString() + " " + ordinate.toString();
+		return axis.toString() + " " + String.valueOf(ordinate);
 	}
 
 
