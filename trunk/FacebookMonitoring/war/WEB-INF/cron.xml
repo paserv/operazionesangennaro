@@ -3,6 +3,6 @@
   <cron>
     <url>/facebook/monitoring</url>
     <description>Monitor Facebook Pages in table pages every X minutes</description>
-    <schedule>every 5 minutes synchronized</schedule>
+    <schedule>every 30 minutes synchronized</schedule>
   </cron>
 </cronentries>
