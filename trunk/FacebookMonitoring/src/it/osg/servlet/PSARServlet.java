@@ -17,7 +17,7 @@ public class PSARServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		out.println("Sindaco,MediaPost" + "</br>");
+		out.println("Sindaco,MediaPost,TotPost,MediaNuoviFan,TotNuoviFan,NumGiorni" + "</br>");
 		
 		//TODO get array sindaci
 		ArrayList<String> sindaci = new ArrayList<String>();
@@ -33,12 +33,12 @@ public class PSARServlet extends HttpServlet {
 			PSARData service = new PSARData();
 			ArrayList<Graph> result = service.getGraphData(new Object[]{sindaci.get(i), from, to});
 			
-			out.println(sindaci.get(i) + ",");
+			out.print(sindaci.get(i) + ",");
 			for (int j = 0; j < result.size(); j++) {
 				Graph currGraph = result.get(j);
-				out.println(currGraph.getOrdinate() + ",");
+				out.print(currGraph.getOrdinate() + ",");
 			}
-			out.println("</br>");
+			out.print("</br>");
 		}
 		
 		
