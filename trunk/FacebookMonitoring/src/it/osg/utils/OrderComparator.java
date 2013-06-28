@@ -10,7 +10,7 @@ public class OrderComparator implements Comparator {
 	public int compare(Object o1, Object o2) {
 		Graph obj1 = (Graph) o1;
 		Graph obj2 = (Graph) o2;
-		return obj2.getOrdinate().compareTo(obj1.getOrdinate());
+		return (int) (obj2.getOrdinate() - obj1.getOrdinate());
 	}
 
 }
