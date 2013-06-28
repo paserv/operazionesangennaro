@@ -61,13 +61,13 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Sindaci Servlet</servlet-name>
-		<servlet-class>it.osg.servlet.SindaciServlet</servlet-class>
+		<servlet-name>PSAR Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.PSARServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>Sindaci Servlet</servlet-name>
-		<url-pattern>/sindaci</url-pattern>
+		<servlet-name>PSAR Servlet</servlet-name>
+		<url-pattern>/psar</url-pattern>
 	</servlet-mapping>
 <!-- FINE VARIE -->
 
