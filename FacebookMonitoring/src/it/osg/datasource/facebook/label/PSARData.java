@@ -53,9 +53,12 @@ public class PSARData extends GraphSourceGenerator {
 			//Media giornaliera dei nuovi Post pubblicati sulla fan page
 			ArrayList<Post> posts = FacebookUtils.getAllPosts(sindaco, f, t, new String[]{"id", "created_time"});
 			double numTotalePost = posts.size();
-			Graph graph1 = new Graph("mediapost", numTotalePost/numGiorni);
-			result.add(graph1);
-
+			Graph mediapost = new Graph("mediapost", numTotalePost/numGiorni);
+			result.add(mediapost);
+			
+			//Totale nuovi Post pubblicati sulla fan page
+			Graph totpost = new Graph("totpost", numTotalePost);
+			result.add(totpost);
 			
 			//Media giornaliera nuovi fan della pagina facebook
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -75,9 +78,17 @@ public class PSARData extends GraphSourceGenerator {
 			long likesTo = (Long) resultTo.get(0).getProperty("like_count");
 			
 			double numNuoviLikes = likesTo - likesFrom;
-			Graph graph2 = new Graph("medialikes", numNuoviLikes/numGiorni);
-			result.add(graph2);
+			Graph medialikes = new Graph("medialikes", numNuoviLikes/numGiorni);
+			result.add(medialikes);
+			
+			//Totale nuovi fan della pagina facebook
+			Graph totlikes = new Graph("totlikes", numNuoviLikes);
+			result.add(totlikes);
 
+			//Numero Unique Authors dei commenti nell'intervallo
+			
+			Graph numGio = new Graph("numGiorni", numGiorni);
+			result.add(numGio);
 
 		} catch (ParseException e) {
 			e.printStackTrace();
