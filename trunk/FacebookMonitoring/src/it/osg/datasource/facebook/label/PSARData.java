@@ -1,8 +1,10 @@
 package it.osg.datasource.facebook.label;
 
+import facebook4j.Comment;
 import facebook4j.Post;
 import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
+import it.osg.utils.ArrayUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 
@@ -10,6 +12,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.lucene.util.ArrayUtil;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -51,7 +55,7 @@ public class PSARData extends GraphSourceGenerator {
 
 			//Dati di Output
 			//Media giornaliera dei nuovi Post pubblicati sulla fan page
-			ArrayList<Post> posts = FacebookUtils.getAllPosts(sindaco, f, t, new String[]{"id", "created_time"});
+			ArrayList<Post> posts = FacebookUtils.getAllPosts(sindaco, f, t, new String[]{"id", "created_time, comments"});
 			double numTotalePost = posts.size();
 			Graph mediapost = new Graph("mediapost", numTotalePost/numGiorni);
 			result.add(mediapost);
@@ -60,6 +64,7 @@ public class PSARData extends GraphSourceGenerator {
 			Graph totpost = new Graph("totpost", numTotalePost);
 			result.add(totpost);
 			
+			/*
 			//Media giornaliera nuovi fan della pagina facebook
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Query q;
@@ -69,14 +74,20 @@ public class PSARData extends GraphSourceGenerator {
 			q = new Query((String)objects[0]).setFilter(fromFilter).addSort("date", SortDirection.ASCENDING);
 			pq = datastore.prepare(q);
 			List<Entity> resultFrom = pq.asList(FetchOptions.Builder.withLimit(1));
-			long likesFrom = (Long) resultFrom.get(0).getProperty("like_count");
-
+			long likesFrom = 0;
+			if (resultFrom.size() > 0) {
+				likesFrom = (Long) resultFrom.get(0).getProperty("like_count");
+			}
+			
 			Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, t);
 			q = new Query((String)objects[0]).setFilter(toFilter).addSort("date", SortDirection.DESCENDING);
 			pq = datastore.prepare(q);
 			List<Entity> resultTo = pq.asList(FetchOptions.Builder.withLimit(1));
-			long likesTo = (Long) resultTo.get(0).getProperty("like_count");
-			
+			long likesTo = 0;
+			if (resultTo.size() > 0) {
+				likesTo = (Long) resultTo.get(0).getProperty("like_count");
+			}
+			 
 			double numNuoviLikes = likesTo - likesFrom;
 			Graph medialikes = new Graph("medialikes", numNuoviLikes/numGiorni);
 			result.add(medialikes);
@@ -84,8 +95,26 @@ public class PSARData extends GraphSourceGenerator {
 			//Totale nuovi fan della pagina facebook
 			Graph totlikes = new Graph("totlikes", numNuoviLikes);
 			result.add(totlikes);
-
+			 */
+			
+			
+			//Numero Commenti ai post nell'intervallo
+			ArrayList<Comment> comments = FacebookUtils.getComments(posts, f, t);
+			Graph commentCount = new Graph("commentCount", comments.size());
+			result.add(commentCount);
+			
 			//Numero Unique Authors dei commenti nell'intervallo
+			ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments, f, t);
+			Graph uniqueAuthors = new Graph("uniqueAuthors", uniqueAuth.size());
+			result.add(uniqueAuthors);
+			
+			//Unique Authors che in media commentano un contenuto pubblicato sulla fan page
+			Graph uniqueAuthorsPerPost = new Graph("uniqueAuthorsPerPost", uniqueAuth.size()/numTotalePost);
+			result.add(uniqueAuthorsPerPost);
+			
+			//TODO Media Likes per Post
+			
+			
 			
 			Graph numGio = new Graph("numGiorni", numGiorni);
 			result.add(numGio);
