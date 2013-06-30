@@ -17,7 +17,7 @@ public class PSARServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		out.println("Sindaco,MediaPost,TotPost,MediaNuoviFan,TotNuoviFan,NumGiorni" + "</br>");
+		out.println("Sindaco,MediaPost,TotPost,MediaNuoviFan,TotNuoviFan,CommentCount,UniqueAuthors,UniqueAuthorsPerPost,NumGiorni" + "</br>");
 		
 		//TODO get array sindaci
 		ArrayList<String> sindaci = new ArrayList<String>();
