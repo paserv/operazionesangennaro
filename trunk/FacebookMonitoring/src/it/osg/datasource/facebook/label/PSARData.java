@@ -1,6 +1,7 @@
 package it.osg.datasource.facebook.label;
 
 import facebook4j.Comment;
+import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
@@ -11,6 +12,8 @@ import it.osg.utils.FacebookUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.lucene.util.ArrayUtil;
@@ -54,14 +57,24 @@ public class PSARData extends GraphSourceGenerator {
 			double numGiorni = DateUtils.giorniTraDueDate(f, t);
 
 			//Dati di Output
+			ArrayList<Post> posts = FacebookUtils.getAllPosts(sindaco, f, t, null);
+			
 			//Media giornaliera dei nuovi Post pubblicati sulla fan page
-			ArrayList<Post> posts = FacebookUtils.getAllPosts(sindaco, f, t, new String[]{"id", "created_time, comments"});
+			ArrayList<Post> postFromPage = new ArrayList<Post>();
+			Iterator<Post> iterPost = posts.iterator();
+			while (iterPost.hasNext()) {
+				Post currPost = iterPost.next();
+				if (currPost.getFrom().getId().equals(sindaco)) {
+					postFromPage.add(currPost);
+				}
+			}
 			double numTotalePost = posts.size();
-			Graph mediapost = new Graph("mediapost", numTotalePost/numGiorni);
+			double numTotalePostFromPage = postFromPage.size();
+			Graph mediapost = new Graph("mediapost", numTotalePostFromPage/numGiorni);
 			result.add(mediapost);
 			
 			//Totale nuovi Post pubblicati sulla fan page
-			Graph totpost = new Graph("totpost", numTotalePost);
+			Graph totpost = new Graph("totpost", numTotalePostFromPage);
 			result.add(totpost);
 			
 			/*
@@ -97,23 +110,69 @@ public class PSARData extends GraphSourceGenerator {
 			result.add(totlikes);
 			 */
 			
+			/*
+			 * PROVVISORIO
+			 */
+			Graph medialikes = new Graph("medialikes", 0);
+			result.add(medialikes);
+			Graph totlikes = new Graph("totlikes", 0);
+			result.add(totlikes);
+			/*
+			 * 
+			 */
+			
+			//Totale fan della pagina facebook
+			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(sindaco);
+			Graph totFan = new Graph("totFan", Double.valueOf((String) baseInfo.get("likes")));
+			result.add(totFan);
+			
+			//Totale talking about della pagina facebook
+			Graph talkAbout = new Graph("talkAbout", Double.valueOf((String) baseInfo.get("talking_about_count")));
+			result.add(talkAbout);
 			
 			//Numero Commenti ai post nell'intervallo
-			ArrayList<Comment> comments = FacebookUtils.getComments(posts, f, t);
+			ArrayList<Comment> comments = FacebookUtils.getComments(postFromPage);
 			Graph commentCount = new Graph("commentCount", comments.size());
 			result.add(commentCount);
 			
+			//Numero medio Commenti per Post nell'intervallo
+			Graph commentsPerPost = new Graph("commentsPerPost", comments.size()/numTotalePostFromPage);
+			result.add(commentsPerPost);
+			
 			//Numero Unique Authors dei commenti nell'intervallo
-			ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments, f, t);
+			ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments);
 			Graph uniqueAuthors = new Graph("uniqueAuthors", uniqueAuth.size());
 			result.add(uniqueAuthors);
 			
 			//Unique Authors che in media commentano un contenuto pubblicato sulla fan page
-			Graph uniqueAuthorsPerPost = new Graph("uniqueAuthorsPerPost", uniqueAuth.size()/numTotalePost);
+			Graph uniqueAuthorsPerPost = new Graph("uniqueAuthorsPerPost", uniqueAuth.size()/numTotalePostFromPage);
 			result.add(uniqueAuthorsPerPost);
 			
-			//TODO Media Likes per Post
+			//Media Likes per Post nell'intervallo
+			ArrayList<Like> likes = FacebookUtils.getLikes(postFromPage);
+			Graph mediaLikePerPost = new Graph("mediaLikePerPost", likes.size()/numTotalePostFromPage);
+			result.add(mediaLikePerPost);
 			
+			//Totale Likes nell'intervallo
+			Graph totLikes = new Graph("totLikes", likes.size());
+			result.add(totLikes);
+			
+			//Media Shares per Post nell'intervallo
+			double totShares = FacebookUtils.getShares(postFromPage);
+			Graph sharesPerPost = new Graph("sharesPerPost", totShares/numTotalePostFromPage);
+			result.add(sharesPerPost);
+			
+			//Totale Shares per Post nell'intervallo
+			Graph totShare = new Graph("totSharesPerPost", totShares);
+			result.add(totShare);
+			
+			//Numero medio Commenti per Autore
+			double commentsPerAuthor = 0;
+			if (comments.size() == 0) {
+				commentsPerAuthor = comments.size()/uniqueAuth.size();
+			}
+			Graph commentPerAuthor = new Graph("commentsPerAuthor", commentsPerAuthor);
+			result.add(commentPerAuthor);
 			
 			
 			Graph numGio = new Graph("numGiorni", numGiorni);
