@@ -17,16 +17,16 @@ public class PSARServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		out.println("Sindaco,MediaPost,TotPost,MediaNuoviFan,TotNuoviFan,CommentCount,UniqueAuthors,UniqueAuthorsPerPost,NumGiorni" + "</br>");
+		out.println("Sindaco,MediaPost,TotPost,MediaNuoviFan,TotNuoviFan,TotaleFan,TalkingAbout,CommentCount,CommentsPerPost,UniqueAuthors,UniqueAuthorsPerPost,MediaLikesPerPost,TotLikes,SharesPerPost,TotShares,CommentsPerAuthor,NumGiorni," + "</br>");
 		
 		//TODO get array sindaci
 		ArrayList<String> sindaci = new ArrayList<String>();
 		//sindaci.add("56208847866"); //Gianni Alemanno
-		sindaci.add("Ballaro.Rai"); //Gianni Alemanno
+		sindaci.add("166115370094396");
 		
 		//TODO get from e to
 		String from = "01-06-2013 00:00:00";
-		String to = "19-06-2013 10:07:06";
+		String to = "05-06-2013 10:07:06";
 		
 		//Iterate over array di sindaci
 		for (int i = 0; i < sindaci.size(); i++) {

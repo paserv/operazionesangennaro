@@ -1,10 +1,12 @@
 package it.osg.servlet;
 
 import it.osg.utils.DateUtils;
+import it.osg.utils.FacebookUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -12,9 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.IdNameEntity;
+import facebook4j.Like;
 import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
@@ -29,10 +37,9 @@ public class TestServlet extends HttpServlet {
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime("01-05-2013 00:00:00");
-			t = DateUtils.parseDateAndTime("30-05-2013 00:00:00");
+			f = DateUtils.parseDateAndTime("01-04-2013 00:00:00");
+			t = DateUtils.parseDateAndTime("30-06-2013 23:59:59");
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 				
@@ -44,56 +51,101 @@ public class TestServlet extends HttpServlet {
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
 		facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
 
-		ResponseList<Post> facResults;
-		try {
-			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t));
-			Iterator<Post> it = facResults.iterator();
-			while(it.hasNext()){
-				Post cu = it.next();
-				out.println("POST: " + cu.getMessage() + "<br>");
-				out.println("Type: " + cu.getType() + "<br>");
-				out.println("Description: " + cu.getDescription() + "<br>");
-				out.println("SharesCount: " + cu.getSharesCount() + "<br>");
-				out.println("CreatedTime: " + cu.getCreatedTime() + "<br>");
-				out.println("From: " + cu.getFrom() + "<br>");
-				out.println("LikesCount: " + cu.getLikes().size() + "<br>");
-				out.println("MessageTagsCount: " + cu.getMessageTags() + "<br>");
-				out.println("Metadata: " + cu.getMetadata() + "<br>");
-				out.println("Place: " + cu.getPlace() + "<br>");
-				out.println("UpdateTime: " + cu.getUpdatedTime() + "<br>");				
-			}			
-
-			//Fetching Post
-			Paging<Post> pagingPost = facResults.getPaging();
-			while (true) {
-				if (pagingPost != null) {
-					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
-					if (nextPosts != null) {
-						Post firstPost = nextPosts.get(0);
-						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
-							break;
-						}
-						Iterator<Post> itr = nextPosts.iterator();
-						while (itr.hasNext()) {
-							Post fetchPost = itr.next();
-							if (fetchPost.getCreatedTime().after(f) && fetchPost.getCreatedTime().before(t)) {
-								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
-								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
-							}
-						}
-					} else {
-						break;
-					}
-					pagingPost = nextPosts.getPaging();
-				} else {
-					break;
-				}
-			}
-		} catch (FacebookException e) {
-			e.printStackTrace();
-		}
-
-		out.println("<br>FINE");		
+				
+		ArrayList<Post> posts = FacebookUtils.getAllPosts("166115370094396", f, t, null);
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Entity currEntity = new Entity("queue");
+		currEntity.setProperty("posts", posts.size());
+		datastore.put(currEntity);
+		
+//		Iterator<Post> iterPost = posts.iterator();
+//		while (iterPost.hasNext()) {
+//			Post curPost = iterPost.next();
+//			out.println("ID Post = " + curPost.getId() + "<br>");
+//			out.println("Post Message = " + curPost.getMessage() + "<br>");
+//			out.println("Post Shares Count = " + curPost.getSharesCount() + "<br>");
+//			out.println("Post Type = " + curPost.getType() + "<br>");
+//			if (curPost.getFrom() != null) {
+//				out.println("Post FROM Name = " + curPost.getFrom().getName() + "<br>");
+//				out.println("Post FROM ID = " + curPost.getFrom().getId() + "<br>");
+//			}
+//			if (curPost.getTo() != null) {
+//				out.println("Post Type = " + curPost.getTo().toString() + "<br>");
+//			}
+//			
+//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
+//			
+//			
+//									
+//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
+//			
+//			ArrayList<Like> likes = FacebookUtils.getAllLikes(curPost);
+//			out.println("----> Num Likes = " + likes.size() + "<br>");
+//			Iterator<Like> iter = likes.iterator();
+//			while (iter.hasNext()) {
+//				Like curr = iter.next();
+//				out.println("ID = " + curr.getId() + "<br>");
+//				out.println("NAME = " + curr.getName() + "<br>");
+//			}
+//			
+//		}
+		
+		
+		
+		
+		
+		
+//		ResponseList<Post> facResults;
+//		try {
+//			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t));
+//			Iterator<Post> it = facResults.iterator();
+//			while(it.hasNext()){
+//				Post cu = it.next();
+//				out.println("POST: " + cu.getMessage() + "<br>");
+//				out.println("Type: " + cu.getType() + "<br>");
+//				out.println("Description: " + cu.getDescription() + "<br>");
+//				out.println("SharesCount: " + cu.getSharesCount() + "<br>");
+//				out.println("CreatedTime: " + cu.getCreatedTime() + "<br>");
+//				out.println("From: " + cu.getFrom() + "<br>");
+//				out.println("LikesCount: " + cu.getLikes().size() + "<br>");
+//				out.println("MessageTagsCount: " + cu.getMessageTags() + "<br>");
+//				out.println("Metadata: " + cu.getMetadata() + "<br>");
+//				out.println("Place: " + cu.getPlace() + "<br>");
+//				out.println("UpdateTime: " + cu.getUpdatedTime() + "<br>");				
+//			}			
+//
+//			//Fetching Post
+//			Paging<Post> pagingPost = facResults.getPaging();
+//			while (true) {
+//				if (pagingPost != null) {
+//					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
+//					if (nextPosts != null) {
+//						Post firstPost = nextPosts.get(0);
+//						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
+//							break;
+//						}
+//						Iterator<Post> itr = nextPosts.iterator();
+//						while (itr.hasNext()) {
+//							Post fetchPost = itr.next();
+//							if (fetchPost.getCreatedTime().after(f) && fetchPost.getCreatedTime().before(t)) {
+//								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
+//								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
+//							}
+//						}
+//					} else {
+//						break;
+//					}
+//					pagingPost = nextPosts.getPaging();
+//				} else {
+//					break;
+//				}
+//			}
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//		}
+//
+//		out.println("<br>FINE");		
 
 
 
