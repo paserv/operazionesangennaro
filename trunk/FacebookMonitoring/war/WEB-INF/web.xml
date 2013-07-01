@@ -61,6 +61,16 @@
 	</servlet-mapping>
 	
 	<servlet>
+		<servlet-name>Test Create Task Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.TestCreateTask</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Test Create Task Servlet</servlet-name>
+		<url-pattern>/testtask</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>PSAR Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.PSARServlet</servlet-class>
 	</servlet>
