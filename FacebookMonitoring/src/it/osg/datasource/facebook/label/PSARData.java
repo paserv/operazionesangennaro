@@ -5,7 +5,6 @@ import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.datasource.GraphSourceGenerator;
 import it.osg.service.model.Graph;
-import it.osg.utils.ArrayUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 
@@ -14,21 +13,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
-
-import org.apache.lucene.util.ArrayUtil;
-
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.SortDirection;
 
 
 public class PSARData extends GraphSourceGenerator {
@@ -61,21 +45,34 @@ public class PSARData extends GraphSourceGenerator {
 			
 			//Media giornaliera dei nuovi Post pubblicati sulla fan page
 			ArrayList<Post> postFromPage = new ArrayList<Post>();
+			ArrayList<Post> postFromFan = new ArrayList<Post>();
 			Iterator<Post> iterPost = posts.iterator();
 			while (iterPost.hasNext()) {
 				Post currPost = iterPost.next();
 				if (currPost.getFrom().getId().equals(sindaco)) {
 					postFromPage.add(currPost);
+				} else {
+					postFromFan.add(currPost);
 				}
 			}
 			double numTotalePost = posts.size();
 			double numTotalePostFromPage = postFromPage.size();
+			double numTotalePostFromFan = postFromFan.size();
+			
 			Graph mediapost = new Graph("mediapost", numTotalePostFromPage/numGiorni);
 			result.add(mediapost);
 			
 			//Totale nuovi Post pubblicati sulla fan page
 			Graph totpost = new Graph("totpost", numTotalePostFromPage);
 			result.add(totpost);
+			
+			//Totale nuovi Post pubblicati sulla page dai fan
+			Graph totPostFromFan = new Graph("totPostFromFan", numTotalePostFromFan);
+			result.add(totPostFromFan);
+			
+			//Media nuovi Post pubblicati sulla page dai fan
+			Graph totPostFromFanMedio = new Graph("totPostFromFanMedio", numTotalePostFromFan/numGiorni);
+			result.add(totPostFromFanMedio);
 			
 			/*
 			//Media giornaliera nuovi fan della pagina facebook
@@ -113,9 +110,9 @@ public class PSARData extends GraphSourceGenerator {
 			/*
 			 * PROVVISORIO
 			 */
-			Graph medialikes = new Graph("medialikes", 0);
+			Graph medialikes = new Graph("mediaNuoviFan", 0);
 			result.add(medialikes);
-			Graph totlikes = new Graph("totlikes", 0);
+			Graph totlikes = new Graph("totNuoviFanlikes", 0);
 			result.add(totlikes);
 			/*
 			 * 
@@ -163,17 +160,21 @@ public class PSARData extends GraphSourceGenerator {
 			result.add(sharesPerPost);
 			
 			//Totale Shares per Post nell'intervallo
-			Graph totShare = new Graph("totSharesPerPost", totShares);
+			Graph totShare = new Graph("totShares", totShares);
 			result.add(totShare);
 			
 			//Numero medio Commenti per Autore
 			double commentsPerAuthor = 0;
-			if (comments.size() == 0) {
-				commentsPerAuthor = comments.size()/uniqueAuth.size();
+			if (uniqueAuth.size() != 0 && comments.size() != 0) {
+				double com = Double.valueOf(String.valueOf(comments.size()));
+				double aut = Double.valueOf(String.valueOf(uniqueAuth.size()));
+				commentsPerAuthor = com/aut;
 			}
 			Graph commentPerAuthor = new Graph("commentsPerAuthor", commentsPerAuthor);
 			result.add(commentPerAuthor);
 			
+			//TODO Numero medio delle Risposte ai Commenti
+			//TODO Tempo medio delle Risposte ai Commenti
 			
 			Graph numGio = new Graph("numGiorni", numGiorni);
 			result.add(numGio);
