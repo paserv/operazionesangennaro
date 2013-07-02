@@ -564,4 +564,31 @@ public class DateUtils {
 		 long giorni = (c2.getTime().getTime() - c1.getTime().getTime()) / (24 * 3600 * 1000);
 		 return giorni;
 	 }
+	 
+	 public static long secondiTraDueDate(Date uno, Date due) {
+		 Calendar c1 = Calendar.getInstance();
+		 Calendar c2 = Calendar.getInstance();
+		 c1.setTime(uno);
+		 c2.setTime(due);
+		 long giorni = (c2.getTime().getTime() - c1.getTime().getTime()) / (1000);
+		 return giorni;
+	 }
+	 
+	 public static String getNow() {
+			Calendar cal= Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			cal.add(Calendar.HOUR_OF_DAY, 2);
+			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Date cestDate= cal.getTime();
+			return DateUtils.formatDateAndTime(cestDate);
+	 }
+	 
+	 public static Date getNowDate() {
+			Calendar cal= Calendar.getInstance();
+			cal.setTimeInMillis(System.currentTimeMillis());
+			cal.add(Calendar.HOUR_OF_DAY, 2);
+			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Date cestDate= cal.getTime();
+			return cestDate;
+	 }
 }
