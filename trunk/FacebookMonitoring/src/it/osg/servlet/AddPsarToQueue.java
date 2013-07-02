@@ -10,28 +10,30 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
 @SuppressWarnings("serial")
-public class TestCreateTask extends HttpServlet {
+public class AddPsarToQueue extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		String strCallResult = "";
 		resp.setContentType("text/plain");
 		try {
-			//Extract out the To, Subject and Body of the Email to be sent
-			String strEmailId = req.getParameter("emailid");
+			
+			String sindaco = req.getParameter("sindaco");
+			String from = req.getParameter("from");
+			String to = req.getParameter("to");
+			
+			String mailTo = req.getParameter("mailTo");
+			
+			if (sindaco == null || from == null || to == null || mailTo == null) throw new Exception("Fields cannot be empty.");
 
-			//Do validations here. Only basic ones i.e. cannot be null/empty
-
-			if (strEmailId == null) throw new Exception("Email Id field cannot be empty.");
-
-			//Trim the stuff
-			strEmailId = strEmailId.trim();
-			if (strEmailId.length() == 0) throw new Exception("Email Id field cannot be empty.");
+			mailTo = mailTo.trim();
+			if (mailTo.length() == 0) throw new Exception("To field cannot be empty.");
+			
 			Queue queue = QueueFactory.getDefaultQueue();
 			//Queue queue = QueueFactory.getQueue("subscription-queue");
 
-			queue.add(TaskOptions.Builder.withUrl("/test").param("emailid",strEmailId));
-			strCallResult = "Successfully created a Task in the Queue";
+			queue.add(TaskOptions.Builder.withUrl("/psar").param("sindaco", sindaco).param("from", from).param("to", to).param("mailTo", mailTo));
+			strCallResult = "Successfully created a Task in the Queue.\nYou will receive an email as data are available";
 			resp.getWriter().println(strCallResult);
 		}
 		catch (Exception ex) {
