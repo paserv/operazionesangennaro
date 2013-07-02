@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="css/jquery-ui-timepicker-addon.css" />
+<title>Get Data</title>
+</head>
+
+<body>
+<form method="post" action="psarqueue">
+<div class="header">
+Sindaco: 
+	<input type="text" id="sindaco" name="sindaco" />
+From: 
+	<input type="text" id="from" name="from" />
+To: 
+	<input type="text" id="to" name="to" />
+Mail:
+	<input type="text" id="mailTo" name="mailTo" />
+	<button id="getData">Get Data</button>
+</div>
+</form>
+    
+
+<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.js"></script>
+<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>	
+<script>
+$(function() {
+	$('#from').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
+	$('#to').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
+});
+</script>
+</body>
+</html>
