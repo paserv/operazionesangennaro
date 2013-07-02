@@ -61,13 +61,13 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Test Create Task Servlet</servlet-name>
-		<servlet-class>it.osg.servlet.TestCreateTask</servlet-class>
+		<servlet-name>Add Psar To Queue Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.AddPsarToQueue</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>Test Create Task Servlet</servlet-name>
-		<url-pattern>/testtask</url-pattern>
+		<servlet-name>Add Psar To Queue Servlet</servlet-name>
+		<url-pattern>/psarqueue</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
