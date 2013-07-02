@@ -30,9 +30,14 @@ public class FacebookDataPicker {
 		
 		System.out.println(likeCount + " " + talkingAboutCount);
 		
-		currRow.put("like_count", Integer.parseInt(likeCount));
-		currRow.put("talking_about_count", Integer.parseInt(talkingAboutCount));
+		if (!likeCount.equalsIgnoreCase("")) {
+			currRow.put("like_count", Integer.parseInt(likeCount));
+		}
 		
+		if (!talkingAboutCount.equalsIgnoreCase("")) {
+			currRow.put("talking_about_count", Integer.parseInt(talkingAboutCount));
+		}
+				
 		Calendar cal= Calendar.getInstance();
 		cal.setTimeInMillis(System.currentTimeMillis());
 		cal.add(Calendar.HOUR_OF_DAY, 2);
