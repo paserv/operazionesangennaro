@@ -2,6 +2,7 @@ package it.osg.servlet;
 
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
+import it.osg.utils.MailUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,7 +10,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,118 +46,175 @@ public class TestServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
-		Date f = null;
-		Date t = null;
+		String strCallResult = "";
+		resp.setContentType("text/plain");
 		try {
-			f = DateUtils.parseDateAndTime("01-04-2013 00:00:00");
-			t = DateUtils.parseDateAndTime("30-06-2013 23:59:59");
-		} catch (ParseException e1) {
-			e1.printStackTrace();
+			//Extract out the To, Subject and Body of the Email to be sent
+			//		String strTo = req.getParameter("email_to");
+			//		String strSubject = req.getParameter("email_subject");
+			//		String strBody = req.getParameter("email_body");
+
+			String strTo = "paserv@gmail.com";
+			String strSubject = "test";
+			String strBody = "ciao";
+			byte[] attachmentData = strBody.getBytes();
+
+			//Do validations here. Only basic ones i.e. cannot be null/empty
+			//Currently only checking the To Email field
+			if (strTo == null) throw new Exception("To field cannot be empty.");
+
+			//Trim the stuff
+			strTo = strTo.trim();
+			if (strTo.length() == 0) throw new Exception("To field cannot be empty.");
+
+			//Call the GAEJ Email Service
+			Properties props = new Properties();
+			Session session = Session.getDefaultInstance(props, null);
+			Message msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress("donpablooooo@gmail.com"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(strTo));
+			msg.setSubject(strSubject);
+			//msg.setText(strBody);
+									
+			Multipart mp = new MimeMultipart();
+			MimeBodyPart htmlPart = new MimeBodyPart();
+	        htmlPart.setContent(strBody, "text/plain");
+	        mp.addBodyPart(htmlPart);
+	        
+	        MimeBodyPart attachment = new MimeBodyPart();
+	        ByteArrayDataSource src = new ByteArrayDataSource(attachmentData, "text/plain"); 
+	        attachment.setFileName("ciao.txt");
+	        
+	        attachment.setDataHandler(new DataHandler (src)); 
+	        
+	        //attachment.setContent(attachmentData, "text/plain");
+	        mp.addBodyPart(attachment);
+	        
+	        msg.setContent(mp);
+	        msg.saveChanges();
+
+			Transport.send(msg);
+			strCallResult = "Success: " + "Email has been delivered.";
+			resp.getWriter().println(strCallResult);
 		}
-				
-		resp.setContentType("text/html;charset=UTF-8");
-		PrintWriter out = resp.getWriter();
+		catch (Exception ex) {
+			strCallResult = "Fail: " + ex.getMessage();
+			resp.getWriter().println(strCallResult);
+		}
 
-		Facebook facebook = new FacebookFactory().getInstance();
-		facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
-		//facebook.setOAuthPermissions(commaSeparetedPermissions);
-		facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
 
-				
-		ArrayList<Post> posts = FacebookUtils.getAllPosts("166115370094396", f, t, null);
-		
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("queue");
-		currEntity.setProperty("posts", posts.size());
-		datastore.put(currEntity);
-		
-//		Iterator<Post> iterPost = posts.iterator();
-//		while (iterPost.hasNext()) {
-//			Post curPost = iterPost.next();
-//			out.println("ID Post = " + curPost.getId() + "<br>");
-//			out.println("Post Message = " + curPost.getMessage() + "<br>");
-//			out.println("Post Shares Count = " + curPost.getSharesCount() + "<br>");
-//			out.println("Post Type = " + curPost.getType() + "<br>");
-//			if (curPost.getFrom() != null) {
-//				out.println("Post FROM Name = " + curPost.getFrom().getName() + "<br>");
-//				out.println("Post FROM ID = " + curPost.getFrom().getId() + "<br>");
-//			}
-//			if (curPost.getTo() != null) {
-//				out.println("Post Type = " + curPost.getTo().toString() + "<br>");
-//			}
-//			
-//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
-//			
-//			
-//									
-//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
-//			
-//			ArrayList<Like> likes = FacebookUtils.getAllLikes(curPost);
-//			out.println("----> Num Likes = " + likes.size() + "<br>");
-//			Iterator<Like> iter = likes.iterator();
-//			while (iter.hasNext()) {
-//				Like curr = iter.next();
-//				out.println("ID = " + curr.getId() + "<br>");
-//				out.println("NAME = " + curr.getName() + "<br>");
-//			}
-//			
-//		}
-		
-		
-		
-		
-		
-		
-//		ResponseList<Post> facResults;
-//		try {
-//			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t));
-//			Iterator<Post> it = facResults.iterator();
-//			while(it.hasNext()){
-//				Post cu = it.next();
-//				out.println("POST: " + cu.getMessage() + "<br>");
-//				out.println("Type: " + cu.getType() + "<br>");
-//				out.println("Description: " + cu.getDescription() + "<br>");
-//				out.println("SharesCount: " + cu.getSharesCount() + "<br>");
-//				out.println("CreatedTime: " + cu.getCreatedTime() + "<br>");
-//				out.println("From: " + cu.getFrom() + "<br>");
-//				out.println("LikesCount: " + cu.getLikes().size() + "<br>");
-//				out.println("MessageTagsCount: " + cu.getMessageTags() + "<br>");
-//				out.println("Metadata: " + cu.getMetadata() + "<br>");
-//				out.println("Place: " + cu.getPlace() + "<br>");
-//				out.println("UpdateTime: " + cu.getUpdatedTime() + "<br>");				
-//			}			
-//
-//			//Fetching Post
-//			Paging<Post> pagingPost = facResults.getPaging();
-//			while (true) {
-//				if (pagingPost != null) {
-//					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
-//					if (nextPosts != null) {
-//						Post firstPost = nextPosts.get(0);
-//						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
-//							break;
-//						}
-//						Iterator<Post> itr = nextPosts.iterator();
-//						while (itr.hasNext()) {
-//							Post fetchPost = itr.next();
-//							if (fetchPost.getCreatedTime().after(f) && fetchPost.getCreatedTime().before(t)) {
-//								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
-//								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
-//							}
-//						}
-//					} else {
-//						break;
-//					}
-//					pagingPost = nextPosts.getPaging();
-//				} else {
-//					break;
-//				}
-//			}
-//		} catch (FacebookException e) {
-//			e.printStackTrace();
-//		}
-//
-//		out.println("<br>FINE");		
+		//		Date f = null;
+		//		Date t = null;
+		//		try {
+		//			f = DateUtils.parseDateAndTime("01-04-2013 00:00:00");
+		//			t = DateUtils.parseDateAndTime("30-06-2013 23:59:59");
+		//		} catch (ParseException e1) {
+		//			e1.printStackTrace();
+		//		}
+		//				
+		//		resp.setContentType("text/html;charset=UTF-8");
+		//		PrintWriter out = resp.getWriter();
+		//
+		//		Facebook facebook = new FacebookFactory().getInstance();
+		//		facebook.setOAuthAppId("156346967866710", "e0f880cc248e811c98952d9a44a27ce4");
+		//		//facebook.setOAuthPermissions(commaSeparetedPermissions);
+		//		facebook.setOAuthAccessToken(new AccessToken("156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk", null));
+		//
+		//				
+		//		ArrayList<Post> posts = FacebookUtils.getAllPosts("166115370094396", f, t, null);
+		//		
+		//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		//		Entity currEntity = new Entity("queue");
+		//		currEntity.setProperty("posts", posts.size());
+		//		datastore.put(currEntity);
+
+		//		Iterator<Post> iterPost = posts.iterator();
+		//		while (iterPost.hasNext()) {
+		//			Post curPost = iterPost.next();
+		//			out.println("ID Post = " + curPost.getId() + "<br>");
+		//			out.println("Post Message = " + curPost.getMessage() + "<br>");
+		//			out.println("Post Shares Count = " + curPost.getSharesCount() + "<br>");
+		//			out.println("Post Type = " + curPost.getType() + "<br>");
+		//			if (curPost.getFrom() != null) {
+		//				out.println("Post FROM Name = " + curPost.getFrom().getName() + "<br>");
+		//				out.println("Post FROM ID = " + curPost.getFrom().getId() + "<br>");
+		//			}
+		//			if (curPost.getTo() != null) {
+		//				out.println("Post Type = " + curPost.getTo().toString() + "<br>");
+		//			}
+		//			
+		//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
+		//			
+		//			
+		//									
+		//			out.println("<br>" + "---------------getAllLikes-------------" + "<br>");
+		//			
+		//			ArrayList<Like> likes = FacebookUtils.getAllLikes(curPost);
+		//			out.println("----> Num Likes = " + likes.size() + "<br>");
+		//			Iterator<Like> iter = likes.iterator();
+		//			while (iter.hasNext()) {
+		//				Like curr = iter.next();
+		//				out.println("ID = " + curr.getId() + "<br>");
+		//				out.println("NAME = " + curr.getName() + "<br>");
+		//			}
+		//			
+		//		}
+
+
+
+
+
+
+		//		ResponseList<Post> facResults;
+		//		try {
+		//			facResults = facebook.getFeed("Ballaro.Rai", new Reading().since(f).until(t));
+		//			Iterator<Post> it = facResults.iterator();
+		//			while(it.hasNext()){
+		//				Post cu = it.next();
+		//				out.println("POST: " + cu.getMessage() + "<br>");
+		//				out.println("Type: " + cu.getType() + "<br>");
+		//				out.println("Description: " + cu.getDescription() + "<br>");
+		//				out.println("SharesCount: " + cu.getSharesCount() + "<br>");
+		//				out.println("CreatedTime: " + cu.getCreatedTime() + "<br>");
+		//				out.println("From: " + cu.getFrom() + "<br>");
+		//				out.println("LikesCount: " + cu.getLikes().size() + "<br>");
+		//				out.println("MessageTagsCount: " + cu.getMessageTags() + "<br>");
+		//				out.println("Metadata: " + cu.getMetadata() + "<br>");
+		//				out.println("Place: " + cu.getPlace() + "<br>");
+		//				out.println("UpdateTime: " + cu.getUpdatedTime() + "<br>");				
+		//			}			
+		//
+		//			//Fetching Post
+		//			Paging<Post> pagingPost = facResults.getPaging();
+		//			while (true) {
+		//				if (pagingPost != null) {
+		//					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
+		//					if (nextPosts != null) {
+		//						Post firstPost = nextPosts.get(0);
+		//						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
+		//							break;
+		//						}
+		//						Iterator<Post> itr = nextPosts.iterator();
+		//						while (itr.hasNext()) {
+		//							Post fetchPost = itr.next();
+		//							if (fetchPost.getCreatedTime().after(f) && fetchPost.getCreatedTime().before(t)) {
+		//								out.println("Other POSTS: " + fetchPost.getMessage() + "<br>");
+		//								out.println("Other POSTS Created: " + fetchPost.getCreatedTime() + "<br>");
+		//							}
+		//						}
+		//					} else {
+		//						break;
+		//					}
+		//					pagingPost = nextPosts.getPaging();
+		//				} else {
+		//					break;
+		//				}
+		//			}
+		//		} catch (FacebookException e) {
+		//			e.printStackTrace();
+		//		}
+		//
+		//		out.println("<br>FINE");		
 
 
 
