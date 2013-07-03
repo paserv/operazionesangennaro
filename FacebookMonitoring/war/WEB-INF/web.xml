@@ -29,6 +29,41 @@
 <!-- FINE CONF -->
 
 
+
+<!-- QUEUE -->
+    <servlet>
+        <servlet-name>SplitTaskServlet</servlet-name>
+        <servlet-class>it.osg.servlet.SplitTaskServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SplitTaskServlet</servlet-name>
+        <url-pattern>/splittask</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>SubTaskServlet</servlet-name>
+        <servlet-class>it.osg.servlet.SubTaskServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SubTaskServlet</servlet-name>
+        <url-pattern>/subtask</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>JoinTaskServlet</servlet-name>
+        <servlet-class>it.osg.servlet.JoinTaskServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JoinTaskServlet</servlet-name>
+        <url-pattern>/jointask</url-pattern>
+    </servlet-mapping>
+<!-- FINE QUEUE -->
+
+
+
 <!-- VARIE -->
     <servlet>
         <servlet-name>RetrieveDataServlet</servlet-name>
