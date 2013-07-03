@@ -98,8 +98,8 @@ public class SubTaskServlet extends HttpServlet  {
 		
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("task");
-		currEntity.setProperty("idTransaction", idTransaction);
+		Entity currEntity = new Entity("task", idTransaction);
+		//currEntity.setProperty("idTransaction", idTransaction);
 		//currEntity.setProperty("pageId", pageId);
 		currEntity.setProperty("from", f);
 		currEntity.setProperty("to", t);

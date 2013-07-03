@@ -73,6 +73,7 @@ public class JoinTaskServlet extends HttpServlet {
 			}
 			
 			//OUTPUT DATA
+			//Da aggregare
 			double totPostFromPage = 0;
 			double totPostFromFan = 0;
 			double totComments = 0;
@@ -80,7 +81,7 @@ public class JoinTaskServlet extends HttpServlet {
 			double uniqueAuthors = 0;
 			double totLikes = 0;
 			double totShares = 0;
-
+			//da ricavare
 			double mediaPostFromPage;
 			double mediaPostFromFan;
 			double commentsPerPost;
@@ -88,13 +89,20 @@ public class JoinTaskServlet extends HttpServlet {
 			double mediaLikePerPost;
 			double sharesPerPost;
 			double commentsPerAuthor;			
-
+			//Da cercare
 			double totNuoviFan = 0;
 			double mediaNuoviFan = 0;
 			double totFan;
 			double totTalkAbout;
-
 			String pageName;
+			//Già presenti nel DB
+			String regione;
+			String provincia;
+			String sesso;
+			String annoNascita;
+			String partito;
+			String URL;
+			String tipologiaAccount;
 
 
 			for (Entity ent : pq.asIterable()) {
@@ -117,7 +125,13 @@ public class JoinTaskServlet extends HttpServlet {
 			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
 			totFan = Double.valueOf((String) baseInfo.get("likes"));
 			totTalkAbout = Double.valueOf((String) baseInfo.get("talking_about_count"));
-
+			pageName = (String) baseInfo.get("pageName");
+			
+			//GET INFO PAGE ID
+			
+			
+			
+			//SEND MAIL
 
 		} else {
 			//RIMETTE IN CODA SE STESSO 
