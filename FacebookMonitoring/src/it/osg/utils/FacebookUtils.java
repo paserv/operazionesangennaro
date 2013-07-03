@@ -49,6 +49,7 @@ public class FacebookUtils {
 				
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
+		//String pageName = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
 		//TODO retrieve anche degli altri campi
 				
 		result.put("likes", likeCount);
