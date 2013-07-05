@@ -562,7 +562,7 @@ public class DateUtils {
 		 c1.setTime(uno);
 		 c2.setTime(due);
 		 long giorni = (c2.getTime().getTime() - c1.getTime().getTime()) / (24 * 3600 * 1000);
-		 return giorni;
+		 return giorni + 1;
 	 }
 	 
 	 public static long secondiTraDueDate(Date uno, Date due) {
@@ -591,4 +591,14 @@ public class DateUtils {
 			Date cestDate= cal.getTime();
 			return cestDate;
 	 }
+	 
+	 public static String parseTimestamp(long timestamp) {
+			Calendar cal= Calendar.getInstance();
+			cal.setTimeInMillis(timestamp);
+			cal.add(Calendar.HOUR_OF_DAY, 2);
+			SimpleDateFormat sdf= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Date cestDate= cal.getTime();
+			return DateUtils.formatDateAndTime(cestDate);
+	 }
+	 
 }
