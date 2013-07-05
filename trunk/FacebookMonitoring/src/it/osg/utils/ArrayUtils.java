@@ -18,4 +18,12 @@ public class ArrayUtils {
 		return result;
 	}
 	
+	public static ArrayList<String> splitAndAdd (String unsplittedString, String separator) {
+		ArrayList<String> result = new ArrayList<String>();
+		String[] splitted = unsplittedString.split(separator);
+		for (int i = 0; i < splitted.length; i++) {
+			result.add(splitted[i]);
+		}
+		return result;
+	}
 }
