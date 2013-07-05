@@ -145,7 +145,7 @@ public class JoinTaskServlet extends HttpServlet {
 			pageName = (String) baseInfo.get("pageName");
 
 			//PRESENTI NEL DB
-			idFilter = new FilterPredicate("ID", FilterOperator.EQUAL, pageId);
+			idFilter = new FilterPredicate("Id", FilterOperator.EQUAL, pageId);
 			q = new Query("sindaco").setFilter(idFilter);
 			pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
