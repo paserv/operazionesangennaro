@@ -4,9 +4,7 @@ import it.osg.utils.ArrayUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 
@@ -15,6 +13,7 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -33,6 +32,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -44,6 +44,7 @@ public class JoinTaskServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final long timeout = 400000L;
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
@@ -57,11 +58,13 @@ public class JoinTaskServlet extends HttpServlet {
 		String timestamp = req.getParameter("timestamp");
 		String pageId = req.getParameter("pageId");
 
+		long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
+
 		//CHECK FINE TASKS
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate("ID", FilterOperator.EQUAL, idTransaction);
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
 		q = new Query("task").setFilter(idFilter);
 		pq = datastore.prepare(q);
 		int executedTask = pq.countEntities();
@@ -69,15 +72,15 @@ public class JoinTaskServlet extends HttpServlet {
 
 			//INPUT DATA
 			double numGiorni = Double.valueOf(numTask);
-//			Date f = null;
-//			Date t = null;
-//			try {
-//				f = DateUtils.parseDateAndTime(from);
-//				t = DateUtils.parseDateAndTime(to);
-//				numGiorni = DateUtils.giorniTraDueDate(f, t);
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			}
+			//			Date f = null;
+			//			Date t = null;
+			//			try {
+			//				f = DateUtils.parseDateAndTime(from);
+			//				t = DateUtils.parseDateAndTime(to);
+			//				numGiorni = DateUtils.giorniTraDueDate(f, t);
+			//			} catch (ParseException e) {
+			//				e.printStackTrace();
+			//			}
 
 			//OUTPUT DATA
 			//Da aggregare
@@ -89,19 +92,19 @@ public class JoinTaskServlet extends HttpServlet {
 			double totLikes = 0;
 			double totShares = 0;
 			//da ricavare
-			double mediaPostFromPage;
-			double mediaPostFromFan;
-			double commentsPerPost;
+			double mediaPostFromPage = 0;
+			double mediaPostFromFan = 0;
+			double commentsPerPost = 0;
 			double uniqueAuthorsPerPost = 0;
-			double mediaLikePerPost;
-			double sharesPerPost;
-			double commentsPerAuthor;			
+			double mediaLikePerPost = 0;
+			double sharesPerPost = 0;
+			double commentsPerAuthor = 0;			
 			//Da cercare
 			double totNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
 			double mediaNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
-			double totFan;
-			double totTalkAbout;
-			String pageName;
+			double totFan = 0;
+			double totTalkAbout = 0;
+			String pageName = "";
 			//Già presenti nel DB
 			String regione = "";
 			String provincia = "";
@@ -117,7 +120,7 @@ public class JoinTaskServlet extends HttpServlet {
 				totPostFromPage = totPostFromPage + (Double) ent.getProperty("totParzPostFromPage");
 				totPostFromFan = totPostFromFan + (Double) ent.getProperty("totParzPostFromFan");
 				totComments = totComments + (Double) ent.getProperty("totParzComments");
-				authors.addAll(ArrayUtils.splitAndAdd((String) ent.getProperty("authors"), ","));
+				authors.addAll(ArrayUtils.splitAndAdd(((Text) ent.getProperty("authors")).getValue(), ","));
 				totLikes = totLikes + (Double) ent.getProperty("totParzLikes");
 				totShares = totShares + (Double) ent.getProperty("totParzShares");
 			}
@@ -133,8 +136,12 @@ public class JoinTaskServlet extends HttpServlet {
 
 			//DA CERCARE
 			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
-			totFan = Double.valueOf((String) baseInfo.get("likes"));
-			totTalkAbout = Double.valueOf((String) baseInfo.get("talking_about_count"));
+			if (!((String) baseInfo.get("likes")).equals("")) {
+				totFan = Double.valueOf((String) baseInfo.get("likes"));
+			}
+			if (!((String) baseInfo.get("talking_about_count")).equals("")) {
+				totTalkAbout = Double.valueOf((String) baseInfo.get("talking_about_count"));
+			}
 			pageName = (String) baseInfo.get("pageName");
 
 			//PRESENTI NEL DB
@@ -151,16 +158,14 @@ public class JoinTaskServlet extends HttpServlet {
 				tipologiaAccount = (String) ent.getProperty("tipologiaAccount");
 			}
 
-			long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
-			
 			//CREA PARTI MAIL
 			String bodyMail = "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per la pagina " + pageName + "\nID Facebook = " + pageId;
 
 			String attachFile = "Nome Pagina,ID Facebook,Totale Fan,Totale TalkAbout,Regione,Provincia,Sesso,Anno di Nascita,Partito,URL Facebook,Tipologia Account,Totale Post from Account,Totale Post from Fan,Totale Comments ai Post,Unique Authors dei Comments ai Post,Totale Likes ai Post from Account,Totale Shares dei Post from Account,Media Post from Account al giorno,Media Post from Fan al giorno,Media Comments per Post from Account,Media Unique Authors per Post from Account,Media Like per Post from Account,Media Shares per Post,Media Comments per Author" + 
 					"\n" + pageName  + "," + pageId  + "," + totFan  + "," + totTalkAbout + "," + regione + "," + provincia + "," + sesso + "," + annoNascita + "," + partito + "," + URL + "," + tipologiaAccount +
 					"," + totPostFromPage + "," + totPostFromFan + "," + totComments + "," + uniqueAuthors + "," + totLikes + "," + totShares +
-					 "," + mediaPostFromPage  + "," + mediaPostFromFan  + "," + commentsPerPost + "," + uniqueAuthorsPerPost + "," + mediaLikePerPost  + "," + sharesPerPost  + "," + commentsPerAuthor;
-			
+					"," + mediaPostFromPage  + "," + mediaPostFromFan  + "," + commentsPerPost + "," + uniqueAuthorsPerPost + "," + mediaLikePerPost  + "," + sharesPerPost  + "," + commentsPerAuthor;
+
 			//SEND MAIL
 			Properties props = new Properties();
 			Session session = Session.getDefaultInstance(props, null);
@@ -184,6 +189,7 @@ public class JoinTaskServlet extends HttpServlet {
 
 				msg.setContent(mp);
 				msg.saveChanges();
+				Transport.send(msg);
 
 			} catch (AddressException e) {
 				e.printStackTrace();
@@ -191,23 +197,32 @@ public class JoinTaskServlet extends HttpServlet {
 				e.printStackTrace();
 			}	
 
-			} else {
-				//RIMETTE IN CODA SE STESSO 
+		} else {
+			if (timeout - elapsedTime > 0) {
+				//RIMETTE IN CODA SE STESSO DOPO UN CERTO DELAY
+				try {
+					Thread.sleep(100000L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 				Queue queue = QueueFactory.getDefaultQueue();
-				//Queue queue = QueueFactory.getQueue("subscription-queue");
-				queue.add(TaskOptions.Builder.withUrl("/jointask").param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId));
-			}
+				queue.add(TaskOptions.Builder.withUrl("/jointask").param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId));	
 
 
-
-
+			}			
 		}
 
 
-
-		public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-			doGet(req, resp);
-		}
 
 
 	}
+
+
+
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		doGet(req, resp);
+	}
+
+
+}

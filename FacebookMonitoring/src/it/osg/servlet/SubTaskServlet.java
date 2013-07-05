@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Text;
 
 public class SubTaskServlet extends HttpServlet  {
 
@@ -39,12 +40,12 @@ public class SubTaskServlet extends HttpServlet  {
 		String to = req.getParameter("to");
 		
 		//OUTPUT DATA
-		double totParzPostFromPage;
-		double totParzPostFromFan;
-		double totParzComments;
+		double totParzPostFromPage = 0;
+		double totParzPostFromFan = 0;
+		double totParzComments = 0;
 		String authors = "";
-		double totParzLikes;
-		double totParzShares;
+		double totParzLikes = 0;
+		double totParzShares = 0;
 		
 				
 		//GET DATE
@@ -98,8 +99,8 @@ public class SubTaskServlet extends HttpServlet  {
 		
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("task", idTransaction);
-		//currEntity.setProperty("idTransaction", idTransaction);
+		Entity currEntity = new Entity("task");
+		currEntity.setProperty("idTransaction", idTransaction);
 		//currEntity.setProperty("pageId", pageId);
 		currEntity.setProperty("from", f);
 		currEntity.setProperty("to", t);
@@ -109,7 +110,7 @@ public class SubTaskServlet extends HttpServlet  {
 		currEntity.setProperty("totParzPostFromPage", totParzPostFromPage);
 		currEntity.setProperty("totParzPostFromFan", totParzPostFromFan);
 		currEntity.setProperty("totParzComments", totParzComments);
-		currEntity.setProperty("authors", authors);
+		currEntity.setProperty("authors", new Text(authors));
 		currEntity.setProperty("totParzLikes", totParzLikes);
 		currEntity.setProperty("totParzShares", totParzShares);
 		
