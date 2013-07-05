@@ -66,14 +66,18 @@ public class SubTaskServlet extends HttpServlet  {
 		ArrayList<Post> postFromFan = new ArrayList<Post>();
 		
 		Iterator<Post> iterPost = posts.iterator();
+		String del = ""; /* <---- */
 		while (iterPost.hasNext()) {
 			Post currPost = iterPost.next();
 			if (currPost.getFrom().getId().equals(pageId)) {
 				postFromPage.add(currPost);
+				del = del + currPost.getId() + ",";/* <---- */
 			} else {
 				postFromFan.add(currPost);
 			}
 		}
+		
+		Text delete = new Text(del);/* <---- */
 		
 		totParzPostFromPage = postFromPage.size();
 		totParzPostFromFan = postFromFan.size();
@@ -114,6 +118,7 @@ public class SubTaskServlet extends HttpServlet  {
 		currEntity.setProperty("totParzLikes", totParzLikes);
 		currEntity.setProperty("totParzShares", totParzShares);
 		
+		currEntity.setProperty("del", delete);/* <---- */
 		datastore.put(currEntity);
 		
 
