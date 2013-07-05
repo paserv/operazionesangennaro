@@ -72,7 +72,7 @@
 
     <servlet-mapping>
         <servlet-name>RetrieveDataServlet</servlet-name>
-        <url-pattern>/facebook/monitoring/data</url-pattern>
+        <url-pattern>/data</url-pattern>
     </servlet-mapping>
 
 	<servlet>
