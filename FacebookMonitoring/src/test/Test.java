@@ -18,7 +18,7 @@ public class Test {
 
 
 		String from = "01-06-2013 00:00:00";
-		String to = "30-06-2013 00:00:00";
+		String to = "02-06-2013 00:00:00";
 		
 		Date f = null;
 		Date t = null;
