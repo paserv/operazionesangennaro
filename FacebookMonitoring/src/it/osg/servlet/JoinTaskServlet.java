@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -72,15 +74,6 @@ public class JoinTaskServlet extends HttpServlet {
 
 			//INPUT DATA
 			double numGiorni = Double.valueOf(numTask);
-			//			Date f = null;
-			//			Date t = null;
-			//			try {
-			//				f = DateUtils.parseDateAndTime(from);
-			//				t = DateUtils.parseDateAndTime(to);
-			//				numGiorni = DateUtils.giorniTraDueDate(f, t);
-			//			} catch (ParseException e) {
-			//				e.printStackTrace();
-			//			}
 
 			//OUTPUT DATA
 			//Da aggregare
@@ -109,7 +102,7 @@ public class JoinTaskServlet extends HttpServlet {
 			String regione = "";
 			String provincia = "";
 			String sesso = "";
-			String annoNascita = "";
+			long annoNascita = 0L;
 			String partito = "";
 			String URL = "";
 			String tipologiaAccount = "";
@@ -145,14 +138,14 @@ public class JoinTaskServlet extends HttpServlet {
 			pageName = (String) baseInfo.get("pageName");
 
 			//PRESENTI NEL DB
-			idFilter = new FilterPredicate("Id", FilterOperator.EQUAL, pageId);
+			idFilter = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey("sindaco", pageId));
 			q = new Query("sindaco").setFilter(idFilter);
 			pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
 				regione = (String) ent.getProperty("regione");
 				provincia = (String) ent.getProperty("provincia");
 				sesso = (String) ent.getProperty("sesso");
-				annoNascita = (String) ent.getProperty("annoNascita");
+				annoNascita = (Long) ent.getProperty("annoNascita");
 				partito = (String) ent.getProperty("partito");
 				URL = (String) ent.getProperty("URL");
 				tipologiaAccount = (String) ent.getProperty("tipologiaAccount");
@@ -183,7 +176,7 @@ public class JoinTaskServlet extends HttpServlet {
 
 				MimeBodyPart attachment = new MimeBodyPart();
 				ByteArrayDataSource src = new ByteArrayDataSource(attachFile.getBytes(), "text/plain"); 
-				attachment.setFileName(pageName + ".txt");
+				attachment.setFileName(pageName + ".csv");
 				attachment.setDataHandler(new DataHandler (src));
 				mp.addBodyPart(attachment);
 

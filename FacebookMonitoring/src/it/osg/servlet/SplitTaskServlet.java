@@ -43,43 +43,40 @@ public class SplitTaskServlet  extends HttpServlet {
 
 			String idTransaction = Utils.MD5(pageId + mail + timestamp);
 
-			//GET TO DATE	
+			//GET TO DATE
+			String toDay = to.substring(0, 10) + " 23:59:59";
 			Date t = null;
 			try {
-				t = DateUtils.parseDateAndTime(to);
+				t = DateUtils.parseDateAndTime(toDay);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 
+
 			//SPLITTO UN GIORNO ALLA VOLTA ED INVIO IN CODA
 			Queue queue = QueueFactory.getDefaultQueue();
-			String from1 = from;
+			String from1 = from.substring(0, 10) + " 00:00:00";
 			int numTask = 0;
 			while (true) {
-				Date f1 = null;
-				try {
-					f1 = DateUtils.parseDateAndTime(from1);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				from1 = DateUtils.formatDateAndTime(f1);
-				Date t1 = DateUtils.addOneDay(f1);
-				String to1 = DateUtils.formatDateAndTime(t1);
+				String to1 = from1.substring(0, 10) + " 23:59:59";
+				Date t1 = DateUtils.parseDateAndTime(to1);
 
 				if (DateUtils.compareDate(t, t1) >= 0) {
-					String paramFrom = from1.substring(0, 10) + " 00:00:00";
-					String paramTo = to1.substring(0, 10) + " 23:59:59";
+					//String paramFrom = from1.substring(0, 10) + " 00:00:01";
+					//String paramTo = to1.substring(0, 10) + " 00:00:00";
 
-					queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", paramFrom).param("to", paramTo).param("pageId", pageId));
+					queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", from1).param("to", to1).param("pageId", pageId));
 					numTask = numTask + 1;
-					from1 = DateUtils.formatDateAndTime(t1);
+					Date f1 = DateUtils.parseDateAndTime(from1);
+					f1 = DateUtils.addOneDay(f1);
+					from1 = DateUtils.formatDateAndTime(f1);
 
 				} else {
 					break;
 				}
 			}
 
-			
+
 			//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 			queue.add(TaskOptions.Builder.withUrl("/jointask").param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("mail", mail).param("timestamp", timestamp));	
 
