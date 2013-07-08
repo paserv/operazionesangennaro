@@ -1,13 +1,10 @@
 package it.osg.servlet.mapreduce;
 
-import facebook4j.Post;
 import it.osg.utils.DateUtils;
-import it.osg.utils.FacebookUtils;
 import it.osg.utils.Utils;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpServlet;
@@ -18,7 +15,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class SplitTaskServlet  extends HttpServlet {
+public class del_SplitTaskServlet  extends HttpServlet {
 
 	/**
 	 * 
@@ -46,20 +43,20 @@ public class SplitTaskServlet  extends HttpServlet {
 			//OUTPUT DATA
 			String timestamp = String.valueOf(System.currentTimeMillis());
 			String idTransaction = Utils.MD5(pageId + mail + timestamp);
-			int numPost = 0;
+			//int numPost = 0;
 			
 			//GET TO DATE
-			Date f = null;
+			//Date f = null;
 			Date t = null;
 			try {
-				f = DateUtils.parseDateAndTime(from);
+				//f = DateUtils.parseDateAndTime(from);
 				t = DateUtils.parseDateAndTime(to);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 
 			//Get all Post
-			ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, new String[]{"id"});
+			//ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, new String[]{"id"});
 			
 			//SPLITTO UN GIORNO ALLA VOLTA ED INVIO IN CODA
 			Queue queue = QueueFactory.getDefaultQueue();
@@ -77,8 +74,10 @@ public class SplitTaskServlet  extends HttpServlet {
 				String to1 = DateUtils.formatDateAndTime(t1);
 
 				if (DateUtils.compareDate(t, t1) >= 0) {
-					String paramFrom = from1.substring(0, 10) + " 00:00:00";
-					String paramTo = to1.substring(0, 10) + " 23:59:59";
+					String paramFrom = from1.substring(0, 10) + " 00:00:01";
+					String paramTo = to1.substring(0, 10) + " 00:00:00";
+					System.out.println(paramFrom);
+					System.out.println(paramTo);
 
 					queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", paramFrom).param("to", paramTo).param("pageId", pageId));
 					numTask = numTask + 1;
