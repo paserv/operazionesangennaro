@@ -37,7 +37,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class JoinTaskServlet extends HttpServlet {
+public class del_JoinTaskServlet extends HttpServlet {
 
 	/**
 	 * 

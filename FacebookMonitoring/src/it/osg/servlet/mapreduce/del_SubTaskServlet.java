@@ -21,7 +21,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 
-public class SubTaskServlet extends HttpServlet  {
+public class del_SubTaskServlet extends HttpServlet  {
 
 	/**
 	 * 
