@@ -4,6 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 
 public class Utils {
@@ -22,5 +29,22 @@ public class Utils {
 		return signature;
 	} 
 
+	
+	public static ArrayList<String> getAllSindaci() {
+		ArrayList<String> sindaci = new ArrayList<String>();
+		
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		PreparedQuery pq;
+		q = new Query("sindaco");
+		pq = datastore.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			String currSindaco = String.valueOf(ent.getKey().getName());
+			sindaci.add(currSindaco);
+		}
+		
+		return sindaci;
+		
+	}
 
 }
