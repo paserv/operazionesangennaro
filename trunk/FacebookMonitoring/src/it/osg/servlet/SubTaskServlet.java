@@ -101,7 +101,7 @@ public class SubTaskServlet extends HttpServlet  {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity currEntity = new Entity("task");
 		currEntity.setProperty("idTransaction", idTransaction);
-		//currEntity.setProperty("pageId", pageId);
+		currEntity.setProperty("pageId", pageId);
 		currEntity.setProperty("from", f);
 		currEntity.setProperty("to", t);
 		//currEntity.setProperty("mail", mail);
