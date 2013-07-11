@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
-    <url>/facebook/monitoring</url>
-    <description>Monitor Facebook Pages in table pages every X minutes</description>
-    <schedule>every 15 minutes synchronized</schedule>
-  </cron>
+	<cron>
+		<url>/facebook/monitoring/trasmissioni</url>
+		<description>Monitor Facebook Pages in table pages every X minutes
+		</description>
+		<schedule>every 30 minutes synchronized</schedule>
+	</cron>
+	<cron>
+		<url>/facebook/monitoring/sindaci</url>
+		<description>Monitor Facebook Pages in table pages every X minutes
+		</description>
+		<schedule>every 6 hours synchronized</schedule>
+	</cron>
 </cronentries>

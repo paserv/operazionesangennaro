@@ -1,79 +1,103 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<!-- Servlets -->
-	
-	
+
+
 	<!-- MONITORING -->
 	<servlet>
 		<servlet-name>MonitoringServlet</servlet-name>
-		<servlet-class>it.osg.servlet.MonitoringServlet</servlet-class>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>MonitoringServlet</servlet-name>
 		<url-pattern>/facebook/monitoring</url-pattern>
 	</servlet-mapping>
-    <!-- FINE MONITORING -->
+
+	<servlet>
+		<servlet-name>MonitoringTrasmissioniServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringTrasmissioniServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringTrasmissioniServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/trasmissioni</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MonitoringSindaciServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringSindaciServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringSindaciServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/sindaci</url-pattern>
+	</servlet-mapping>
+	<!-- FINE MONITORING -->
 
 
 
-<!-- CONF -->
-    <servlet>
-        <servlet-name>Conf Time Likes Servlet</servlet-name>
-        <servlet-class>it.osg.servlet.conf.ConfTimeLikesServlet</servlet-class>
-    </servlet>
+	<!-- CONF -->
+	<servlet>
+		<servlet-name>Conf Time Likes Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.conf.ConfTimeLikesServlet</servlet-class>
+	</servlet>
 
-    <servlet-mapping>
-        <servlet-name>Conf Time Likes Servlet</servlet-name>
-        <url-pattern>/conf/conftimelikes</url-pattern>
-    </servlet-mapping>
-<!-- FINE CONF -->
-
-
-
-<!-- QUEUE -->
-    <servlet>
-        <servlet-name>SplitTaskServlet</servlet-name>
-        <servlet-class>it.osg.servlet.SplitTaskServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SplitTaskServlet</servlet-name>
-        <url-pattern>/splittask</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>SubTaskServlet</servlet-name>
-        <servlet-class>it.osg.servlet.SubTaskServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SubTaskServlet</servlet-name>
-        <url-pattern>/subtask</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>JoinTaskServlet</servlet-name>
-        <servlet-class>it.osg.servlet.JoinTaskServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>JoinTaskServlet</servlet-name>
-        <url-pattern>/jointask</url-pattern>
-    </servlet-mapping>
-<!-- FINE QUEUE -->
+	<servlet-mapping>
+		<servlet-name>Conf Time Likes Servlet</servlet-name>
+		<url-pattern>/conf/conftimelikes</url-pattern>
+	</servlet-mapping>
+	<!-- FINE CONF -->
 
 
 
-<!-- VARIE -->
-    <servlet>
-        <servlet-name>RetrieveDataServlet</servlet-name>
-        <servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
-    </servlet>
+	<!-- QUEUE -->
+	<servlet>
+		<servlet-name>SplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.SplitTaskServlet</servlet-class>
+	</servlet>
 
-    <servlet-mapping>
-        <servlet-name>RetrieveDataServlet</servlet-name>
-        <url-pattern>/data</url-pattern>
-    </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SplitTaskServlet</servlet-name>
+		<url-pattern>/splittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.SubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SubTaskServlet</servlet-name>
+		<url-pattern>/subtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>JoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.JoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>JoinTaskServlet</servlet-name>
+		<url-pattern>/jointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE QUEUE -->
+
+
+
+	<!-- VARIE -->
+	<servlet>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Bulk Upload</servlet-name>
@@ -84,7 +108,7 @@
 		<servlet-name>Bulk Upload</servlet-name>
 		<url-pattern>/bulk/bulkupload</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Test Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.TestServlet</servlet-class>
@@ -94,7 +118,7 @@
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Add Psar To Queue Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.AddPsarToQueue</servlet-class>
@@ -104,7 +128,7 @@
 		<servlet-name>Add Psar To Queue Servlet</servlet-name>
 		<url-pattern>/psarqueue</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>PSAR Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.PSARServlet</servlet-class>
@@ -114,11 +138,11 @@
 		<servlet-name>PSAR Servlet</servlet-name>
 		<url-pattern>/psar</url-pattern>
 	</servlet-mapping>
-<!-- FINE VARIE -->
+	<!-- FINE VARIE -->
 
 
 
-<!-- JERSEY -->
+	<!-- JERSEY -->
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -128,23 +152,19 @@
 		</init-param>
 		<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-    		<param-value>it.osg.security.ResponseCorsFilter</param-value>
-    	</init-param>
+			<param-value>it.osg.security.ResponseCorsFilter</param-value>
+		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
-	<!-- 
-	<servlet-mapping>
-		<servlet-name>Jersey Web Application</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
-	</servlet-mapping>
- 	-->
-	
+
+	<!-- <servlet-mapping> <servlet-name>Jersey Web Application</servlet-name> 
+		<url-pattern>/resources/*</url-pattern> </servlet-mapping> -->
+
 	<servlet-mapping>
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
-<!-- FINE JERSEY -->
+	<!-- FINE JERSEY -->
 
 
 
@@ -157,7 +177,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>
