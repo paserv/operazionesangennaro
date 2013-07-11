@@ -5,7 +5,9 @@ import it.osg.utils.Utils;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +23,14 @@ public class SplitTaskServlet  extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final int step = 11;
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
+		ArrayList<String> sindaci = new ArrayList<String>();
+		
 		//INPUT DATA
 		String pageId = req.getParameter("pageId");
 		String from = req.getParameter("from");
@@ -40,9 +46,14 @@ public class SplitTaskServlet  extends HttpServlet {
 			resp.getWriter().println(strCallResult);
 
 			String timestamp = String.valueOf(System.currentTimeMillis());
-
 			String idTransaction = Utils.MD5(pageId + mail + timestamp);
 
+			if (pageId.equalsIgnoreCase("all")) {
+				sindaci = Utils.getAllSindaci();//preleva gli ID di tutti i sindaci dal DB
+			} else {
+				sindaci.add(pageId);
+			}
+			
 			//GET TO DATE
 			String toDay = to.substring(0, 10) + " 23:59:59";
 			Date t = null;
@@ -51,32 +62,32 @@ public class SplitTaskServlet  extends HttpServlet {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-
-
-			//SPLITTO UN GIORNO ALLA VOLTA ED INVIO IN CODA
+			
 			Queue queue = QueueFactory.getDefaultQueue();
-			String from1 = from.substring(0, 10) + " 00:00:00";
+			
 			int numTask = 0;
-			while (true) {
-				String to1 = from1.substring(0, 10) + " 23:59:59";
-				Date t1 = DateUtils.parseDateAndTime(to1);
-
-				if (DateUtils.compareDate(t, t1) >= 0) {
-					//String paramFrom = from1.substring(0, 10) + " 00:00:01";
-					//String paramTo = to1.substring(0, 10) + " 00:00:00";
-
-					queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", from1).param("to", to1).param("pageId", pageId));
-					numTask = numTask + 1;
-					Date f1 = DateUtils.parseDateAndTime(from1);
-					f1 = DateUtils.addOneDay(f1);
-					from1 = DateUtils.formatDateAndTime(f1);
-
-				} else {
-					break;
+			
+			Iterator<String> iterSindaco = sindaci.iterator();
+			while (iterSindaco.hasNext()) {
+				String currPageId = iterSindaco.next();
+				//SPLITTO UN GIORNO ALLA VOLTA ED INVIO IN CODA
+				String from1 = from.substring(0, 10) + " 00:00:00";
+				while (true) {
+					String to1 = from1.substring(0, 10) + " 23:59:59";
+					Date t1 = DateUtils.parseDateAndTime(to1);
+					if (DateUtils.compareDate(t, t1) >= 0) {
+						queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", from1).param("to", to1).param("pageId", currPageId));
+						numTask = numTask + 1;
+						Date f1 = DateUtils.parseDateAndTime(from1);
+						f1 = DateUtils.addOneDay(f1);
+						from1 = DateUtils.formatDateAndTime(f1);
+					} else {
+						break;
+					}
 				}
 			}
-
-
+			
+			
 			//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 			queue.add(TaskOptions.Builder.withUrl("/jointask").param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("mail", mail).param("timestamp", timestamp));	
 
