@@ -29,6 +29,15 @@ public abstract class MonitoringServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 
+		//TODO Li deve mettere in coda
+		
+		
+		
+		
+		
+		
+		
+		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		ArrayList<String> conf = getConfPage(getConfTable());
