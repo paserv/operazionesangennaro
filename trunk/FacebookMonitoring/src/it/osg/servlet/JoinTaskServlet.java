@@ -6,6 +6,7 @@ import it.osg.utils.FacebookUtils;
 import it.osg.utils.Utils;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -81,7 +82,12 @@ public class JoinTaskServlet extends HttpServlet {
 			String headerCSV = "Nome Pagina,ID Facebook,Totale Fan,Totale TalkAbout,Regione,Provincia,Sesso,Anno di Nascita,Partito,URL Facebook,Tipologia Account,Totale Post from Account,Totale Post from Fan,Totale Comments ai Post,Unique Authors dei Comments ai Post,Totale Likes ai Post from Account,Totale Shares dei Post from Account,Media Post from Account al giorno,Media Post from Fan al giorno,Media Comments per Post from Account,Media Unique Authors per Post from Account,Media Like per Post from Account,Media Shares per Post,Media Comments per Author\n";
 			String dataCSV = "";
 			
-			double numGiorni = Double.valueOf(numTask);
+			double numGiorni = 0;
+			try {
+				numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
 			
 			ArrayList<String> sindaci = new ArrayList<String>();
 			if (pageId.equalsIgnoreCase("all")) {

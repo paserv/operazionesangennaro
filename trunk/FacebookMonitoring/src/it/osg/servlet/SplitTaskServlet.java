@@ -24,7 +24,7 @@ public class SplitTaskServlet  extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static final int step = 11;
+	private static final int step = 4;
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
@@ -72,16 +72,19 @@ public class SplitTaskServlet  extends HttpServlet {
 				String currPageId = iterSindaco.next();
 				//SPLITTO UN GIORNO ALLA VOLTA ED INVIO IN CODA
 				String from1 = from.substring(0, 10) + " 00:00:00";
+				Date f1 = DateUtils.parseDateAndTime(from1);
 				while (true) {
-					String to1 = from1.substring(0, 10) + " 23:59:59";
+					//String to1 = from1.substring(0, 10) + " 23:59:59";
+					String to1 = DateUtils.formatDateAndTime(DateUtils.addDayToDate(DateUtils.parseDateAndTime(from1), step));
 					Date t1 = DateUtils.parseDateAndTime(to1);
 					if (DateUtils.compareDate(t, t1) >= 0) {
 						queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", from1).param("to", to1).param("pageId", currPageId));
 						numTask = numTask + 1;
-						Date f1 = DateUtils.parseDateAndTime(from1);
-						f1 = DateUtils.addOneDay(f1);
+						f1 = t1;
 						from1 = DateUtils.formatDateAndTime(f1);
 					} else {
+						queue.add(TaskOptions.Builder.withUrl("/subtask").param("idTransaction", idTransaction).param("from", from1).param("to", toDay).param("pageId", currPageId));
+						numTask = numTask + 1;
 						break;
 					}
 				}
