@@ -40,10 +40,14 @@
 	<form method="post" action="data">
 	
     Tabella
-    <input type="text" id="tab" name="tab" />
+    <input type="text" id="tabella" name="tabella" />
     
-    Campo
-    <input type="text" id="cam" name="cam" />
+    Operazione
+    <select id="operazione" name="operazione" >
+  		<option value="select">Select</option>
+  		<option value="delete">Delete</option>
+  		<option value="test">Test</option>
+ 	</select>
     
     <button id="getData">Get Data</button>
 	</form>
