@@ -1,12 +1,7 @@
 package it.osg.servlet.monitoring;
 
-import it.osg.datapicker.FacebookDataPicker;
-import it.osg.utils.JSONObjectUtil;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,52 +12,26 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
 @SuppressWarnings("serial")
 public abstract class MonitoringServlet extends HttpServlet {
 	
-	//private String confTable;
-	private static String graphAPIUrl = "https://graph.facebook.com/";
 
 	public abstract String getConfTable();
 	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
-		//TODO Li deve mettere in coda
+		Queue queue = QueueFactory.getDefaultQueue();
 		
-		
-		
-		
-		
-		
-		
-		
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
 		ArrayList<String> conf = getConfPage(getConfTable());
 
 		Iterator<String> iter = conf.iterator();
 		while (iter.hasNext()) {
 			String idPage = iter.next();
-
-			String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + idPage);
-			ArrayList<Hashtable<String, Object>> analisi = FacebookDataPicker.likeTalkAnalysis(jsonString);
-
-			Iterator<Hashtable<String, Object>> iterAna = analisi.iterator();
-			while (iterAna.hasNext()) {
-				Entity currEntity = new Entity(idPage);
-				Hashtable<String, Object> currRow = iterAna.next();
-				Enumeration<String> enumer = currRow.keys();
-				while (enumer.hasMoreElements()) {
-					String currKey = enumer.nextElement();
-					Object currValue = currRow.get(currKey);
-					currEntity.setProperty(currKey, currValue);
-					System.out.println(currKey + " " + currValue);
-				}
-				datastore.put(currEntity);
-
-			}
+			queue.add(TaskOptions.Builder.withUrl("/facebook/monitor").param("idPage", idPage));			
 		}
 
 	}
