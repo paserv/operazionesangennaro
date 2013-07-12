@@ -2,14 +2,20 @@
 <cronentries>
 	<cron>
 		<url>/facebook/monitoring/trasmissioni</url>
-		<description>Monitor Facebook Pages in table pages every X minutes
+		<description>Monitor Facebook Pages contained into trasmissioni table every 30 minutes
 		</description>
 		<schedule>every 30 minutes synchronized</schedule>
 	</cron>
 	<cron>
 		<url>/facebook/monitoring/sindaci</url>
-		<description>Monitor Facebook Pages in table pages every X minutes
+		<description>Monitor Facebook Pages contained in sindaco table every 6 hours
 		</description>
 		<schedule>every 6 hours synchronized</schedule>
+	</cron>
+	<cron>
+		<url>/deletetasklog</url>
+		<description>Delete Task Log in table task every 24 hours
+		</description>
+		<schedule>every 24 hours synchronized</schedule>
 	</cron>
 </cronentries>

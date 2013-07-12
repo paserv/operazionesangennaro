@@ -12,6 +12,16 @@
 		<servlet-name>MonitoringServlet</servlet-name>
 		<url-pattern>/facebook/monitoring</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MonitorServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitorServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitorServlet</servlet-name>
+		<url-pattern>/facebook/monitor</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>MonitoringTrasmissioniServlet</servlet-name>
@@ -85,6 +95,16 @@
 
 
 	<!-- VARIE -->
+	<servlet>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteTaskLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<url-pattern>/deletetasklog</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
