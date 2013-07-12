@@ -36,7 +36,7 @@ public class Utils {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		q = new Query("sindaco");
+		q = new Query("anagraficaSindaco");
 		pq = datastore.prepare(q);
 		for (Entity ent : pq.asIterable()) {
 			String currSindaco = String.valueOf(ent.getKey().getName());
