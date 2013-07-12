@@ -102,8 +102,8 @@ public class SubTaskServlet extends HttpServlet  {
 		Entity currEntity = new Entity("task");
 		currEntity.setProperty("idTransaction", idTransaction);
 		currEntity.setProperty("pageId", pageId);
-		currEntity.setProperty("from", f);
-		currEntity.setProperty("to", t);
+		//currEntity.setProperty("from", f);
+		//currEntity.setProperty("to", t);
 		//currEntity.setProperty("mail", mail);
 		//currEntity.setProperty("timestamp", Long.valueOf(timestamp));
 		

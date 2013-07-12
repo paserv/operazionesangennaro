@@ -6,6 +6,7 @@ import it.osg.utils.FacebookUtils;
 import it.osg.utils.Utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -66,42 +67,34 @@ public class JoinTaskServlet extends HttpServlet {
 
 		long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
 
-		//CHECK FINE TASKS
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
 		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
-		q = new Query("task").setFilter(idFilter);
-		pq = datastore.prepare(q);
-		int executedTask = pq.countEntities();
-		if (executedTask == Integer.valueOf(numTask)) {
 
-			//CREA PARTI MAIL
-			String bodyMail = "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per ID Facebook = " + pageId;
-			
-			String headerCSV = "Nome Pagina,ID Facebook,Totale Fan,Totale TalkAbout,Regione,Provincia,Sesso,Anno di Nascita,Partito,URL Facebook,Tipologia Account,Totale Post from Account,Totale Post from Fan,Totale Comments ai Post,Unique Authors dei Comments ai Post,Totale Likes ai Post from Account,Totale Shares dei Post from Account,Media Post from Account al giorno,Media Post from Fan al giorno,Media Comments per Post from Account,Media Unique Authors per Post from Account,Media Like per Post from Account,Media Shares per Post,Media Comments per Author\n";
+		if (isTransactionEnded(idTransaction, numTask)) {
+
 			String dataCSV = "";
-			
+
 			double numGiorni = 0;
 			try {
 				numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
 			} catch (ParseException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			ArrayList<String> sindaci = new ArrayList<String>();
 			if (pageId.equalsIgnoreCase("all")) {
 				sindaci = Utils.getAllSindaci();
-				numGiorni = Double.valueOf(Integer.valueOf(numTask)/sindaci.size());
 			} else {
 				sindaci.add(pageId);
 			}
-			
-						
+
+
 			Iterator<String> iterSindaci = sindaci.iterator();
 			while (iterSindaci.hasNext()) {
 				String currSindaco = iterSindaci.next();
-				
+
 				//OUTPUT DATA
 				//Da aggregare
 				double totPostFromPage = 0;
@@ -133,7 +126,8 @@ public class JoinTaskServlet extends HttpServlet {
 				String partito = "";
 				String URL = "";
 				String tipologiaAccount = "";
-				
+				String sindacoName = "";
+
 				//Query sindaco corrente
 				Filter sindacoFilter = new FilterPredicate("pageId", FilterOperator.EQUAL, currSindaco);
 				Filter compositeFilter = CompositeFilterOperator.and(idFilter, sindacoFilter);
@@ -147,7 +141,7 @@ public class JoinTaskServlet extends HttpServlet {
 					authors.addAll(ArrayUtils.splitAndAdd(((Text) ent.getProperty("authors")).getValue(), ","));
 					totLikes = totLikes + (Double) ent.getProperty("totParzLikes");
 					totShares = totShares + (Double) ent.getProperty("totParzShares");
-					
+
 					//RICAVA DATI
 					mediaPostFromPage = totPostFromPage/numGiorni;
 					mediaPostFromFan = totPostFromFan/numGiorni;
@@ -157,7 +151,7 @@ public class JoinTaskServlet extends HttpServlet {
 					sharesPerPost = totShares/totPostFromPage;
 					commentsPerAuthor = totComments/uniqueAuthors;
 					uniqueAuthorsPerPost = uniqueAuthors/totPostFromPage;
-					
+
 					//DA CERCARE
 					Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(currSindaco);
 					if (!((String) baseInfo.get("likes")).equals("")) {
@@ -166,11 +160,12 @@ public class JoinTaskServlet extends HttpServlet {
 					if (!((String) baseInfo.get("talking_about_count")).equals("")) {
 						totTalkAbout = Double.valueOf((String) baseInfo.get("talking_about_count"));
 					}
-					pageName = (String) baseInfo.get("pageName");
 					
+					pageName = (String) baseInfo.get("pageName");
+
 					//PRESENTI NEL DB
-					Filter DBInfo = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey("sindaco", currSindaco));
-					q = new Query("sindaco").setFilter(DBInfo);
+					Filter DBInfo = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey("anagraficaSindaco", currSindaco));
+					q = new Query("anagraficaSindaco").setFilter(DBInfo);
 					pq = datastore.prepare(q);
 					for (Entity ent2 : pq.asIterable()) {
 						regione = (String) ent2.getProperty("regione");
@@ -180,50 +175,25 @@ public class JoinTaskServlet extends HttpServlet {
 						partito = (String) ent2.getProperty("partito");
 						URL = (String) ent2.getProperty("URL");
 						tipologiaAccount = (String) ent2.getProperty("tipologiaAccount");
-						if (pageName.equalsIgnoreCase("")) {
-							pageName = (String) ent2.getProperty("sindaco");
-						}
+						sindacoName = (String) ent2.getProperty("sindaco");
+
 					}
-					
+
 				}
-				
-				dataCSV = dataCSV + pageName  + "," + pageId  + "," + totFan  + "," + totTalkAbout + "," + regione + "," + provincia + "," + sesso + "," + annoNascita + "," + partito + "," + URL + "," + tipologiaAccount +
+
+				dataCSV = dataCSV + sindacoName + "," + pageName  + "," + currSindaco  + "," + totFan  + "," + totTalkAbout + "," + regione + "," + provincia + "," + sesso + "," + annoNascita + "," + partito + "," + URL + "," + tipologiaAccount +
 						"," + totPostFromPage + "," + totPostFromFan + "," + totComments + "," + uniqueAuthors + "," + totLikes + "," + totShares +
 						"," + mediaPostFromPage  + "," + mediaPostFromFan  + "," + commentsPerPost + "," + uniqueAuthorsPerPost + "," + mediaLikePerPost  + "," + sharesPerPost  + "," + commentsPerAuthor + "\n";	
 			}
-			
+
+
+			//INVIA MAIL
+			String bodyMail = "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per ID Facebook = " + pageId;
+			String headerCSV = "Nome Sindaco,Nome Pagina,ID Facebook,Totale Fan,Totale TalkAbout,Regione,Provincia,Sesso,Anno di Nascita,Partito,URL Facebook,Tipologia Account,Totale Post from Account,Totale Post from Fan,Totale Comments ai Post,Unique Authors dei Comments ai Post,Totale Likes ai Post from Account,Totale Shares dei Post from Account,Media Post from Account al giorno,Media Post from Fan al giorno,Media Comments per Post from Account,Media Unique Authors per Post from Account,Media Like per Post from Account,Media Shares per Post,Media Comments per Author\n";
 			String attachFile = headerCSV + dataCSV;
-			
-			//SEND MAIL
-			Properties props = new Properties();
-			Session session = Session.getDefaultInstance(props, null);
-			Message msg = new MimeMessage(session);
-			try {
-				msg.setFrom(new InternetAddress("donpablooooo@gmail.com", "DONPABLOWATCH"));
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mail));
-				msg.setSubject("Dati relativi alla pagina con ID " + pageId);
-				//msg.setText(bodyMail);
+			sendMail(mail, pageId, bodyMail, attachFile);
 
-				Multipart mp = new MimeMultipart();
-				MimeBodyPart htmlPart = new MimeBodyPart();
-				htmlPart.setContent(bodyMail, "text/plain");
-				mp.addBodyPart(htmlPart);
 
-				MimeBodyPart attachment = new MimeBodyPart();
-				ByteArrayDataSource src = new ByteArrayDataSource(attachFile.getBytes(), "text/plain"); 
-				attachment.setFileName(pageId + ".csv");
-				attachment.setDataHandler(new DataHandler (src));
-				mp.addBodyPart(attachment);
-
-				msg.setContent(mp);
-				msg.saveChanges();
-				Transport.send(msg);
-
-			} catch (AddressException e) {
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				e.printStackTrace();
-			}	
 
 		} else {
 			if (timeout - elapsedTime > 0) {
@@ -236,9 +206,9 @@ public class JoinTaskServlet extends HttpServlet {
 				//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 				Queue queue = QueueFactory.getDefaultQueue();
 				queue.add(TaskOptions.Builder.withUrl("/jointask").param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId));	
-
-
-			}			
+			} else {
+				//TODO SALVA IL SALVABILE ED INVIA LA MAIL
+			}
 		}
 
 
@@ -247,9 +217,58 @@ public class JoinTaskServlet extends HttpServlet {
 	}
 
 
-
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		doGet(req, resp);
+	}
+
+
+
+	private void sendMail(String mail, String pageId, String bodyMail, String attachFile) {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props, null);
+		Message msg = new MimeMessage(session);
+		try {
+			msg.setFrom(new InternetAddress("donpablooooo@gmail.com", "DONPABLOWATCH"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+			msg.setSubject("Dati relativi alla pagina con ID " + pageId);
+			//msg.setText(bodyMail);
+
+			Multipart mp = new MimeMultipart();
+			MimeBodyPart htmlPart = new MimeBodyPart();
+			htmlPart.setContent(bodyMail, "text/plain");
+			mp.addBodyPart(htmlPart);
+
+			MimeBodyPart attachment = new MimeBodyPart();
+			ByteArrayDataSource src = new ByteArrayDataSource(attachFile.getBytes(), "text/plain"); 
+			attachment.setFileName(pageId + ".csv");
+			attachment.setDataHandler(new DataHandler (src));
+			mp.addBodyPart(attachment);
+
+			msg.setContent(mp);
+			msg.saveChanges();
+			Transport.send(msg);
+
+		} catch (AddressException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}	
+
+	}
+
+
+	private boolean isTransactionEnded (String idTransaction, String numTask) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
+		q = new Query("task").setFilter(idFilter);
+		pq = datastore.prepare(q);
+		int executedTask = pq.countEntities();
+		if (Integer.valueOf(numTask) == executedTask) return true;
+		else return false;
 	}
 
 
