@@ -3,7 +3,6 @@ package it.osg.servlet.imm2;
 import facebook4j.Comment;
 import facebook4j.Like;
 import facebook4j.Post;
-import it.osg.service.model.Color;
 import it.osg.service.model.Edge;
 import it.osg.service.model.GraphElement.ElementType;
 import it.osg.service.model.Node;
@@ -19,6 +18,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +31,7 @@ public class SubTaskServlet extends HttpServlet  {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger log = Logger.getLogger(SubTaskServlet.class.getName());
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
@@ -90,6 +91,7 @@ public class SubTaskServlet extends HttpServlet  {
 		Hashtable<String, ArrayList<Comment>> commHash = new Hashtable<String, ArrayList<Comment>>();
 		while (iterComm.hasNext()) {
 			Comment currComm = iterComm.next();
+			log.info("MIO LOG: " + currComm.getMetadata());
 			//TODO trovare anche le risposte ai commenti
 			String idFrom = currComm.getFrom().getId();
 			if (!commHash.containsKey(idFrom)) {
@@ -121,7 +123,8 @@ public class SubTaskServlet extends HttpServlet  {
 		}
 		
 		//TODO aggiungere NODI ed EDGEs per quello che riguarda i post dei fan sulla bacheca
-		
+//		ArrayList<Comment> commentsPostFromFan = FacebookUtils.getComments(postFromFan);
+//		Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
 		
 		String attachFile = GephiUtils.createGraph(nodes, edges);
 		
