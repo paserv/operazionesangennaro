@@ -69,9 +69,15 @@ public class TestServlet extends HttpServlet {
 			String currId = iter.next();
 			try {
 				while (true) {
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
 					ResponseList<Post> facResults = facebook.getFeed(currId, new Reading().since(f).until(t).fields("created_time").limit(1));
-					if (facResults.size() != 0) {
+					if (facResults != null && facResults.size() != 0) {
 						Post currPost = facResults.get(0);
+						System.out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()));
 						result = result + currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) + "\n";
 						//out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) +  "<br>");
 						break;
