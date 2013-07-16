@@ -12,7 +12,6 @@ import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
-import facebook4j.IdNameEntity;
 import facebook4j.Like;
 import facebook4j.PagableList;
 import facebook4j.Paging;
@@ -30,7 +29,7 @@ public class FacebookUtils {
 	private static String graphAPIUrl = "https://graph.facebook.com/";
 
 
-	private static Facebook getFB() {
+	public static Facebook getFB() {
 		Facebook facebook = new FacebookFactory().getInstance();
 		facebook.setOAuthAppId(appID, appKey);
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
@@ -50,11 +49,13 @@ public class FacebookUtils {
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
 		String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
+		String release_date = JSONObjectUtil.retrieveJsonPath(json, "release_date");
 		//TODO retrieve anche degli altri campi
 
 		result.put("likes", likeCount);
 		result.put("talking_about_count", talkingAboutCount);
 		result.put("pageName", pageName);
+		result.put("release_date", release_date);
 
 		return result;
 	}
@@ -72,7 +73,7 @@ public class FacebookUtils {
 			} else {
 				facResults = facebook.getFeed(pageId, new Reading().since(f).until(t));
 			}
-
+			
 			result.addAll(facResults);
 
 			//			//Fetching Post

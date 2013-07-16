@@ -1,10 +1,7 @@
 package it.osg.utils;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
-
 import it.osg.service.model.Edge;
 import it.osg.service.model.Node;
 
