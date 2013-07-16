@@ -1,27 +1,24 @@
 package it.osg.servlet;
 
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.Post;
+import facebook4j.Reading;
+import facebook4j.ResponseList;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.MailUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Properties;
+import java.util.logging.Logger;
 
-import javax.activation.DataHandler;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,78 +26,125 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-
-import facebook4j.Facebook;
-import facebook4j.FacebookException;
-import facebook4j.FacebookFactory;
-import facebook4j.IdNameEntity;
-import facebook4j.Like;
-import facebook4j.Paging;
-import facebook4j.Post;
-import facebook4j.Reading;
-import facebook4j.ResponseList;
-import facebook4j.auth.AccessToken;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 @SuppressWarnings("serial")
 public class TestServlet extends HttpServlet {
 
+	private static final Logger log = Logger.getLogger(TestServlet.class.getName());
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
-		String strCallResult = "";
-		resp.setContentType("text/plain");
-		try {
-			//Extract out the To, Subject and Body of the Email to be sent
-			//		String strTo = req.getParameter("email_to");
-			//		String strSubject = req.getParameter("email_subject");
-			//		String strBody = req.getParameter("email_body");
-
-			String strTo = "paserv@gmail.com";
-			String strSubject = "test";
-			String strBody = "ciao";
-			byte[] attachmentData = strBody.getBytes();
-
-			//Do validations here. Only basic ones i.e. cannot be null/empty
-			//Currently only checking the To Email field
-			if (strTo == null) throw new Exception("To field cannot be empty.");
-
-			//Trim the stuff
-			strTo = strTo.trim();
-			if (strTo.length() == 0) throw new Exception("To field cannot be empty.");
-
-			//Call the GAEJ Email Service
-			Properties props = new Properties();
-			Session session = Session.getDefaultInstance(props, null);
-			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress("donpablooooo@gmail.com"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(strTo));
-			msg.setSubject(strSubject);
-			//msg.setText(strBody);
-									
-			Multipart mp = new MimeMultipart();
-			MimeBodyPart htmlPart = new MimeBodyPart();
-	        htmlPart.setContent(strBody, "text/plain");
-	        mp.addBodyPart(htmlPart);
-	        
-	        MimeBodyPart attachment = new MimeBodyPart();
-	        ByteArrayDataSource src = new ByteArrayDataSource(attachmentData, "text/plain"); 
-	        attachment.setFileName("ciao.txt");
-	        
-	        attachment.setDataHandler(new DataHandler (src)); 
-	        
-	        //attachment.setContent(attachmentData, "text/plain");
-	        mp.addBodyPart(attachment);
-	        
-	        msg.setContent(mp);
-	        msg.saveChanges();
-
-			Transport.send(msg);
-			strCallResult = "Success: " + "Email has been delivered.";
-			resp.getWriter().println(strCallResult);
+		//log.info("TEST");
+		
+		resp.setContentType("text/html;charset=UTF-8");
+		//PrintWriter out = resp.getWriter();
+		
+		String result = "";
+		
+		ArrayList<String> idSindaci = new ArrayList<String>();
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query("sindaco");
+		PreparedQuery pq = datastore.prepare(q);
+		for (Entity res : pq.asIterable()) {
+			String idPage = res.getKey().getName();
+			idSindaci.add(idPage);
 		}
-		catch (Exception ex) {
-			strCallResult = "Fail: " + ex.getMessage();
-			resp.getWriter().println(strCallResult);
+		
+		
+		
+		Facebook facebook = FacebookUtils.getFB();
+		
+		Iterator<String> iter = idSindaci.iterator();
+		while (iter.hasNext()) {
+			Date f = null;
+			Date t = null;
+			try {
+				f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+				t = DateUtils.addMonthToDate(f, 1);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			String currId = iter.next();
+			try {
+				while (true) {
+					ResponseList<Post> facResults = facebook.getFeed(currId, new Reading().since(f).until(t).fields("created_time").limit(1));
+					if (facResults.size() != 0) {
+						Post currPost = facResults.get(0);
+						result = result + currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) + "\n";
+						//out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) +  "<br>");
+						break;
+					} else {
+						f = t;
+						t = DateUtils.addMonthToDate(f, 1);
+					}
+				}
+				
+			} catch (FacebookException e) {
+				e.printStackTrace();
+			}
+						
 		}
+		
+		MailUtils.sendMail("paserv@gmail.com", "START DATE FACEBOOK ID", result, "result.csv", result);
+		
+		
+//		String strCallResult = "";
+//		resp.setContentType("text/plain");
+//		try {
+//			//Extract out the To, Subject and Body of the Email to be sent
+//			//		String strTo = req.getParameter("email_to");
+//			//		String strSubject = req.getParameter("email_subject");
+//			//		String strBody = req.getParameter("email_body");
+//
+//			String strTo = "paserv@gmail.com";
+//			String strSubject = "test";
+//			String strBody = "ciao";
+//			byte[] attachmentData = strBody.getBytes();
+//
+//			//Do validations here. Only basic ones i.e. cannot be null/empty
+//			//Currently only checking the To Email field
+//			if (strTo == null) throw new Exception("To field cannot be empty.");
+//
+//			//Trim the stuff
+//			strTo = strTo.trim();
+//			if (strTo.length() == 0) throw new Exception("To field cannot be empty.");
+//
+//			//Call the GAEJ Email Service
+//			Properties props = new Properties();
+//			Session session = Session.getDefaultInstance(props, null);
+//			Message msg = new MimeMessage(session);
+//			msg.setFrom(new InternetAddress("donpablooooo@gmail.com"));
+//			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(strTo));
+//			msg.setSubject(strSubject);
+//			//msg.setText(strBody);
+//									
+//			Multipart mp = new MimeMultipart();
+//			MimeBodyPart htmlPart = new MimeBodyPart();
+//	        htmlPart.setContent(strBody, "text/plain");
+//	        mp.addBodyPart(htmlPart);
+//	        
+//	        MimeBodyPart attachment = new MimeBodyPart();
+//	        ByteArrayDataSource src = new ByteArrayDataSource(attachmentData, "text/plain"); 
+//	        attachment.setFileName("ciao.txt");
+//	        
+//	        attachment.setDataHandler(new DataHandler (src)); 
+//	        
+//	        //attachment.setContent(attachmentData, "text/plain");
+//	        mp.addBodyPart(attachment);
+//	        
+//	        msg.setContent(mp);
+//	        msg.saveChanges();
+//
+//			Transport.send(msg);
+//			strCallResult = "Success: " + "Email has been delivered.";
+//			resp.getWriter().println(strCallResult);
+//		}
+//		catch (Exception ex) {
+//			strCallResult = "Fail: " + ex.getMessage();
+//			resp.getWriter().println(strCallResult);
+//		}
 
 
 		//		Date f = null;
