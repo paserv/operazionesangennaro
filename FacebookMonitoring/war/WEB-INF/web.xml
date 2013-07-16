@@ -12,7 +12,7 @@
 		<servlet-name>MonitoringServlet</servlet-name>
 		<url-pattern>/facebook/monitoring</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MonitorServlet</servlet-name>
 		<servlet-class>it.osg.servlet.monitoring.MonitorServlet</servlet-class>
@@ -104,7 +104,7 @@
 		<servlet-name>DeleteTaskLogServlet</servlet-name>
 		<url-pattern>/deletetasklog</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
@@ -127,12 +127,32 @@
 
 	<servlet>
 		<servlet-name>Test Servlet</servlet-name>
-		<servlet-class>it.osg.servlet.imm2.SubTaskServlet</servlet-class>
+		<servlet-class>it.osg.servlet.TestServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Add To Queue</servlet-name>
+		<servlet-class>it.osg.servlet.AddToQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Add To Queue</servlet-name>
+		<url-pattern>/atq</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Imm2 Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.SubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2 Servlet</servlet-name>
+		<url-pattern>/imm2</url-pattern>
 	</servlet-mapping>
 
 	<!-- FINE VARIE -->
