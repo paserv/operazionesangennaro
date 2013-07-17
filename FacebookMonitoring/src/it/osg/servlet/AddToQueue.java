@@ -19,10 +19,17 @@ public class AddToQueue extends HttpServlet {
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
+		
+		String param1 = req.getParameter("param1");
+		String param2 = req.getParameter("param2");
+		String param3 = req.getParameter("param3");
+		String param4 = req.getParameter("param4");
+		
+		
 		resp.setContentType("text/plain");
 		String servlet = req.getParameter("servlet");
 		Queue queue = QueueFactory.getDefaultQueue();
-		queue.add(TaskOptions.Builder.withUrl("/" + servlet));
+		queue.add(TaskOptions.Builder.withUrl("/" + servlet).param(param1.split(",")[0], param1.split(",")[1]).param(param2.split(",")[0], param2.split(",")[1]).param(param3.split(",")[0], param3.split(",")[1]).param(param4.split(",")[0], param4.split(",")[1]));
 		resp.getWriter().println("STABBENE");
 	}
 
