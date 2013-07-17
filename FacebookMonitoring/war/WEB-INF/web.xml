@@ -146,13 +146,13 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>Imm2 Servlet</servlet-name>
-		<servlet-class>it.osg.servlet.imm2.SubTaskServlet</servlet-class>
+		<servlet-name>Imm2 Task Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2SubTaskServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>Imm2 Servlet</servlet-name>
-		<url-pattern>/imm2</url-pattern>
+		<servlet-name>Imm2 Task Servlet</servlet-name>
+		<url-pattern>/imm2task</url-pattern>
 	</servlet-mapping>
 
 	<!-- FINE VARIE -->
