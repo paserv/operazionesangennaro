@@ -1,5 +1,6 @@
 package it.osg.servlet;
 
+import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.Post;
@@ -36,64 +37,86 @@ public class TestServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
-		//log.info("TEST");
-		
 		resp.setContentType("text/html;charset=UTF-8");
-		//PrintWriter out = resp.getWriter();
-		
-		String result = "";
-		
-		ArrayList<String> idSindaci = new ArrayList<String>();
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q = new Query("sindaco");
-		PreparedQuery pq = datastore.prepare(q);
-		for (Entity res : pq.asIterable()) {
-			String idPage = res.getKey().getName();
-			idSindaci.add(idPage);
+		PrintWriter out = resp.getWriter();
+
+		String pageId = req.getParameter("pageId");
+		Date f = null;
+		Date t = null;
+		try {
+			f = DateUtils.parseDateAndTime("01-05-2013 00:00:00");
+			t = DateUtils.parseDateAndTime("15-05-2013 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, null);
+		ArrayList<Comment> commentsPostFromPage = FacebookUtils.getComments(posts);
+		Iterator<Comment> iterComm = commentsPostFromPage.iterator();
+		while (iterComm.hasNext()) {
+			Comment currComm = iterComm.next();
+			out.println("From ID: " + currComm.getFrom().getId() + "<br>");
+			out.println("From name: " + currComm.getFrom().getName() + "<br>");
+			out.println("Message: " + currComm.getMessage() + "<br>");
+			out.println("Created Time: " + currComm.getCreatedTime() + "<br>");
+			out.println("Metadata: " + currComm.getMetadata() + "<br>");
 		}
 		
-		
-		
-		Facebook facebook = FacebookUtils.getFB();
-		
-		Iterator<String> iter = idSindaci.iterator();
-		while (iter.hasNext()) {
-			Date f = null;
-			Date t = null;
-			try {
-				f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
-				t = DateUtils.addMonthToDate(f, 1);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			String currId = iter.next();
-			try {
-				while (true) {
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					ResponseList<Post> facResults = facebook.getFeed(currId, new Reading().since(f).until(t).fields("created_time").limit(1));
-					if (facResults != null && facResults.size() != 0) {
-						Post currPost = facResults.get(0);
-						System.out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()));
-						result = result + currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) + "\n";
-						//out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) +  "<br>");
-						break;
-					} else {
-						f = t;
-						t = DateUtils.addMonthToDate(f, 1);
-					}
-				}
-				
-			} catch (FacebookException e) {
-				e.printStackTrace();
-			}
-						
-		}
-		
-		MailUtils.sendMail("paserv@gmail.com", "START DATE FACEBOOK ID", result, "result.csv", result);
+//		resp.setContentType("text/html;charset=UTF-8");
+//		PrintWriter out = resp.getWriter();
+//		
+//		String result = "";
+//		
+//		ArrayList<String> idSindaci = new ArrayList<String>();
+//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//		Query q = new Query("sindaco");
+//		PreparedQuery pq = datastore.prepare(q);
+//		for (Entity res : pq.asIterable()) {
+//			String idPage = res.getKey().getName();
+//			idSindaci.add(idPage);
+//		}
+//		
+//		
+//		
+//		Facebook facebook = FacebookUtils.getFB();
+//		
+//		Iterator<String> iter = idSindaci.iterator();
+//		while (iter.hasNext()) {
+//			Date f = null;
+//			Date t = null;
+//			try {
+//				f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+//				t = DateUtils.addMonthToDate(f, 1);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//			String currId = iter.next();
+//			try {
+//				while (true) {
+//					try {
+//						Thread.sleep(2000);
+//					} catch (InterruptedException e1) {
+//						e1.printStackTrace();
+//					}
+//					ResponseList<Post> facResults = facebook.getFeed(currId, new Reading().since(f).until(t).fields("created_time").limit(1));
+//					if (facResults != null && facResults.size() != 0) {
+//						Post currPost = facResults.get(0);
+//						System.out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()));
+//						result = result + currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) + "\n";
+//						//out.println(currId + "," + DateUtils.formatDateAndTime(currPost.getCreatedTime()) +  "<br>");
+//						break;
+//					} else {
+//						f = t;
+//						t = DateUtils.addMonthToDate(f, 1);
+//					}
+//				}
+//				
+//			} catch (FacebookException e) {
+//				e.printStackTrace();
+//			}
+//						
+//		}
+//		
+//		MailUtils.sendMail("paserv@gmail.com", "START DATE FACEBOOK ID", result, "result.csv", result);
 		
 		
 //		String strCallResult = "";
