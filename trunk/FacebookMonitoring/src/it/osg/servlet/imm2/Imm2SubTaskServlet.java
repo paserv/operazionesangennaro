@@ -6,10 +6,12 @@ import facebook4j.Post;
 import it.osg.service.model.Edge;
 import it.osg.service.model.GraphElement.ElementType;
 import it.osg.service.model.Node;
+import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.GephiUtils;
 import it.osg.utils.MailUtils;
+import it.osg.utils.Utils;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,27 +20,23 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class SubTaskServlet extends HttpServlet  {
+public class Imm2SubTaskServlet extends HttpServlet  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger log = Logger.getLogger(SubTaskServlet.class.getName());
-
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		//INPUT DATA
 		String idTransaction = req.getParameter("idTransaction");
 		String pageId = req.getParameter("pageId");
-		String from = req.getParameter("from");
+		String from = req.getParameter("from");//01-07-2013 00:00:00
 		String to = req.getParameter("to");
 
 		//GET DATE
@@ -81,8 +79,10 @@ public class SubTaskServlet extends HttpServlet  {
 		parzShares = parzShares + FacebookUtils.getShares(postFromPage);
 		parzNumPost = parzNumPost + postFromFan.size();
 
+		Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
+		
 		//AGGIUNGO NODO FACEBOOK ID
-		Node pageIdNode = new Node(pageId, pageId, parzShares*parzNumPost*parzLikes.size(), ElementType.PAGEID);
+		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax(parzShares*parzNumPost*parzLikes.size(), 100), ElementType.PAGEID);
 		nodes.put(pageId, pageIdNode);
 
 		//Prendo i Commenti ai Post e li raggruppo per ID_AUTORE_COMMENTO
@@ -91,15 +91,14 @@ public class SubTaskServlet extends HttpServlet  {
 		Hashtable<String, ArrayList<Comment>> commHash = new Hashtable<String, ArrayList<Comment>>();
 		while (iterComm.hasNext()) {
 			Comment currComm = iterComm.next();
-			log.info("MIO LOG: " + currComm.getMetadata());
 			//TODO trovare anche le risposte ai commenti
-			String idFrom = currComm.getFrom().getId();
-			if (!commHash.containsKey(idFrom)) {
+			String nameFrom = currComm.getFrom().getName();
+			if (!commHash.containsKey(nameFrom)) {
 				ArrayList<Comment> currComms = new ArrayList<Comment>();
 				currComms.add(currComm);
-				commHash.put(idFrom, currComms);
+				commHash.put(nameFrom, currComms);
 			} else  {
-				ArrayList<Comment> addComm = commHash.get(idFrom);
+				ArrayList<Comment> addComm = commHash.get(nameFrom);
 				addComm.add(currComm);
 			}
 		}
@@ -113,7 +112,7 @@ public class SubTaskServlet extends HttpServlet  {
 			//AGGIUNGO NODO AUTHOR DI COMMENTI
 			double sizeAuthorNode = 1;
 			sizeAuthorNode = sizeAuthorNode + FacebookUtils.getCommentLike(commentsForAuthor);
-			Node authorNode = new Node(currKey, currKey, sizeAuthorNode, ElementType.AUTHOR);
+			Node authorNode = new Node(currKey, commentsForAuthor.get(0).getFrom().getName(), sizeAuthorNode, ElementType.AUTHOR);
 			nodes.put(currKey, authorNode);
 			//AGGIUNGO LA EDGE
 			double weightEdge = 1;
@@ -126,14 +125,12 @@ public class SubTaskServlet extends HttpServlet  {
 //		ArrayList<Comment> commentsPostFromFan = FacebookUtils.getComments(postFromFan);
 //		Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
 		
+		//TODO SAVE NODES AND EDGES TO DATASTORE
+		DatastoreUtils.saveNodes("node", nodes);
+		DatastoreUtils.saveEdges("edge", edges);
 		String attachFile = GephiUtils.createGraph(nodes, edges);
-		
 		MailUtils.sendMail("paserv@gmail.com", "TEST", "TEST", "test.xml", attachFile);
 		
-
-
-
-
 	}
 
 
