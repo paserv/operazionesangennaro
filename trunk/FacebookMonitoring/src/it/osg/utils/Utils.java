@@ -46,5 +46,23 @@ public class Utils {
 		return sindaci;
 		
 	}
+	
+	
+	public static boolean isDouble(String s) {
+	    try { 
+	        Double.parseDouble(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    return true;
+	}
+
+
+	public static double trunkateToMax(double d, int i) {
+		if (d > i) {
+			return i;
+		}
+		return d;
+	}
 
 }

@@ -1,5 +1,6 @@
 package it.osg.utils;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
@@ -38,6 +39,43 @@ public class FacebookUtils {
 		return facebook;
 	}
 
+
+	public static Date getActivityInterval (String pageId){
+		
+		Facebook facebook = getFB();
+		Date f = null;
+		Date t = null;
+		try {
+			f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+			t = DateUtils.addMonthToDate(f, 1);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			while (true) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				ResponseList<Post> facResults = facebook.getFeed(pageId, new Reading().since(f).until(t).fields("created_time").limit(1));
+				if (facResults != null && facResults.size() != 0) {
+					Post currPost = facResults.get(0);
+					return currPost.getCreatedTime();
+				} else {
+					f = t;
+					t = DateUtils.addMonthToDate(f, 1);
+				}
+			}
+
+		} catch (FacebookException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
 	public static Hashtable<String, Object> getBaseInfo (String pageId) {
 
 		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
@@ -49,13 +87,11 @@ public class FacebookUtils {
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
 		String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
-		String release_date = JSONObjectUtil.retrieveJsonPath(json, "release_date");
 		//TODO retrieve anche degli altri campi
 
 		result.put("likes", likeCount);
 		result.put("talking_about_count", talkingAboutCount);
 		result.put("pageName", pageName);
-		result.put("release_date", release_date);
 
 		return result;
 	}
@@ -73,7 +109,7 @@ public class FacebookUtils {
 			} else {
 				facResults = facebook.getFeed(pageId, new Reading().since(f).until(t));
 			}
-			
+
 			result.addAll(facResults);
 
 			//			//Fetching Post
