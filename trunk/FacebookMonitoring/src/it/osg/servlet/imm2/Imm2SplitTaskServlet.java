@@ -16,12 +16,12 @@ public class Imm2SplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public String getSubtask() {
-		return "imm2task";
+		return "imm2subtask";
 	}
 
 	@Override
 	public String getJointask() {
-		return "imm2join";
+		return "imm2jointask";
 	}
 
 
