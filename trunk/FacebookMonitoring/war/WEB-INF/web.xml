@@ -90,6 +90,36 @@
 		<servlet-name>JoinTaskServlet</servlet-name>
 		<url-pattern>/jointask</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Imm2SplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2SplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2SplitTaskServlet</servlet-name>
+		<url-pattern>/imm2splittask</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Imm2SubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2SubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2SubTaskServlet</servlet-name>
+		<url-pattern>/imm2subtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Imm2JoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2JoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2JoinTaskServlet</servlet-name>
+		<url-pattern>/imm2jointask</url-pattern>
+	</servlet-mapping>
 	<!-- FINE QUEUE -->
 
 
@@ -143,16 +173,6 @@
 	<servlet-mapping>
 		<servlet-name>Add To Queue</servlet-name>
 		<url-pattern>/atq</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>Imm2 Task Servlet</servlet-name>
-		<servlet-class>it.osg.servlet.imm2.Imm2SubTaskServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>Imm2 Task Servlet</servlet-name>
-		<url-pattern>/imm2task</url-pattern>
 	</servlet-mapping>
 
 	<!-- FINE VARIE -->
