@@ -1,5 +1,7 @@
 package it.osg.servlet.imm2;
 
+import it.osg.service.model.Edge;
+import it.osg.service.model.Node;
 import it.osg.utils.ArrayUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
@@ -60,23 +62,13 @@ public class Imm2JoinTaskServlet extends HttpServlet {
 
 		if (isTransactionEnded(idTransaction, numTask)) {
 
-			String dataCSV = "";
+			String dataXML = "";
 
-			double numGiorni = 0;
-			try {
-				numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-
-			ArrayList<String> sindaci = new ArrayList<String>();
-			if (pageId.equalsIgnoreCase("all")) {
-				sindaci = Utils.getAllSindaci();
-			} else {
-				sindaci.add(pageId);
-			}
-
-
+			ArrayList<Node> nodes = new ArrayList<Node>();
+			ArrayList<Edge> edges = new ArrayList<Edge>();
+			
+			
+			
 			Iterator<String> iterSindaci = sindaci.iterator();
 			while (iterSindaci.hasNext()) {
 				String currSindaco = iterSindaci.next();
@@ -217,8 +209,8 @@ public class Imm2JoinTaskServlet extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
-		q = new Query("task").setFilter(idFilter);
+		Filter idFilter = new FilterPredicate(idTransaction, FilterOperator.EQUAL, idTransaction);
+		q = new Query("node").setFilter(idFilter);
 		pq = datastore.prepare(q);
 		int executedTask = pq.countEntities();
 		if (Integer.valueOf(numTask) == executedTask) return true;

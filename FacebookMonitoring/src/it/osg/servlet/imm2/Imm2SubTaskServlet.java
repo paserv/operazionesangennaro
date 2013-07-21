@@ -125,9 +125,10 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 //		ArrayList<Comment> commentsPostFromFan = FacebookUtils.getComments(postFromFan);
 //		Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
 		
-		//TODO SAVE NODES AND EDGES TO DATASTORE (deve essere salvato anche l'idTransaction e l'id facebook di riferimento)
-		DatastoreUtils.saveNodes("node", nodes);
-		DatastoreUtils.saveEdges("edge", edges);
+		//TODO SAVE NODES AND EDGES TO DATASTORE AND INCREMENT 1 TASK
+		DatastoreUtils.saveNodes("node", idTransaction, nodes);
+		DatastoreUtils.saveEdges("edge", idTransaction, edges);
+		DatastoreUtils.incrementTask("task", idTransaction);
 		String attachFile = GephiUtils.createGraph(nodes, edges);
 		MailUtils.sendMail("paserv@gmail.com", "TEST", "TEST", "test.xml", attachFile);
 		
