@@ -2,13 +2,17 @@ package it.osg.servlet.imm2;
 
 import it.osg.service.model.Edge;
 import it.osg.service.model.Node;
-import it.osg.utils.ArrayUtils;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.GephiUtils;
 import it.osg.utils.MailUtils;
+import it.osg.utils.Utils;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,11 +48,12 @@ public class Imm2JoinTaskServlet extends HttpServlet {
 			ArrayList<Node> nodes = DatastoreUtils.getNodes("node", idTransaction);
 			ArrayList<Edge> edges = DatastoreUtils.getEdges("edge", idTransaction);
 
-			//			ArrayList<Node> joinNodes = ArrayUtils.removeDuplicate(list)
+			Hashtable<String, Node> joinedNodes = aggregateNodes(nodes);
+			Hashtable<String, Edge> joinedEdges = aggregateEdges(edges);			
 
 			//INVIA MAIL
 			String bodyMail = "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per ID Facebook = " + pageId;
-			String attachFile = GephiUtils.createGraph(nodes, edges);
+			String attachFile = GephiUtils.createGraph(joinedNodes, joinedEdges);
 			String subject = "Dati relativi alla pagina con ID " + pageId;
 			MailUtils.sendMail(mail, subject, bodyMail, pageId + ".gexf", attachFile);
 
@@ -71,6 +76,36 @@ public class Imm2JoinTaskServlet extends HttpServlet {
 
 
 
+	}
+
+	private Hashtable<String, Edge> aggregateEdges(ArrayList<Edge> edges) {
+		Hashtable<String, Edge>  result = new Hashtable<String, Edge>();
+		Iterator<Edge> iter = edges.iterator();
+		while (iter.hasNext()) {
+			Edge currEdge = iter.next();
+			if (!result.containsKey(currEdge.source + "_" + currEdge.target)) {
+				result.put(currEdge.source + "_" + currEdge.target, currEdge);
+			} else {
+				Edge presentEdge = result.get(currEdge.source + "_" + currEdge.target);
+				presentEdge.weight = Utils.trunkateToMax(presentEdge.weight + currEdge.weight, 50);
+			}
+		}
+		return result;
+	}
+
+	private Hashtable<String, Node> aggregateNodes(ArrayList<Node> nodes) {
+		Hashtable<String, Node>  result = new Hashtable<String, Node>();
+		Iterator<Node> iter = nodes.iterator();
+		while (iter.hasNext()) {
+			Node currNode = iter.next();
+			if (!result.containsKey(currNode.id)) {
+				result.put(currNode.id, currNode);
+			} else {
+				Node presentNode = result.get(currNode.id);
+				presentNode.size = Utils.trunkateToMax(presentNode.size + currNode.size, 100);
+			}
+		}
+		return result;
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
