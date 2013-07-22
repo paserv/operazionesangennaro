@@ -7,4 +7,11 @@ public class GraphElement {
 	public ElementType type;
 	public enum ElementType {PAGEID, AUTHOR};
 	
+	public static ElementType getType(String type) {
+		if (type.equalsIgnoreCase(ElementType.PAGEID.toString())) {
+			return ElementType.PAGEID;
+		} else {
+			return ElementType.AUTHOR;
+		}
+	}
 }
