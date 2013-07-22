@@ -1,6 +1,7 @@
 package it.osg.utils;
 
 import it.osg.service.model.Edge;
+import it.osg.service.model.GraphElement;
 import it.osg.service.model.Node;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Iterator;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -100,11 +102,34 @@ public class DatastoreUtils {
 		q = new Query(table).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
-
+			String nodeID = (String) ent.getProperty("nodeID");
+			String nodeLabel = (String) ent.getProperty("nodeLabel");
+			double nodeSize = (Double) ent.getProperty("nodeSize");
+			String tipo = (String) ent.getProperty("nodeType");
+			Node currNode = new Node(nodeID, nodeLabel, nodeSize, GraphElement.getType(tipo));
+			result.add(currNode);
 		}
-		
 		return result;
-		
+
+	}
+
+	public static ArrayList<Edge> getEdges (String table, String idTransaction) {
+		ArrayList<Edge> result = new ArrayList<Edge>();
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = new FilterPredicate(idTransaction, FilterOperator.EQUAL, idTransaction);
+		q = new Query(table).setFilter(idFilter);
+		pq = DS.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			String edgeSource = (String) ent.getProperty("edgeSource");
+			String edgeTarget = (String) ent.getProperty("edgeTarget");
+			double edgeWeight = (Double) ent.getProperty("edgeWeight");
+			String edgeType = (String) ent.getProperty("edgeType");
+			Edge currEdge = new Edge(edgeSource, edgeTarget, edgeWeight, GraphElement.getType(edgeType));
+			result.add(currEdge);
+		}
+		return result;
+
 	}
 
 	public static void incrementTask(String table, String idTransaction) {
@@ -114,9 +139,38 @@ public class DatastoreUtils {
 		q = new Query(table).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
-			ent.getProperty("executedtask");
+			Long exexutedTask = (Long) ent.getProperty("executedtask");
+			ent.setProperty("executedtask", exexutedTask + 1L);
+			DS.put(ent);
+			return;
 		}
+		Entity newEnt = new Entity("task", idTransaction);
+		newEnt.setProperty("executedtask", 1L);
+		DS.put(newEnt);
+	}
 
+	public static Object getValue(String table, String filterPropertyName, String filterPropertyValue, String returnProperty) {
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = null;
+		if (filterPropertyName.equalsIgnoreCase("key")) {
+			idFilter = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey(table, filterPropertyValue));
+		} else {
+			idFilter = new FilterPredicate(filterPropertyName, FilterOperator.EQUAL, filterPropertyValue);
+		} 
+		q = new Query(table).setFilter(idFilter);
+		pq = DS.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			Object returnValue = ent.getProperty(returnProperty);
+			return returnValue;
+		}
+		return null;
+	}
+	
+	public static void addRow(String table, String propertyName, Object propertyValue) {
+		Entity newEnt = new Entity(table);
+		newEnt.setProperty(propertyName, propertyValue);
+		DS.put(newEnt);
 	}
 
 }

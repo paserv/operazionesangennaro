@@ -1,7 +1,10 @@
 package it.osg.utils;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+
 import it.osg.service.model.Edge;
 import it.osg.service.model.Node;
 
@@ -47,6 +50,28 @@ public class GephiUtils {
 		Enumeration<Edge> iterEdge = edges.elements();
 		while (iterEdge.hasMoreElements()) {
 			Edge currEdge = iterEdge.nextElement();
+			result = result + GephiUtils.insertEdge(currEdge);
+		}
+		result = result + "</edges>\n";
+		result = result + GephiUtils.FOOTER;
+		return result;
+	}
+	
+	public static String createGraph(ArrayList<Node> nodes, ArrayList<Edge> edges) {
+		String result = GephiUtils.HEADER;
+		
+		result = result + "<nodes>\n";
+		Iterator<Node> iterNodes = nodes.iterator();		
+		while (iterNodes.hasNext()) {
+			Node currNode = iterNodes.next();
+			result = result + GephiUtils.insertNode(currNode);
+		}
+		result = result + "</nodes>\n";
+		
+		result = result + "<edges>\n";
+		Iterator<Edge> iterEdges = edges.iterator();		
+		while (iterEdges.hasNext()) {
+			Edge currEdge = iterEdges.next();
 			result = result + GephiUtils.insertEdge(currEdge);
 		}
 		result = result + "</edges>\n";
