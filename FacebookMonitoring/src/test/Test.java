@@ -16,7 +16,16 @@ public class Test {
 		double numTotalePost = 41;
 		double numGiorni = 4;
 
-
+		String numTask = "1";
+		Long executedTask = 1L;
+		
+		if (executedTask != null) {
+			if (Long.valueOf(numTask) == executedTask) {
+				System.out.println("ciao");
+			}
+		}
+		
+		
 		String from = "01-06-2013 00:00:00";
 		String to = "02-06-2013 00:00:00";
 		
