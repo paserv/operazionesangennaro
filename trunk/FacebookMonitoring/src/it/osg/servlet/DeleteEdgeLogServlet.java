@@ -1,6 +1,6 @@
 package it.osg.servlet;
 
-public class DeleteTaskLogServlet extends DeleteTableServlet {
+public class DeleteEdgeLogServlet extends DeleteTableServlet {
 
 	/**
 	 * 
@@ -9,7 +9,7 @@ public class DeleteTaskLogServlet extends DeleteTableServlet {
 
 	@Override
 	protected String getTabella() {
-		return "task";
+		return "edge";
 	}
 
 
