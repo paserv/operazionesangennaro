@@ -98,7 +98,7 @@ public class DatastoreUtils {
 		ArrayList<Node> result = new ArrayList<Node>();
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate(idTransaction, FilterOperator.EQUAL, idTransaction);
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
 		q = new Query(table).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
@@ -117,7 +117,7 @@ public class DatastoreUtils {
 		ArrayList<Edge> result = new ArrayList<Edge>();
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate(idTransaction, FilterOperator.EQUAL, idTransaction);
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
 		q = new Query(table).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
