@@ -13,6 +13,15 @@ public class Node extends GraphElement {
 		this.size = siz;
 		this.type = tp;
 	}
+	 @Override
+	 public boolean equals(Object object) {
+		 if (object != null && object instanceof Node) {
+			 if (((Node) object).id.equalsIgnoreCase(this.id)) {
+				 return true;
+			 }
+		 }
+		 return false;
+	 }
 	
 	
 }
