@@ -90,7 +90,7 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		while (iterComm.hasNext()) {
 			Comment currComm = iterComm.next();
 			//TODO trovare anche le risposte ai commenti
-			String nameFrom = currComm.getFrom().getName();
+			String nameFrom = currComm.getFrom().getId();
 			if (!commHash.containsKey(nameFrom)) {
 				ArrayList<Comment> currComms = new ArrayList<Comment>();
 				currComms.add(currComm);
