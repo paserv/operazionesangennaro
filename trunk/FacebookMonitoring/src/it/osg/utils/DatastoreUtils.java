@@ -135,7 +135,7 @@ public class DatastoreUtils {
 	public static void incrementTask(String table, String idTransaction) {
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate(idTransaction, FilterOperator.EQUAL, idTransaction);
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
 		q = new Query(table).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
