@@ -90,7 +90,7 @@
 		<servlet-name>JoinTaskServlet</servlet-name>
 		<url-pattern>/jointask</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Imm2SplitTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.imm2.Imm2SplitTaskServlet</servlet-class>
@@ -100,7 +100,7 @@
 		<servlet-name>Imm2SplitTaskServlet</servlet-name>
 		<url-pattern>/imm2splittask</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Imm2SubTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.imm2.Imm2SubTaskServlet</servlet-class>
@@ -124,7 +124,7 @@
 
 
 
-	<!-- VARIE -->
+	<!-- CRON JOB DI PULIZIA -->
 	<servlet>
 		<servlet-name>DeleteTaskLogServlet</servlet-name>
 		<servlet-class>it.osg.servlet.DeleteTaskLogServlet</servlet-class>
@@ -135,6 +135,30 @@
 		<url-pattern>/deletetasklog</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteNodeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<url-pattern>/deletenodelog</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteEdgeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<url-pattern>/deleteedgelog</url-pattern>
+	</servlet-mapping>
+	<!-- FINE CRON JOB DI PULIZIA -->
+
+
+
+	<!-- VARIE -->
 	<servlet>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
