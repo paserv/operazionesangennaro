@@ -176,4 +176,29 @@ public class DatastoreUtils {
 		DS.put(newEnt);
 	}
 
+
+
+	public static Hashtable<String, Node> saveNodes(String table, String idTransaction, Hashtable<String, Node> nodes, long value) {
+		Enumeration<String> keys = nodes.keys();
+		Hashtable<String, Node> result = new Hashtable<String, Node>();
+		while(keys.hasMoreElements()) {
+			Node currNode = nodes.get(keys.nextElement());
+			if (currNode.size >= value)
+			saveNode(table, idTransaction, currNode);
+			result.put(currNode.id, currNode);
+		}
+		return result;
+	}
+
+
+
+	public static void saveEdges(String table, String idTransaction, Hashtable<String, Edge> edges, Hashtable<String, Node> nodes) {
+		Enumeration<String> keys = edges.keys();
+		while(keys.hasMoreElements()) {
+			Edge currEdge = edges.get(keys.nextElement());
+			if (nodes.containsKey(currEdge.source) && nodes.containsKey(currEdge.target))
+			saveEdge(table, idTransaction, currEdge);
+		}		
+	}
+
 }
