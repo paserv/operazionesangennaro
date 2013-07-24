@@ -34,7 +34,7 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		//INPUT DATA
 		String idTransaction = req.getParameter("idTransaction");
 		String pageId = req.getParameter("pageId");
-		String from = req.getParameter("from");//01-07-2013 00:00:00
+		String from = req.getParameter("from");
 		String to = req.getParameter("to");
 
 		//GET DATE
@@ -80,7 +80,7 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
 		
 		//AGGIUNGO NODO FACEBOOK ID
-		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax(parzShares*parzNumPost*parzLikes.size(), 100), ElementType.PAGEID);
+		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax(parzShares*parzNumPost*parzLikes.size(), 50), ElementType.PAGEID);
 		nodes.put(pageId, pageIdNode);
 
 		//Prendo i Commenti ai Post e li raggruppo per ID_AUTORE_COMMENTO
@@ -110,7 +110,7 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 			//AGGIUNGO NODO AUTHOR DI COMMENTI
 			double sizeAuthorNode = 1;
 			sizeAuthorNode = sizeAuthorNode + FacebookUtils.getCommentLike(commentsForAuthor);
-			Node authorNode = new Node(currKey, commentsForAuthor.get(0).getFrom().getName(), sizeAuthorNode, ElementType.AUTHOR);
+			Node authorNode = new Node(currKey, Utils.cleanString(commentsForAuthor.get(0).getFrom().getName()), sizeAuthorNode, ElementType.AUTHOR);
 			nodes.put(currKey, authorNode);
 			//AGGIUNGO LA EDGE
 			double weightEdge = 1;
@@ -127,8 +127,6 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		DatastoreUtils.saveNodes("node", idTransaction, nodes);
 		DatastoreUtils.saveEdges("edge", idTransaction, edges);
 		DatastoreUtils.incrementTask("task", idTransaction);
-//		String attachFile = GephiUtils.createGraph(nodes, edges);
-//		MailUtils.sendMail("paserv@gmail.com", "TEST", "TEST", "test.xml", attachFile);
 		
 	}
 
