@@ -1,6 +1,7 @@
 package it.osg.servlet.imm2;
 
 import it.osg.servlet.SplitTaskServlet;
+import it.osg.utils.DatastoreUtils;
 
 public class Imm2SplitTaskServlet extends SplitTaskServlet {
 
@@ -11,7 +12,8 @@ public class Imm2SplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public int getStep() {
-		return 4;
+		long res = (Long) DatastoreUtils.getValue("conf", "property", "splitstep", "value");
+		return Integer.parseInt((String.valueOf(res)));
 	}
 
 	@Override
