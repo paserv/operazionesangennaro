@@ -124,8 +124,8 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 //		Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
 		
 		//SAVE NODES AND EDGES TO DATASTORE AND INCREMENT 1 TASK
-		DatastoreUtils.saveNodes("node", idTransaction, nodes);
-		DatastoreUtils.saveEdges("edge", idTransaction, edges);
+		Hashtable<String, Node> myNodes = DatastoreUtils.saveNodes("node", idTransaction, nodes, (Long) DatastoreUtils.getValue("conf", "property", "minnodesize", "value"));
+		DatastoreUtils.saveEdges("edge", idTransaction, edges, myNodes);
 		DatastoreUtils.incrementTask("task", idTransaction);
 		
 	}

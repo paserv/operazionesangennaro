@@ -21,13 +21,13 @@ public class Imm2JoinTaskServlet extends JoinTaskServlet {
 	
 	@Override
 	protected long getTimeout() {
-		return 1000000L;
+		return (Long) DatastoreUtils.getValue("conf", "property", "jointimeout", "value");
 	}
 
 
 	@Override
 	protected long getDelay() {
-		return 100000L;
+		return (Long) DatastoreUtils.getValue("conf", "property", "joindelay", "value");
 	}
 
 
