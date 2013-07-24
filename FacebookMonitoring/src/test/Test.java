@@ -16,6 +16,9 @@ public class Test {
 		double numTotalePost = 41;
 		double numGiorni = 4;
 
+		String vir = "paolo \"ciao\" sono io";
+		System.out.println(Utils.cleanString(vir));
+		
 		String numTask = "1";
 		Long executedTask = 1L;
 		
