@@ -16,6 +16,11 @@ public class Test {
 		double numTotalePost = 41;
 		double numGiorni = 4;
 
+		double d = 5;
+		long l = 6;
+		
+		System.out.println(d > l);
+		
 		String vir = "paolo \"ciao\" sono io";
 		System.out.println(Utils.cleanString(vir));
 		
