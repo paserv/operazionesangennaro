@@ -47,6 +47,10 @@ public class Utils {
 		
 	}
 	
+	public static String cleanString(String s) {
+	    String result = s.replace("\"", "");
+	    return result;
+	}
 	
 	public static boolean isDouble(String s) {
 	    try { 

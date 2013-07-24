@@ -91,7 +91,7 @@ public class FacebookUtils {
 
 		result.put("likes", likeCount);
 		result.put("talking_about_count", talkingAboutCount);
-		result.put("pageName", pageName);
+		result.put("name", pageName);
 
 		return result;
 	}
