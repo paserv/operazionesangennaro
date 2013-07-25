@@ -183,9 +183,10 @@ public class DatastoreUtils {
 		Hashtable<String, Node> result = new Hashtable<String, Node>();
 		while(keys.hasMoreElements()) {
 			Node currNode = nodes.get(keys.nextElement());
-			if (currNode.size >= value)
-			saveNode(table, idTransaction, currNode);
-			result.put(currNode.id, currNode);
+			if (currNode.size >= value) {
+				saveNode(table, idTransaction, currNode);
+				result.put(currNode.id, currNode);
+			}
 		}
 		return result;
 	}
@@ -196,8 +197,9 @@ public class DatastoreUtils {
 		Enumeration<String> keys = edges.keys();
 		while(keys.hasMoreElements()) {
 			Edge currEdge = edges.get(keys.nextElement());
-			if (nodes.containsKey(currEdge.source) && nodes.containsKey(currEdge.target))
-			saveEdge(table, idTransaction, currEdge);
+			if (nodes.containsKey(currEdge.source) && nodes.containsKey(currEdge.target)) {
+				saveEdge(table, idTransaction, currEdge);
+			}
 		}		
 	}
 
