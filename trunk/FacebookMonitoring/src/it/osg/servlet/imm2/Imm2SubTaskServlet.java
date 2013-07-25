@@ -80,7 +80,7 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
 		
 		//AGGIUNGO NODO FACEBOOK ID
-		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax(parzShares*parzNumPost*parzLikes.size(), 50), ElementType.PAGEID);
+		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax((parzShares+parzLikes.size())/parzNumPost, 1000), ElementType.PAGEID);
 		nodes.put(pageId, pageIdNode);
 
 		//Prendo i Commenti ai Post e li raggruppo per ID_AUTORE_COMMENTO
