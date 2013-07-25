@@ -69,7 +69,7 @@ public class Imm2JoinTaskServlet extends JoinTaskServlet {
 		Hashtable<String, Node> joinedNodes = aggregateNodes(nodes);
 		Hashtable<String, Edge> joinedEdges = aggregateEdges(edges);
 		
-		String attachFile = GephiUtils.createGraph(joinedNodes, joinedEdges);
+		String attachFile = GephiUtils.createGraph(joinedNodes, joinedEdges, getBodyMail());
 		
 		return attachFile;
 	}
