@@ -13,15 +13,16 @@ import it.osg.service.model.Node;
 public class GephiUtils {
 
 	private static final Color PAGEID_COLOR = new Color("40", "160", "255");
-	private static final Color AUTHOR_COLOR = new Color("25", "140", "255");
+	private static final Color AUTHOR_COLOR = new Color("40", "170", "20");
 	private static final Color PAGEID_EDGE_COLOR = new Color("0", "0", "255");
 	private static final Color AUTHOR_EDGE_COLOR = new Color("0", "255", "0");
+	private static String description = "";
 
 	public static String HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 			"<gexf xmlns=\"http://www.gexf.net/1.2draft\" version=\"1.2\" xmlns:viz=\"http://www.gexf.net/1.2draft/viz\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\">\n" +
 			"\t<meta lastmodifieddate=\"2013-07-15\">\n" +
 			"\t\t<creator>Don Pablo</creator>\n" +
-			"\t\t<description></description>\n" +
+			"\t\t<description>" + description + "</description>\n" +
 			"\t</meta>\n" +
 			"\t<graph defaultedgetype=\"directed\" mode=\"static\">\n";
 	public static String FOOTER = "\t</graph>\n" +
@@ -43,7 +44,8 @@ public class GephiUtils {
 				"\t\t</edge>\n";
 	}
 
-	public static String createGraph(Hashtable<String,Node> nodes, Hashtable<String,Edge> edges) {
+	public static String createGraph(Hashtable<String,Node> nodes, Hashtable<String,Edge> edges, String descr) {
+		description = descr;
 		String result = GephiUtils.HEADER;
 		Enumeration<Node> iterNodes = nodes.elements();
 
