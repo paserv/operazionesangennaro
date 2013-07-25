@@ -3,16 +3,50 @@ package test;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 
+import it.osg.service.model.Edge;
+import it.osg.service.model.Node;
+import it.osg.service.model.GraphElement.ElementType;
 import it.osg.utils.DateUtils;
 import it.osg.utils.Utils;
 
 public class Test {
 
 	public static void main(String[] args) {
+		
+		
+		Hashtable<String, Edge> edges = new Hashtable<String, Edge>();
+		Edge edge1 = new Edge("nonpres", "pres", 1,ElementType.AUTHOR);
+		Edge edge2 = new Edge("pres", "nonpres", 1,ElementType.AUTHOR);
+		Edge edge3 = new Edge("nonpres", "nonpres", 1,ElementType.AUTHOR);
+		Edge edge4 = new Edge("pres", "pres", 1,ElementType.AUTHOR);
+		edges.put("nonpres_pres", edge1);
+		edges.put("pres_nonpres", edge2);
+		edges.put("nonpres_nonpres", edge3);
+		edges.put("pres_pres", edge4);
+		
+		Hashtable<String, Node> nodes = new Hashtable<String, Node>();
+		Node nod = new Node("pres", "ciao", 13, ElementType.AUTHOR);
+		nodes.put("pres", nod);
+		
+		Enumeration<String> keys = edges.keys();
+		while(keys.hasMoreElements()) {
+			String currKey = keys.nextElement();
+			Edge currEdge = edges.get(currKey);
+			if (nodes.containsKey(currEdge.source) && nodes.containsKey(currEdge.target))
+				System.out.println("Edge" + currKey);
+		}
+		
+		
+		
+		
+		
+		
 		double numTotalePost = 41;
 		double numGiorni = 4;
 
