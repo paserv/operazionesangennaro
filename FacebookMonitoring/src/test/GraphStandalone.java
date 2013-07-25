@@ -147,7 +147,7 @@ public class GraphStandalone {
 		Hashtable<String, Node> filNodes = filterNodesBySize(nodes, 10);
 		Hashtable<String, Edge> filEdges = filterEdgesByWeight(edges, 1);
 
-		String attachFile = GephiUtils.createGraph(filNodes, filEdges);
+		String attachFile = GephiUtils.createGraph(filNodes, filEdges, "TEST");
 		System.out.println(attachFile);
 		
 
