@@ -90,7 +90,10 @@
 		<servlet-name>JoinTaskServlet</servlet-name>
 		<url-pattern>/jointask</url-pattern>
 	</servlet-mapping>
+	<!-- FINE PSAR -->
 
+	
+	<!-- IMM2 -->
 	<servlet>
 		<servlet-name>Imm2SplitTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.imm2.Imm2SplitTaskServlet</servlet-class>
@@ -120,8 +123,40 @@
 		<servlet-name>Imm2JoinTaskServlet</servlet-name>
 		<url-pattern>/imm2jointask</url-pattern>
 	</servlet-mapping>
-	<!-- FINE QUEUE -->
+	<!-- FINE IMM2 -->
 
+
+	<!-- BASEINFO -->
+	<servlet>
+		<servlet-name>BaseInfoSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoSplitTaskServlet</servlet-name>
+		<url-pattern>/baseinfosplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BaseInfoSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoSubTaskServlet</servlet-name>
+		<url-pattern>/baseinfosubtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BaseInfoJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoJoinTaskServlet</servlet-name>
+		<url-pattern>/baseinfojointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE BASEINFO -->
 
 
 	<!-- CRON JOB DI PULIZIA -->
