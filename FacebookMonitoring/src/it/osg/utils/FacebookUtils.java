@@ -95,7 +95,8 @@ public class FacebookUtils {
 
 		return result;
 	}
-
+	
+	
 	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) {
 
 		ArrayList<Post> result = new ArrayList<Post>();
