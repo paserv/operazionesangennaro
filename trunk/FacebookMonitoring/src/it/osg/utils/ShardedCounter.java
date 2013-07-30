@@ -31,7 +31,7 @@ public class ShardedCounter {
     /**
      * Default number of shards.
      */
-    private static final int NUM_SHARDS = 20;
+    private static final int NUM_SHARDS = 50;
 
     /**
      * A random number generator, for distributing writes across shards.
@@ -95,13 +95,9 @@ public class ShardedCounter {
     }
     
     public final void delete(String counterName) {
-        long sum = 0;
-
         Query query = new Query(counterName);
         for (Entity e : DS.prepare(query).asIterable()) {
-            sum += (Long) e.getProperty("executedtask");
+            DS.delete(e.getKey());
         }
-
-        return sum;
     }
 }
