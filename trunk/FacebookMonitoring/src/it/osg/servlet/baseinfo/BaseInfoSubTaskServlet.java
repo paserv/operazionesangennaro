@@ -1,80 +1,58 @@
 package it.osg.servlet.baseinfo;
 
+import facebook4j.FacebookException;
 import facebook4j.Post;
+import facebook4j.Reading;
+import facebook4j.ResponseList;
+import it.osg.servlet.SubTaskServlet;
+import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
-import it.osg.utils.MailUtils;
-import it.osg.utils.ShardedCounter;
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.datastore.Entity;
 
-public class BaseInfoSubTaskServlet extends HttpServlet  {
+public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
-
-		//INPUT DATA
-		String idTransaction = req.getParameter("idTransaction");
-		String pageId = req.getParameter("pageId");
-		String from = req.getParameter("from");
-		String to = req.getParameter("to");
-
-		//GET DATE
+	@Override
+	protected void runSubTask() {
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime(from);
-			t = DateUtils.parseDateAndTime(to);
-		} catch (ParseException e) {
+			f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+		} catch (ParseException e2) {
+			e2.printStackTrace();
+		}
+		t = DateUtils.addMonthToDate(f, 1);
+		try {
+			while (true) {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				ResponseList<Post> facResults = FacebookUtils.getFB().getFeed(pageId, new Reading().since(f).until(t).fields("created_time").limit(1));
+				if (facResults != null && facResults.size() != 0) {
+					Post currPost = facResults.get(0);
+					Entity ent = new Entity("firstpostofpages", pageId);
+					ent.setUnindexedProperty("startdate", currPost.getCreatedTime());
+					DatastoreUtils.saveEntity(ent);
+					break;
+				} else {
+					f = t;
+					t = DateUtils.addMonthToDate(f, 1);
+				}
+			}
+
+		} catch (FacebookException e) {
 			e.printStackTrace();
 		}
-				
-		//Get all Post
-		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, new String[]{"id", "from"});
-		
-		ArrayList<Post> postFromPage = new ArrayList<Post>();
-		ArrayList<Post> postFromFan = new ArrayList<Post>();
 
-		Iterator<Post> iterPost = posts.iterator();
-		while (iterPost.hasNext()) {
-			Post currPost = iterPost.next();
-			if (currPost.getFrom().getId().equals(pageId)) {
-				postFromPage.add(currPost);
-			} else {
-				postFromFan.add(currPost);
-			}
-		}
-
-		//ArrayList<Like> parzLikes = FacebookUtils.getLikes(postFromPage);
-		//parzShares = parzShares + FacebookUtils.getShares(postFromPage);
-		//ArrayList<Comment> commentsPostFromPage = FacebookUtils.getComments(postFromPage);
-		
-		String attachFile = postFromFan.size() + "," + postFromPage.size();
-		
-		MailUtils.sendMail("paserv@gmail.com", "test", "ciao", "test.csv", attachFile);
-		
-		//SAVE DATA TO DATASTORE AND INCREMENT 1 TASK
-		//TODO
-		ShardedCounter counter = new ShardedCounter();
-		for (int i = 1; i <= 100; i++) {
-			counter.increment(idTransaction);	
-		}
-			
-	}
-
-
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		doGet(req, resp);
 	}
 
 
