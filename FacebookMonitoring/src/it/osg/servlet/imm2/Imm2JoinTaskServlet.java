@@ -32,18 +32,6 @@ public class Imm2JoinTaskServlet extends JoinTaskServlet {
 
 
 	@Override
-	protected String getTaskTable() {
-		return "task";
-	}
-
-
-	@Override
-	protected String getExecutedTaskField() {
-		return "executedtask";
-	}
-
-
-	@Override
 	protected String getSubjectMail() {
 		return "Dati relativi alla pagina con ID " + pageId;
 	}

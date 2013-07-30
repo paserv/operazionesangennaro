@@ -6,54 +6,34 @@ import facebook4j.Post;
 import it.osg.service.model.Edge;
 import it.osg.service.model.GraphElement.ElementType;
 import it.osg.service.model.Node;
+import it.osg.servlet.SubTaskServlet;
 import it.osg.utils.DatastoreUtils;
-import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
+import it.osg.utils.ShardedCounter;
 import it.osg.utils.Utils;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-public class Imm2SubTaskServlet extends HttpServlet  {
-
+public class Imm2SubTaskServlet extends SubTaskServlet  {
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
-
-		//INPUT DATA
-		String idTransaction = req.getParameter("idTransaction");
-		String pageId = req.getParameter("pageId");
-		String from = req.getParameter("from");
-		String to = req.getParameter("to");
-
-		//GET DATE
-		Date f = null;
-		Date t = null;
-		try {
-			f = DateUtils.parseDateAndTime(from);
-			t = DateUtils.parseDateAndTime(to);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+	@Override
+	protected void runSubTask() {
 
 		//OUTPUT DATA
 		Hashtable<String, Node> nodes = new Hashtable<String, Node>();
 		Hashtable<String, Edge> edges = new Hashtable<String, Edge>();
 
-		
+
 		//Get all Post
-		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, null);
+		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, from, to, null);
 		ArrayList<Post> postFromPage = new ArrayList<Post>();
 		ArrayList<Post> postFromFan = new ArrayList<Post>();
 
@@ -71,14 +51,14 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 		double sizeLikes = 1;
 		double parzShares = 1;
 		double parzNumPost = 1;
-		
+
 		ArrayList<Like> parzLikes = FacebookUtils.getLikes(postFromPage);
 		sizeLikes = sizeLikes + parzLikes.size();
 		parzShares = parzShares + FacebookUtils.getShares(postFromPage);
 		parzNumPost = parzNumPost + postFromFan.size();
 
 		Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfo(pageId);
-		
+
 		//AGGIUNGO NODO FACEBOOK ID
 		Node pageIdNode = new Node(pageId, (String) baseInfo.get("name"), Utils.trunkateToMax((parzShares+parzLikes.size())/parzNumPost, 100), ElementType.PAGEID);
 		nodes.put(pageId, pageIdNode);
@@ -118,21 +98,16 @@ public class Imm2SubTaskServlet extends HttpServlet  {
 			Edge currEdge = new Edge(currKey, pageId, weightEdge, ElementType.AUTHOR);
 			edges.put(currKey + "_" + pageId, currEdge);
 		}
-		
+
 		//TODO aggiungere NODI ed EDGEs per quello che riguarda i post dei fan sulla bacheca
-//		ArrayList<Comment> commentsPostFromFan = FacebookUtils.getComments(postFromFan);
-//		Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
-		
+		//				ArrayList<Comment> commentsPostFromFan = FacebookUtils.getComments(postFromFan);
+		//				Iterator<Comment> iterFanPost = commentsPostFromFan.iterator();
+
 		//SAVE NODES AND EDGES TO DATASTORE AND INCREMENT 1 TASK
 		Hashtable<String, Node> myNodes = DatastoreUtils.saveNodes("node", idTransaction, nodes, (Long) DatastoreUtils.getValue("conf", "property", "minnodesize", "value"));
 		DatastoreUtils.saveEdges("edge", idTransaction, edges, myNodes);
-		DatastoreUtils.incrementTask("task", idTransaction);
-		
-	}
-
-
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		doGet(req, resp);
+		ShardedCounter sc = new ShardedCounter();
+		sc.increment(idTransaction);
 	}
 
 
