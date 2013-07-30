@@ -1,7 +1,6 @@
 package it.osg.servlet.baseinfo;
 
 import it.osg.servlet.SplitTaskServlet;
-import it.osg.utils.DatastoreUtils;
 
 public class BaseInfoSplitTaskServlet extends SplitTaskServlet {
 
@@ -12,8 +11,7 @@ public class BaseInfoSplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public int getStep() {
-		long res = (Long) DatastoreUtils.getValue("conf", "property", "splitstep", "value");
-		return Integer.parseInt((String.valueOf(res)));
+		return Integer.parseInt((String.valueOf("1000000000")));
 	}
 
 	@Override
