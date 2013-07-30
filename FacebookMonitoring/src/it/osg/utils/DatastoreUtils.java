@@ -18,7 +18,6 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.labs.repackaged.com.google.common.collect.Multiset.Entry;
 
 public class DatastoreUtils {
 
@@ -40,6 +39,9 @@ public class DatastoreUtils {
 
 	}
 
+	public static void saveEntity (Entity ent) {
+		DS.put(ent);
+	}
 
 	
 	public static void saveNode (String table, String idTransaction, Node node) {
@@ -202,5 +204,6 @@ public class DatastoreUtils {
 			}
 		}		
 	}
+	
 
 }
