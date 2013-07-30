@@ -1,7 +1,8 @@
 package it.osg.servlet;
 
-import it.osg.utils.DatastoreUtils;
 import it.osg.utils.MailUtils;
+import it.osg.utils.ShardedCounter;
+
 import java.io.IOException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,8 +29,8 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	protected abstract long getTimeout();
 	protected abstract long getDelay();
 	
-	protected abstract String getTaskTable();
-	protected abstract String getExecutedTaskField();
+//	protected abstract String getTaskTable();
+//	protected abstract String getExecutedTaskField();
 	
 	protected abstract String getSubjectMail();
 	protected abstract String getBodyMail();
@@ -53,6 +54,8 @@ public abstract class JoinTaskServlet extends HttpServlet {
 		if (isTransactionEnded(idTransaction, numTask)) {
 
 			MailUtils.sendMail(mail, getSubjectMail(), getBodyMail(), getAttachFileName(), getAttachFile());
+			ShardedCounter counter = new ShardedCounter();
+			counter.delete(idTransaction);
 
 		} else {
 			if (getTimeout() - elapsedTime > 0) {
@@ -78,12 +81,10 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	}
 
 	private boolean isTransactionEnded (String idTransaction, String numTask) {
-		Long executedTask = (Long) DatastoreUtils.getValue(getTaskTable(), "key", idTransaction, getExecutedTaskField());
-		if (executedTask != null && executedTask.compareTo(Long.valueOf(numTask)) == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		ShardedCounter counter = new ShardedCounter();
+		long totalTask = Long.valueOf(numTask);
+		long executedTask = counter.getCount(idTransaction);
+		return totalTask == executedTask;
 	}
 
 
