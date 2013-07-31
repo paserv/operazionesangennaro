@@ -1,14 +1,14 @@
 package it.osg.servlet.baseinfo;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 import it.osg.servlet.JoinTaskServlet;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
-import it.osg.utils.FacebookUtils;
-import it.osg.utils.Utils;
 
 public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 
@@ -16,7 +16,7 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
 	protected long getTimeout() {
 		return (Long) DatastoreUtils.getValue("conf", "property", "jointimeout", "value");
@@ -30,40 +30,35 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 
 
 	@Override
-	protected String getSubjectMail() {
+	protected String getSubjectMail(String pageId) {
 		return "Dati relativi alla pagina con ID " + pageId;
 	}
 
 
 	@Override
-	protected String getBodyMail() {
+	protected String getBodyMail(String from, String to, String timestamp, String pageId, long elapsedTime) {
 		return "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per ID Facebook = " + pageId;
 	}
 
 
 	@Override
-	protected String getAttachFileName() {
+	protected String getAttachFileName(String pageId) {
 		return pageId + ".csv";
 	}
 
 
 	@Override
-	protected String getAttachFile() {
+	protected String getAttachFile(String idTransaction) {
 		String result = "ID,Nome,TotalFan,TalkingAbout,FirstPost\n";
-		
-		ArrayList<String> pages = new ArrayList<String>();
-		if (!Utils.isDouble(pageId)) {
-			pages = DatastoreUtils.getKeyNamesFromTable(pageId);
-		} else {
-			pages.add(pageId);
+		DatastoreService DS = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		PreparedQuery pq;
+		q = new Query(BaseInfoSubTaskServlet.subtasktable);
+		pq = DS.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("name") + ";" + ent.getProperty("likes") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("startdate") + "\n";
 		}
-		Iterator<String> iter = pages.iterator();
-		while (iter.hasNext()) {
-			String currPage = iter.next();
-			Hashtable<String, Object> bi = FacebookUtils.getBaseInfo(currPage);
-			String startDate = DatastoreUtils.getValue("firstpostofpages", "key", currPage, "startdate").toString();
-			result = result + currPage + "," + bi.get("name") + "," + bi.get("likes") + "," + bi.get("talking_about_count") + "," + startDate + "\n";
-		}
+		//}
 		return result;		
 	}
 
@@ -72,7 +67,7 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 	protected String getJoinTaskName() {
 		return "baseinfojointask";
 	}
-	
-	
+
+
 
 }
