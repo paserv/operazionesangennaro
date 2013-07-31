@@ -13,6 +13,7 @@ import it.osg.utils.ShardedCounter;
 import it.osg.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -25,7 +26,7 @@ public class Imm2SubTaskServlet extends SubTaskServlet  {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void runSubTask() {
+	protected void runSubTask(String idTransaction, String pageId, Date from, Date to) {
 
 		//OUTPUT DATA
 		Hashtable<String, Node> nodes = new Hashtable<String, Node>();

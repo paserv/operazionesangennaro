@@ -32,32 +32,32 @@ public class Imm2JoinTaskServlet extends JoinTaskServlet {
 
 
 	@Override
-	protected String getSubjectMail() {
+	protected String getSubjectMail(String pageId) {
 		return "Dati relativi alla pagina con ID " + pageId;
 	}
 
 
 	@Override
-	protected String getBodyMail() {
+	protected String getBodyMail(String from, String to, String timestamp, String pageId, long elapsedTime) {
 		return "Periodo di riferimento:\nFROM: " + from + "\nTO: " + to + "\nQuery iniziata il: " + DateUtils.parseTimestamp(Long.valueOf(timestamp)) + "\nElapsed Time: " + elapsedTime + "\n\nRisultati per ID Facebook = " + pageId;
 	}
 
 
 	@Override
-	protected String getAttachFileName() {
+	protected String getAttachFileName(String pageId) {
 		return pageId + ".gexf";
 	}
 
 
 	@Override
-	protected String getAttachFile() {
+	protected String getAttachFile(String idTransaction) {
 		ArrayList<Node> nodes = DatastoreUtils.getNodes("node", idTransaction);
 		ArrayList<Edge> edges = DatastoreUtils.getEdges("edge", idTransaction);
 
 		Hashtable<String, Node> joinedNodes = aggregateNodes(nodes);
 		Hashtable<String, Edge> joinedEdges = aggregateEdges(edges);
 		
-		String attachFile = GephiUtils.createGraph(joinedNodes, joinedEdges, getBodyMail());
+		String attachFile = GephiUtils.createGraph(joinedNodes, joinedEdges, idTransaction);
 		
 		return attachFile;
 	}
