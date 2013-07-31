@@ -5,12 +5,16 @@ import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
 import it.osg.servlet.SubTaskServlet;
-import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Hashtable;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Transaction;
 
 public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 
@@ -18,9 +22,12 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public static final String subtasktable = "baseinfo";
 
 	@Override
-	protected void runSubTask() {
+	protected void runSubTask(String idTranscation, String pageId, Date from, Date to) {
+		Date startDate = null;
+
 		Date f = null;
 		Date t = null;
 		try {
@@ -39,22 +46,36 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 				ResponseList<Post> facResults = FacebookUtils.getFB().getFeed(pageId, new Reading().since(f).until(t).fields("created_time").limit(1));
 				if (facResults != null && facResults.size() != 0) {
 					Post currPost = facResults.get(0);
-					Entity ent = new Entity("firstpostofpages", pageId);
-					ent.setUnindexedProperty("startdate", currPost.getCreatedTime());
-					DatastoreUtils.saveEntity(ent);
+					startDate = currPost.getCreatedTime();
 					break;
-				} else {
+				} else if (DateUtils.diffInDay(t, DateUtils.getNowDate()) > 0) {
 					f = t;
 					t = DateUtils.addMonthToDate(f, 1);
+				} else if (DateUtils.diffInDay(t, DateUtils.getNowDate()) < 0) {
+					startDate =  DateUtils.getNowDate();
+					break;
 				}
 			}
+
 
 		} catch (FacebookException e) {
 			e.printStackTrace();
 		}
 
-	}
+		Hashtable<String, Object> bi = FacebookUtils.getBaseInfo(pageId);
 
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Transaction txn = datastore.beginTransaction();
+		Entity ent = new Entity(subtasktable);
+		ent.setProperty("pageId", pageId);
+		ent.setUnindexedProperty("name", bi.get("name"));
+		ent.setUnindexedProperty("likes", bi.get("likes"));
+		ent.setUnindexedProperty("talking_about_count", bi.get("talking_about_count"));
+		ent.setUnindexedProperty("startdate", startDate);
+		datastore.put(ent);
+		txn.commit();
+		
+	}
 
 
 }
