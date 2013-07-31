@@ -71,7 +71,7 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 		ent.setUnindexedProperty("name", bi.get("name"));
 		ent.setUnindexedProperty("likes", bi.get("likes"));
 		ent.setUnindexedProperty("talking_about_count", bi.get("talking_about_count"));
-		ent.setUnindexedProperty("startdate", startDate);
+		ent.setUnindexedProperty("startdate", DateUtils.formatDate(startDate));
 		datastore.put(ent);
 		txn.commit();
 		
