@@ -19,41 +19,31 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected String pageId = "";
-	protected String idTransaction = "";
-	protected String from = "";
-	protected String to = "";
-	protected String timestamp = "";
-	protected long elapsedTime = 0L;
-	
 	protected abstract long getTimeout();
 	protected abstract long getDelay();
 	
-//	protected abstract String getTaskTable();
-//	protected abstract String getExecutedTaskField();
-	
-	protected abstract String getSubjectMail();
-	protected abstract String getBodyMail();
-	protected abstract String getAttachFileName();
-	protected abstract String getAttachFile();
+	protected abstract String getSubjectMail(String pageId);
+	protected abstract String getBodyMail(String from, String to, String timestamp, String pageId, long elapsedTime);
+	protected abstract String getAttachFileName(String pageId);
+	protected abstract String getAttachFile(String idTransaction);
 	protected abstract String getJoinTaskName();
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		//INPUT DATA
 		String numTask = req.getParameter("numTask");
-		idTransaction = req.getParameter("idTransaction");
-		from = req.getParameter("from");
-		to = req.getParameter("to");
+		String idTransaction = req.getParameter("idTransaction");
+		String from = req.getParameter("from");
+		String to = req.getParameter("to");
 		String mail = req.getParameter("mail");
-		timestamp = req.getParameter("timestamp");
-		pageId = req.getParameter("pageId");
+		String timestamp = req.getParameter("timestamp");
+		String pageId = req.getParameter("pageId");
 
-		elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
+		long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
 
 		if (isTransactionEnded(idTransaction, numTask)) {
 
-			MailUtils.sendMail(mail, getSubjectMail(), getBodyMail(), getAttachFileName(), getAttachFile());
+			MailUtils.sendMail(mail, getSubjectMail(pageId), getBodyMail(from, to, timestamp, pageId, elapsedTime), getAttachFileName(pageId), getAttachFile(idTransaction));
 			ShardedCounter counter = new ShardedCounter();
 			counter.delete(idTransaction);
 
