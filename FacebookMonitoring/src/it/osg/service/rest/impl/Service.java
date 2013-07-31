@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 public abstract class Service {
 
-	 public enum graphType {DATA,TIME};
+	public enum graphType {DATA,TIME};
 	
 
 	public static Response getGraphData(String className, Object[] objects, String gt) {
