@@ -18,24 +18,19 @@ public abstract class SubTaskServlet extends HttpServlet  {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected String pageId = "";
-	protected String idTransaction = "";
-	protected Date from;
-	protected Date to;
-
-	protected abstract void runSubTask();
+	protected abstract void runSubTask(String idTranscation, String pageId, Date from, Date to);
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		//INPUT DATA
-		idTransaction = req.getParameter("idTransaction");
-		pageId = req.getParameter("pageId");
+		String idTransaction = req.getParameter("idTransaction");
+		String pageId = req.getParameter("pageId");
 		String f = req.getParameter("from");
 		String t = req.getParameter("to");
 
 		//GET DATE
-		from = null;
-		to = null;
+		Date from = null;
+		Date to = null;
 		try {
 			from = DateUtils.parseDateAndTime(f);
 			to = DateUtils.parseDateAndTime(t);
@@ -43,7 +38,7 @@ public abstract class SubTaskServlet extends HttpServlet  {
 			e.printStackTrace();
 		}
 				
-		runSubTask();
+		runSubTask(idTransaction, pageId, from, to);
 		
 		//SAVE DATA TO DATASTORE AND INCREMENT 1 TASK
 		ShardedCounter counter = new ShardedCounter();
