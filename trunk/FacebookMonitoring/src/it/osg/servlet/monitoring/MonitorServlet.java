@@ -19,7 +19,7 @@ import com.google.appengine.api.datastore.Entity;
 @SuppressWarnings("serial")
 public class MonitorServlet extends HttpServlet {
 
-	//private static String monitorTable = "monitor";
+	public static String monitorTable = "monitor";
 	private static String graphAPIUrl = "https://graph.facebook.com/";
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -33,7 +33,7 @@ public class MonitorServlet extends HttpServlet {
 
 		Iterator<Hashtable<String, Object>> iterAna = analisi.iterator();
 		while (iterAna.hasNext()) {
-			Entity currEntity = new Entity(idPage);
+			Entity currEntity = new Entity(monitorTable);
 			currEntity.setProperty("idFacebook", idPage);
 			Hashtable<String, Object> currRow = iterAna.next();
 			Enumeration<String> enumer = currRow.keys();
