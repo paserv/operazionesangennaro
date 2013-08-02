@@ -26,6 +26,11 @@ public class Imm2SplitTaskServlet extends SplitTaskServlet {
 		return "imm2jointask";
 	}
 
+	@Override
+	public String getQueueName() {
+		return "imm2";
+	}
+
 
 
 }
