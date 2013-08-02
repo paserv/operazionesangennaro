@@ -27,7 +27,8 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 	public abstract int getStep();
 	public abstract String getSubtask();
 	public abstract String getJointask();
-
+	public abstract String getQueueName();
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
 		String strCallResult = "";
@@ -64,7 +65,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 				e.printStackTrace();
 			}
 
-			Queue queue = QueueFactory.getDefaultQueue();
+			Queue queue = QueueFactory.getQueue(getQueueName());
 
 			int numTask = 0;
 
