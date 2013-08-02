@@ -19,7 +19,9 @@ import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
+import facebook4j.User;
 import facebook4j.auth.AccessToken;
+import facebook4j.json.DataObjectFactory;
 
 public class FacebookUtils {
 
@@ -78,20 +80,27 @@ public class FacebookUtils {
 
 	public static Hashtable<String, Object> getBaseInfo (String pageId) {
 
-		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
-
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		Object objJson = JSONValue.parse(jsonString);
-		JSONObject json =(JSONObject) objJson;
+		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);	
+		
+//		Facebook facebook = getFB();
+//		try {
+//			User user = facebook.getUser(pageId, new Reading().fields("likes", "talking_about_count", "name"));
+//			String jsonString = DataObjectFactory.getRawJSON(user);
+			Object objJson = JSONValue.parse(jsonString);
+			JSONObject json =(JSONObject) objJson;
 
-		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
-		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
-		String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
-		//TODO retrieve anche degli altri campi
+			String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
+			String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
+			String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
+			//TODO retrieve anche degli altri campi
 
-		result.put("likes", likeCount);
-		result.put("talking_about_count", talkingAboutCount);
-		result.put("name", pageName);
+			result.put("likes", likeCount);
+			result.put("talking_about_count", talkingAboutCount);
+			result.put("name", pageName);
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//		}
 
 		return result;
 	}
