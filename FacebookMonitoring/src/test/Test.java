@@ -22,6 +22,7 @@ public class Test {
 		Date tooo;
 		try {
 			tooo = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+			System.out.println(DateUtils.addMonthToDate(tooo, -1));
 			if (DateUtils.diffInDay(tooo, DateUtils.getNowDate()) > 0) {
 				System.out.println("OK");
 			}
