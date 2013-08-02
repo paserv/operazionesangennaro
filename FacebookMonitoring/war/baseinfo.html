@@ -3,31 +3,51 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" href="css/styles_time.css" />
 <link rel="stylesheet" href="css/styles.css" />
-<link rel="stylesheet" href="css/jquery-ui-timepicker-addon.css" />
+<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
 <title>Get Data</title>
 </head>
 
 <body>
-<form method="post" action="baseinfosplittask">
-<div class="header">
-PageId: 
-	<input type="text" id="pageId" name="pageId" />
 
-	<input type="hidden" id="from" name="from" value="01-02-2004 00:00:00" />
+<script type="text/javascript">
+$(document).ready(function(){
+	var rootURL = "http://05-monitorfacebookpages.appspot.com/rest/resource/";
+	$.ajax({
+		type: 'GET',
+		url: rootURL + "conf/monitoredentities/sindaco",
+		dataType: "json",
+		success: function(data) {
+				$.each(data, function() {	
+					$.each(this, function(key, value) {
+						$('#pageId').append($("<option/>", {
+					        value: this.identificativo,
+					        text: this.nome
+					    }));
+					});
+				});
+		}
+	});
+}) 
+</script>
 
-	<input type="hidden" id="to" name="to" value="02-02-2004 00:00:00" />
-Mail:
-	<input type="text" id="mail" name="mail" />
-	<button id="getData">Get Data</button>
-</div>
-</form>
-    
-<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
-<script type="text/javascript" src="js/jquery-ui-1.10.3.js"></script>
-<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>	
+
+	<form method="post" action="baseinfosplittask">
+		<div class="header">
+			PageId: 
+			<select id="pageId" name="pageId">
+				<option value="sindaco">Sindaci</option>
+			</select> 
+			<input type="hidden" id="from" name="from" value="01-02-2004 00:00:00" />
+			<input type="hidden" id="to" name="to" value="02-02-2004 00:00:00" />
+			Mail: 
+			<input type="text" id="mail" name="mail" />
+			<button id="getData">Get Data</button>
+		</div>
+	</form>
 
 </body>
 </html>
