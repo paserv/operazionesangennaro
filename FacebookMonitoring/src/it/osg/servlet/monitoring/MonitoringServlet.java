@@ -24,7 +24,7 @@ public abstract class MonitoringServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
-		Queue queue = QueueFactory.getDefaultQueue();
+		Queue queue = QueueFactory.getQueue("monitoring");
 		
 		ArrayList<String> conf = getConfPage(getConfTable());
 
