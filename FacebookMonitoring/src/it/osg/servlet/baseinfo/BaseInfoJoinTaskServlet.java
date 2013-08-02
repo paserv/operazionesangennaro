@@ -52,7 +52,7 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected String getAttachFile(String idTransaction) {
-		String result = "ID;Nome;TotalFan;TalkingAbout;FirstPost,LastPost\n";
+		String result = "ID;Nome;TotalFan;TalkingAbout;FirstPost;LastPost\n";
 		DatastoreService DS = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
