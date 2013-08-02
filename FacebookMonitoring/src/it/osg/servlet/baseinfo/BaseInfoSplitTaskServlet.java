@@ -24,6 +24,11 @@ public class BaseInfoSplitTaskServlet extends SplitTaskServlet {
 		return "baseinfojointask";
 	}
 
+	@Override
+	public String getQueueName() {
+		return "baseinfo";
+	}
+
 
 
 }
