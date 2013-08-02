@@ -27,14 +27,21 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 	@Override
 	protected void runSubTask(String idTranscation, String pageId, Date from, Date to) {
 		Date startDate = null;
-
+		Date endDate = null;
 		Date f = null;
 		Date t = null;
+
+		Date startFB = null;
 		try {
-			f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
-		} catch (ParseException e2) {
-			e2.printStackTrace();
+			startFB = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		
+
+		
+		//FIRST POST
+		f = startFB;
 		t = DateUtils.addMonthToDate(f, 1);
 		try {
 			while (true) {
@@ -62,6 +69,39 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 			e.printStackTrace();
 		}
 
+		
+		
+		
+		//LAST POST
+		t = DateUtils.getNowDate();
+		f = DateUtils.addMonthToDate(t, -1);
+		
+		while (true) {
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			ResponseList<Post> facResults2;
+			try {
+				facResults2 = FacebookUtils.getFB().getFeed(pageId, new Reading().since(f).until(t).fields("created_time").limit(1));
+				if (facResults2 != null && facResults2.size() != 0) {
+					Post currPost = facResults2.get(0);
+					endDate = currPost.getCreatedTime();
+					break;
+				} else if (DateUtils.diffInDay(startFB, f) > 0) {
+					t = f;
+					f = DateUtils.addMonthToDate(t, -1);
+				} else if (DateUtils.diffInDay(startFB, f) < 0) {
+					startDate =  startFB;
+					break;
+				}
+			} catch (FacebookException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 		Hashtable<String, Object> bi = FacebookUtils.getBaseInfo(pageId);
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -73,6 +113,7 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 		ent.setUnindexedProperty("likes", bi.get("likes"));
 		ent.setUnindexedProperty("talking_about_count", bi.get("talking_about_count"));
 		ent.setUnindexedProperty("startdate", DateUtils.formatDate(startDate));
+		ent.setUnindexedProperty("endDate", DateUtils.formatDate(endDate));
 		datastore.put(ent);
 		txn.commit();
 		

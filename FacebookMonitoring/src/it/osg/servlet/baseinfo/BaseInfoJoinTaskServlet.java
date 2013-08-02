@@ -52,7 +52,7 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected String getAttachFile(String idTransaction) {
-		String result = "ID,Nome,TotalFan,TalkingAbout,FirstPost\n";
+		String result = "ID;Nome;TotalFan;TalkingAbout;FirstPost,LastPost\n";
 		DatastoreService DS = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
@@ -60,8 +60,9 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 		q = new Query(BaseInfoSubTaskServlet.subtasktable).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
-			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("name") + ";" + ent.getProperty("likes") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("startdate") + "\n";
+			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("name") + ";" + ent.getProperty("likes") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("startdate")  + ";" + ent.getProperty("enddate") + "\n";
 		}
+		//TODO Delete BaseInfoSubTaskServlet.subtasktable Entities
 		return result;		
 	}
 
