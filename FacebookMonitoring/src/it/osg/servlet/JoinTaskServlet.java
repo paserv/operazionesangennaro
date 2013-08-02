@@ -27,6 +27,7 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	protected abstract String getAttachFileName(String pageId);
 	protected abstract String getAttachFile(String idTransaction);
 	protected abstract String getJoinTaskName();
+	public abstract String getQueueName();
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
@@ -56,7 +57,7 @@ public abstract class JoinTaskServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 				//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
-				Queue queue = QueueFactory.getDefaultQueue();
+				Queue queue = QueueFactory.getQueue(getQueueName());
 				queue.add(TaskOptions.Builder.withUrl("/" + getJoinTaskName()).param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId));	
 			} else {
 				//TODO SALVA IL SALVABILE ED INVIA LA MAIL
