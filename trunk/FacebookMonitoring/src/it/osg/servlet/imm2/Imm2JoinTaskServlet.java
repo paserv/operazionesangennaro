@@ -99,4 +99,10 @@ public class Imm2JoinTaskServlet extends JoinTaskServlet {
 	}
 
 
+	@Override
+	public String getQueueName() {
+		return "imm2";
+	}
+
+
 }
