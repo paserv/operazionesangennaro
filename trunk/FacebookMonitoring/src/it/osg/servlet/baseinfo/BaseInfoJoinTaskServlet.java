@@ -5,6 +5,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 
 import it.osg.servlet.JoinTaskServlet;
 import it.osg.utils.DatastoreUtils;
@@ -53,12 +56,12 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 		DatastoreService DS = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		q = new Query(BaseInfoSubTaskServlet.subtasktable);
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
+		q = new Query(BaseInfoSubTaskServlet.subtasktable).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
 			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("name") + ";" + ent.getProperty("likes") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("talking_about_count") + ";" + ent.getProperty("startdate") + "\n";
 		}
-		//}
 		return result;		
 	}
 
@@ -66,6 +69,12 @@ public class BaseInfoJoinTaskServlet extends JoinTaskServlet {
 	@Override
 	protected String getJoinTaskName() {
 		return "baseinfojointask";
+	}
+
+
+	@Override
+	public String getQueueName() {
+		return "baseinfo";
 	}
 
 

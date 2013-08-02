@@ -67,6 +67,7 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Transaction txn = datastore.beginTransaction();
 		Entity ent = new Entity(subtasktable);
+		ent.setProperty("idTransaction", idTranscation);
 		ent.setProperty("pageId", pageId);
 		ent.setUnindexedProperty("name", bi.get("name"));
 		ent.setUnindexedProperty("likes", bi.get("likes"));
