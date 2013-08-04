@@ -9,6 +9,8 @@ import java.util.Iterator;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import com.google.appengine.api.datastore.Text;
+
 import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
@@ -81,7 +83,8 @@ public class FacebookUtils {
 	public static Hashtable<String, Object> getBaseInfo (String pageId) {
 
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);	
+		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
+		DatastoreUtils.addRow("test", "json", new Text(jsonString));
 		
 //		Facebook facebook = getFB();
 //		try {
