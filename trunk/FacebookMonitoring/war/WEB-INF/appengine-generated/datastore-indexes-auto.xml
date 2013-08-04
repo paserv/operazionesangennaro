@@ -1,11 +1,4 @@
-<!-- Indices written at Wed, 31 Jul 2013 12:14:41 UTC -->
+<!-- Indices written at Sun, 4 Aug 2013 18:35:40 CEST -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="monitor" ancestor="false" source="auto">
-        <property name="idFacebook" direction="asc"/>
-        <property name="date" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>
