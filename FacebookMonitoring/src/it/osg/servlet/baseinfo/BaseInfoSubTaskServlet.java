@@ -5,6 +5,7 @@ import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
 import it.osg.servlet.SubTaskServlet;
+import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import java.text.ParseException;
@@ -59,7 +60,11 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 					f = t;
 					t = DateUtils.addMonthToDate(f, 1);
 				} else if (DateUtils.diffInDay(t, DateUtils.getNowDate()) < 0) {
-					startDate =  DateUtils.getNowDate();
+					try {
+						startDate =  DateUtils.parseDate("01-01-1970");
+					} catch (ParseException e) {
+						e.printStackTrace();
+					};
 					break;
 				}
 			}
@@ -93,13 +98,23 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 					t = f;
 					f = DateUtils.addMonthToDate(t, -1);
 				} else if (DateUtils.diffInDay(startFB, f) < 0) {
-					startDate =  startFB;
+					try {
+						endDate =  DateUtils.parseDate("01-01-1970");
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
 					break;
 				}
 			} catch (FacebookException e) {
 				e.printStackTrace();
 			}
 			
+		}
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
 		
 		Hashtable<String, Object> bi = FacebookUtils.getBaseInfo(pageId);
@@ -109,13 +124,15 @@ public class BaseInfoSubTaskServlet extends SubTaskServlet  {
 		Entity ent = new Entity(subtasktable);
 		ent.setProperty("idTransaction", idTranscation);
 		ent.setProperty("pageId", pageId);
-		ent.setUnindexedProperty("name", bi.get("name"));
+		ent.setProperty("nome", DatastoreUtils.getValue("sindaco", "key", pageId, "nome"));
+		//ent.setUnindexedProperty("pagename", bi.get("name"));
 		ent.setUnindexedProperty("likes", bi.get("likes"));
 		ent.setUnindexedProperty("talking_about_count", bi.get("talking_about_count"));
 		ent.setUnindexedProperty("startdate", DateUtils.formatDate(startDate));
 		ent.setUnindexedProperty("enddate", DateUtils.formatDate(endDate));
 		datastore.put(ent);
 		txn.commit();
+		//System.out.println(pageId + "," + bi.get("name") + "," + bi.get("likes") + "," + bi.get("talking_about_count") + "," + DateUtils.formatDate(startDate) + "," + DateUtils.formatDate(endDate));
 		
 	}
 
