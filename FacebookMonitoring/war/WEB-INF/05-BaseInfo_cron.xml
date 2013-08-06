@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cronentries/>
+<cronentries>
+	<cron>
+		<url>/deletebaseinfo</url>
+		<description>Delete Base Info table every day 04:00
+		</description>
+		<schedule>every day 04:00</schedule>
+	</cron>
+</cronentries>

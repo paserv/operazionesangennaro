@@ -189,6 +189,16 @@
 		<servlet-name>DeleteEdgeLogServlet</servlet-name>
 		<url-pattern>/deleteedgelog</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteBaseInfoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<url-pattern>/deletebaseinfo</url-pattern>
+	</servlet-mapping>
 	<!-- FINE CRON JOB DI PULIZIA -->
 
 
