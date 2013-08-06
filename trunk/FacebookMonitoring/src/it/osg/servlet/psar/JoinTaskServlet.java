@@ -161,7 +161,7 @@ public class JoinTaskServlet extends HttpServlet {
 						partito = (String) ent2.getProperty("partito");
 						URL = (String) ent2.getProperty("URL");
 						tipologiaAccount = (String) ent2.getProperty("tipologiaAccount");
-						sindacoName = (String) ent2.getProperty("sindaco");
+						sindacoName = (String) ent2.getProperty("nome");
 
 					}
 
