@@ -142,7 +142,7 @@ public class Test {
 			String currID = input.get(currKey);
 			if (!currID.equalsIgnoreCase("")) {
 				User us = twitter.showUser(currID);
-				System.out.println(currKey + ";" + us.getFollowersCount() + ";" + us.getFavouritesCount() + ";" + us.getFriendsCount() + ";" + us.getCreatedAt() + ";" + us.getListedCount() + ";" + us.getStatusesCount());
+				System.out.println(currKey + ";" + us.getFollowersCount() + ";" + us.getFavouritesCount() + ";" + us.getFriendsCount() + ";" + DateUtils.formatDate(us.getCreatedAt()) + ";" + us.getListedCount() + ";" + us.getStatusesCount());
 			}
 			
 		}
