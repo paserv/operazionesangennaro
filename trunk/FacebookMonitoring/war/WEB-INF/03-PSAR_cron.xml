@@ -6,16 +6,4 @@
 		</description>
 		<schedule>every day 03:00</schedule>
 	</cron>
-	<cron>
-		<url>/deletenodelog</url>
-		<description>Delete Node Log in table task every 1 hours
-		</description>
-		<schedule>every day 04:00</schedule>
-	</cron>
-	<cron>
-		<url>/deleteedgelog</url>
-		<description>Delete Edge Log in table task every 1 hours
-		</description>
-		<schedule>every day 05:00</schedule>
-	</cron>
 </cronentries>
