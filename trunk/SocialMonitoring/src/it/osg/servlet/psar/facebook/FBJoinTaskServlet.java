@@ -114,7 +114,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			if (!((String) baseInfo.get("talking_about_count")).equals("")) {
 				totTalkAbout = Double.valueOf((String) baseInfo.get("talking_about_count"));
 			}
-			pageName = (String) baseInfo.get("pageName");
+			pageName = (String) baseInfo.get("name");
 
 
 			//PRESENTI NEL DB
