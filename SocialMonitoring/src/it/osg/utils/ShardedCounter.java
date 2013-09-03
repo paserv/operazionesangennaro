@@ -31,7 +31,7 @@ public class ShardedCounter {
     /**
      * Default number of shards.
      */
-    private static final int NUM_SHARDS = 50;
+    private static final int NUM_SHARDS = 150;
 
     /**
      * A random number generator, for distributing writes across shards.
