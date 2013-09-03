@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="plus/google-api-client-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-api-client-appengine-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-api-client-servlet-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-api-services-plus-v1-rev86-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-http-client-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-http-client-appengine-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-oauth-client-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-oauth-client-appengine-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/google-oauth-client-servlet-1.16.0-rc.jar"/>
+	<classpathentry kind="lib" path="plus/gson-2.1.jar"/>
+	<classpathentry kind="lib" path="plus/jackson-core-2.1.3.jar"/>
+	<classpathentry kind="lib" path="plus/jackson-core-asl-1.9.11.jar"/>
+	<classpathentry kind="lib" path="plus/jdo2-api-2.3-eb.jar"/>
+	<classpathentry kind="lib" path="plus/jsr305-1.3.9.jar"/>
+	<classpathentry kind="lib" path="plus/protobuf-java-2.4.1.jar"/>
+	<classpathentry kind="lib" path="plus/transaction-api-1.1.jar"/>
+	<classpathentry kind="lib" path="plus/xpp3-1.1.4c.jar"/>
+	<classpathentry kind="lib" path="facebook/facebook4j-core-1.1.11.jar"/>
+	<classpathentry kind="lib" path="facebook/json-simple-1.1.1.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
