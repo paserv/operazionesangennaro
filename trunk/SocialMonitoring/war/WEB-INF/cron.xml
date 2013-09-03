@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+	<cron>
+		<url>/deletetasklog</url>
+		<description>Delete Task Log in table task every 24 hours
+		</description>
+		<schedule>every day 03:00</schedule>
+	</cron>
+</cronentries>

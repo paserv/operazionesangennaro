@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- PSAR -->
+	<servlet>
+		<servlet-name>FacebookPsarSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.facebook.FBSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FacebookPsarSplitTaskServlet</servlet-name>
+		<url-pattern>/FBpsarsplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FacebookPsarSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.facebook.FBSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FacebookPsarSubTaskServlet</servlet-name>
+		<url-pattern>/FBpsarsubtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FacebookPsarJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.facebook.FBJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FacebookPsarJoinTaskServlet</servlet-name>
+		<url-pattern>/FBpsarjointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE PSAR -->
+
+
+
+	<!-- CRON JOB DI PULIZIA -->
+	<servlet>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.manutenzione.DeleteTaskLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<url-pattern>/deletetasklog</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.manutenzione.DeleteNodeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<url-pattern>/deletenodelog</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.manutenzione.DeleteEdgeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<url-pattern>/deleteedgelog</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<servlet-class>it.osg.servlet.manutenzione.DeleteBaseInfoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<url-pattern>/deletebaseinfo</url-pattern>
+	</servlet-mapping>
+	<!-- FINE CRON JOB DI PULIZIA -->
+	
+	
+	<!-- VARIE -->
+	<servlet>
+		<servlet-name>BulkUpload</servlet-name>
+		<servlet-class>it.osg.servlet.util.BulkUploaderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BulkUpload</servlet-name>
+		<url-pattern>/bulk/bulkupload</url-pattern>
+	</servlet-mapping>
+	<!-- VARIE -->
+	
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value/>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+</web-app>
