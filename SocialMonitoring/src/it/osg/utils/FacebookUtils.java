@@ -84,7 +84,7 @@ public class FacebookUtils {
 
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
-		DatastoreUtils.addRow("test", "json", new Text(jsonString));
+		//DatastoreUtils.addRow("test", "json", new Text(jsonString));
 		
 //		Facebook facebook = getFB();
 //		try {
