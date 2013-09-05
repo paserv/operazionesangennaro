@@ -6,15 +6,16 @@ import it.osg.utils.ArrayUtils;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
@@ -44,7 +45,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected String getSubjectMail(String pageId) {
-		return "Dati relativi alla pagina con ID " + pageId;
+		return "Dati relativi alla pagina Facebook con ID " + pageId;
 	}
 
 
@@ -74,7 +75,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 	protected String getAttachFile(String idTransaction, String from, String to) {
 
 
-		String dataCSV = "Nome Sindaco,Nome Pagina,ID Facebook,Totale Fan,Totale TalkAbout,Regione,Provincia,Sesso,Anno di Nascita,Partito,Totale Post from Account,Totale Post from Fan,Totale Comments ai Post,Unique Authors dei Comments ai Post,Totale Likes ai Post from Account,Totale Shares dei Post from Account,Media Post from Account al giorno,Media Post from Fan al giorno,Media Comments per Post from Account,Media Unique Authors per Post from Account,Media Like per Post from Account,Media Shares per Post,Media Comments per Author, Area ISTAT, Fascia Eta ISTAT\n";
+		String dataCSV = "Nome Sindaco;Nome Pagina;ID Facebook;Totale Fan;Totale TalkAbout;Regione;Provincia;Sesso;Anno di Nascita;Partito;Totale Post from Account;Totale Post from Fan;Totale Comments ai Post;Unique Authors dei Comments ai Post;Totale Likes ai Post from Account;Totale Shares dei Post from Account;Media Post from Account al giorno;Media Post from Fan al giorno;Media Comments per Post from Account;Media Unique Authors per Post from Account;Media Like per Post from Account;Media Shares per Post;Media Comments per Author;Area ISTAT;Fascia Eta ISTAT\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -82,7 +83,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			e1.printStackTrace();
 		}
 
-		ArrayList<PSARData> psarData = DatastoreUtils.getPsarData("task", idTransaction);
+		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataFB("task", idTransaction);
 
 		Hashtable<String, PSARData> joinedData = aggregatePsarData(psarData);
 
@@ -124,15 +125,15 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			String fasciaEtaISTAT = "";
 			String provincia = "";
 			String sesso = "";
-			long annoNascita = 0L;
+			String annoNascita = "";
 			String partito = "";
 			String sindacoName = "";
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Filter DBInfo = new FilterPredicate(Entity.KEY_RESERVED_PROPERTY, FilterOperator.EQUAL, KeyFactory.createKey("anagraficaSindaco", currKey));
+			Filter DBInfo = new FilterPredicate("IDFacebook", FilterOperator.EQUAL, currKey);
 			Query q = new Query("anagraficaSindaco").setFilter(DBInfo);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
-				annoNascita = (Long) ent.getProperty("annoNascita");
+				annoNascita = (String) ent.getProperty("annoNascita");
 				areaISTAT = (String) ent.getProperty("areaISTAT");
 				fasciaEtaISTAT = (String) ent.getProperty("fasciaEtaISTAT");
 				sindacoName = (String) ent.getProperty("nome");
@@ -142,12 +143,12 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 				sesso = (String) ent.getProperty("sesso");
 			}
 
-			dataCSV = dataCSV + sindacoName + "," + pageName + "," + currKey + "," + totFan + "," + totTalkAbout + "," +
-					regione + "," + provincia + "," + sesso + "," + annoNascita + "," + partito + "," +
-					currPsar.postFromPageCount + "," + currPsar.postFromFanCount + "," + currPsar.commentsCount + "," +
-					uniqueAuthors + "," + currPsar.likesCount + "," + currPsar.sharesCount + "," + mediaPostFromPage + "," +
-					mediaPostFromFan + "," + commentsPerPost + "," + uniqueAuthorsPerPost + "," + mediaLikePerPost + "," +
-					sharesPerPost + "," + commentsPerAuthor + "," + areaISTAT + "," + fasciaEtaISTAT + "," +"\n";
+			dataCSV = dataCSV + sindacoName + ";" + pageName + ";" + currKey + ";" + totFan + ";" + totTalkAbout + ";" +
+					regione + ";" + provincia + ";" + sesso + ";" + annoNascita + ";" + partito + ";" +
+					currPsar.postFromPageCount + ";" + currPsar.postFromFanCount + ";" + currPsar.commentsCount + ";" +
+					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + ";" + mediaPostFromPage + ";" +
+					mediaPostFromFan + ";" + commentsPerPost + ";" + uniqueAuthorsPerPost + ";" + mediaLikePerPost + ";" +
+					sharesPerPost + ";" + commentsPerAuthor + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
 
 		}
 
@@ -167,6 +168,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 				alreadyPresentData.postFromFanCount = alreadyPresentData.postFromFanCount + curr.postFromFanCount;
 				alreadyPresentData.postFromPageCount = alreadyPresentData.postFromPageCount + curr.postFromPageCount;
 				alreadyPresentData.sharesCount = alreadyPresentData.sharesCount + curr.sharesCount;
+				alreadyPresentData.authors.addAll(curr.authors);
 			} else {
 				result.put(curr.pageId, curr);
 			}
