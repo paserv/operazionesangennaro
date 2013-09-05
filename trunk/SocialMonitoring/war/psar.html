@@ -15,8 +15,11 @@
 <div class="header">
 IdPagina: 
 	<input type="text" id="pageId" name="pageId" />
-Social Network: 
-	<input type="text" id="socialNet" name="socialNet" />
+Social Network:
+	<select id="socialNet" name="socialNet">
+		<option value="Plus">Plus</option>
+		<option value="Facebook">Facebook</option>
+	</select>
 From: 
 	<input type="text" id="from" name="from" />
 To: 
@@ -61,7 +64,6 @@ $(document).ready(function() {
         }
         
         var dataString = "pageId=" + pageId + "&from=" + from + "&to=" + to + "&mail=" + mail + "&IDField=" + idField;
-		alert(servlet + " " + dataString);
         $.ajax({
         type: "POST",
         url: servlet,

@@ -52,81 +52,59 @@ public class TestServlet extends HttpServlet {
 		
 		String pageId = "106590037983789925298";
 		
-		ArrayList<String> ids = DatastoreUtils.getPropertyList("anagraficaSindaco", "IDPlus");
-		Iterator<String> iterids = ids.iterator();
-		while (iterids.hasNext()) {
-			String curr = iterids.next();
-			out.println(curr + "<br>");
-			
-		}
+//		ArrayList<String> ids = DatastoreUtils.getPropertyList("anagraficaSindaco", "IDPlus");
+//		Iterator<String> iterids = ids.iterator();
+//		while (iterids.hasNext()) {
+//			String curr = iterids.next();
+//			out.println(curr + "<br>");
+//			
+//		}
 		
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime("01-06-2013 00:00:00");
-			t = DateUtils.parseDateAndTime("15-07-2013 00:00:00");
+			f = DateUtils.parseDateAndTime("01-01-2013 00:00:00");
+			t = DateUtils.parseDateAndTime("01-02-2013 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		ArrayList<Activity> activities = PlusUtils.getAllPosts(pageId, f, t, null);
 		
-		ArrayList<Comment> comments = PlusUtils.getComments(activities);
-		
-		ArrayList<String> authors = PlusUtils.getUniqueAuthors(comments);
-		out.println("Size: " + authors.size() + "<br>");
-		Iterator<String> iter = authors.iterator();
-		while (iter.hasNext()) {
-			String curr = iter.next();
-			out.println(curr + "<br>");
-		}
-		
-		try {
-			f = DateUtils.parseDateAndTime("15-07-2013 00:00:01");
-			t = DateUtils.parseDateAndTime("15-08-2013 00:00:00");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		activities = PlusUtils.getAllPosts(pageId, f, t, null);
-		
-		comments = PlusUtils.getComments(activities);
-		
-		authors.addAll(PlusUtils.getUniqueAuthors(comments));
-		authors = ArrayUtils.removeDuplicate(authors);
-		out.println("Size: " + authors.size() + "<br>");
-		Iterator<String> iter2 = authors.iterator();
-		while (iter2.hasNext()) {
-			String curr = iter2.next();
-			out.println(curr + "<br>");
-		}
-		
-		
-		
-//		out.println("Sized: " + activities.size() + "<br>");
-//		Iterator<Activity> iterActivity = activities.iterator();
-//		while (iterActivity.hasNext()) {
-//			Activity currActivity = iterActivity.next();
-//			out.println("<br><br><br>Autore: " + currActivity.getActor().getDisplayName() + "<br>");
-//			out.println("Data: " + currActivity.getPublished() + "<br>");
-//			out.println("Plusoners: " + currActivity.getObject().getPlusoners().size() + "<br>Total: " + currActivity.getObject().getPlusoners().getTotalItems() + "<br>");
-//			out.println("PLUS STRING: " + currActivity.getObject().getPlusoners().toPrettyString() + "<br>");
-//			out.println("Replies: " + currActivity.getObject().getReplies().size() + "<br>");
-//			out.println("Replies: " + currActivity.getObject().getReplies().toPrettyString() + "<br>");
-//			out.println("Shares: " + currActivity.getObject().getResharers().size() + "<br>");
-//			out.println("Shares: " + currActivity.getObject().getResharers().toPrettyString() + "<br>");
-//			out.println("Content: " + currActivity.getObject().getContent() + "<br>");
-//						
-//			ArrayList<Comment> comments = PlusUtils.getAllComments(currActivity);
-//			Iterator<Comment> iterComm = comments.iterator();
-//			while (iterComm.hasNext()) {
-//				Comment currComm = iterComm.next();
-//				out.println("<p>Autore: " + currComm.getActor().getDisplayName() + "<br>");
-//				out.println("<p>Plusoners: " + currComm.getPlusoners().size() + "<br>");
-//				out.println("<p>Published: " + currComm.getPublished() + "<br>");
-//				out.println("<p>Content: " + currComm.getObject().getContent() + "<br>");
-//			}
-//			
+//		ArrayList<Comment> comments = PlusUtils.getComments(activities);
+//		
+//		ArrayList<String> authors = PlusUtils.getUniqueAuthors(comments);
+//		out.println("Size: " + authors.size() + "<br>");
+//		Iterator<String> iter = authors.iterator();
+//		while (iter.hasNext()) {
+//			String curr = iter.next();
+//			out.println(curr + "<br>");
 //		}
+				
+		out.println("Sized: " + activities.size() + "<br>");
+		Iterator<Activity> iterActivity = activities.iterator();
+		while (iterActivity.hasNext()) {
+			Activity currActivity = iterActivity.next();
+			out.println("<br><br><br>Autore: " + currActivity.getActor().getDisplayName() + "<br>");
+			out.println("Data: " + currActivity.getPublished() + "<br>");
+			out.println("Plusoners: " + currActivity.getObject().getPlusoners().size() + "<br>Total: " + currActivity.getObject().getPlusoners().getTotalItems() + "<br>");
+			out.println("PLUS STRING: " + currActivity.getObject().getPlusoners().toPrettyString() + "<br>");
+			out.println("Replies: " + currActivity.getObject().getReplies().size() + "<br>");
+			out.println("Replies: " + currActivity.getObject().getReplies().toPrettyString() + "<br>");
+			out.println("Shares: " + currActivity.getObject().getResharers().size() + "<br>");
+			out.println("Shares: " + currActivity.getObject().getResharers().toPrettyString() + "<br>");
+			out.println("Content: " + currActivity.getObject().getContent() + "<br>");
+						
+			ArrayList<Comment> comments = PlusUtils.getAllComments(currActivity);
+			Iterator<Comment> iterComm = comments.iterator();
+			while (iterComm.hasNext()) {
+				Comment currComm = iterComm.next();
+				out.println("<p>Autore: " + currComm.getActor().getDisplayName() + "<br>");
+				out.println("<p>Plusoners: " + currComm.getPlusoners().size() + "<br>");
+				out.println("<p>Published: " + currComm.getPublished() + "<br>");
+				out.println("<p>Content: " + currComm.getObject().getContent() + "<br>");
+			}
+			
+		}
 		
 //		resp.setContentType("text/html;charset=UTF-8");
 //		PrintWriter out = resp.getWriter();
