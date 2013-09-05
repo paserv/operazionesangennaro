@@ -162,8 +162,10 @@ public class DatastoreUtils {
 			curr.commentsCount = (Double) ent.getProperty("totParzComments");
 			curr.likesCount = (Double) ent.getProperty("totParzPluses");
 			curr.sharesCount = (Double) ent.getProperty("totParzShares");
-			String authors = ((Text) ent.getProperty("authors")).getValue();
-			curr.authors = ArrayUtils.splitAndAdd(authors, ",");
+			if ((Text) ent.getProperty("authors") != null && !((Text) ent.getProperty("authors")).getValue().equalsIgnoreCase("")){
+				String authors = ((Text) ent.getProperty("authors")).getValue();
+				curr.authors = ArrayUtils.splitAndAdd(authors, ",");
+			}
 			result.add(curr);
 		}
 		return result;
