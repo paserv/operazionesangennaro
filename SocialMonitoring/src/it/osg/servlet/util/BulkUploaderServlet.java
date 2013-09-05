@@ -30,8 +30,6 @@ public class BulkUploaderServlet extends HttpServlet {
 		String[] headers = getHeaders(data, delimiter);
 		ArrayList<String[]> dataSet = getData(data, delimiter);
 		
-		//Key questionarioKey = KeyFactory.createKey("Domande", group);
-		
 		for(int j=0; j<dataSet.size();j++){
 			String[] currRow = dataSet.get(j);
 			Entity currEntity = new Entity(entity, currRow[0]);
@@ -39,18 +37,24 @@ public class BulkUploaderServlet extends HttpServlet {
 				System.out.println(headers[i] + ": " + currRow[i]);
 				Object value = null;
 				boolean isString = true;
-				try {
-					value = Long.parseLong(currRow[i]);
-					isString = false;
-					System.out.println("LONG");
-				} catch (Exception e) {
-					
-				}
+//				try {
+//					value = Long.parseLong(currRow[i]);
+//					isString = false;
+//					System.out.println("LONG");
+//				} catch (Exception e) {
+//					
+//				}
 				
 				if (currRow[i].equalsIgnoreCase("true") || currRow[i].equalsIgnoreCase("false")){
 					value = Boolean.parseBoolean(currRow[i]);
 					isString = false;
 					System.out.println("BOOLEANO");
+				}
+				
+				if (currRow[i].equalsIgnoreCase("null")){
+					value = null;
+					isString = false;
+					System.out.println("null");
 				}
 				
 				try {
