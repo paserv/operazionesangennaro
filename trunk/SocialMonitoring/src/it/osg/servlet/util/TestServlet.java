@@ -1,128 +1,130 @@
 package it.osg.servlet.util;
 
 
-import facebook4j.Facebook;
-import facebook4j.FacebookException;
+import facebook4j.Comment;
 import facebook4j.Post;
-import facebook4j.Reading;
-import facebook4j.ResponseList;
-import it.osg.utils.ArrayUtils;
-import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.MailUtils;
-import it.osg.utils.PlusUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.api.services.plus.Plus;
-import com.google.api.services.plus.Plus.Comments;
-import com.google.api.services.plus.model.Activity;
-import com.google.api.services.plus.model.Activity.PlusObject.Plusoners;
-import com.google.api.services.plus.model.Comment;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 
 @SuppressWarnings("serial")
 public class TestServlet extends HttpServlet {
 
-	private static final Logger log = Logger.getLogger(TestServlet.class.getName());
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
-
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-
-		out.println("106590037983789925298<br>");
 		
-		String pageId = "106590037983789925298";
+		String mail = "";
 		
-//		ArrayList<String> ids = DatastoreUtils.getPropertyList("anagraficaSindaco", "IDPlus");
-//		Iterator<String> iterids = ids.iterator();
-//		while (iterids.hasNext()) {
-//			String curr = iterids.next();
-//			out.println(curr + "<br>");
-//			
-//		}
+//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//		Query q;
+//		PreparedQuery pq;
+//		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, "7182af0116b073f5299372a6e5be3c59");
+//		q = new Query("task").setFilter(idFilter);
+//		pq = datastore.prepare(q);
+//		int executedTask = pq.countEntities();
+//		out.println("AAAAAAA: " + executedTask);
+//		mail = mail + "ExTask: " + executedTask + "\n";
+		
 		
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime("01-01-2013 00:00:00");
-			t = DateUtils.parseDateAndTime("01-02-2013 00:00:00");
+			f = DateUtils.parseDateAndTime("01-08-2013 00:00:00");
+			t = DateUtils.parseDateAndTime("03-08-2013 00:00:00");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		ArrayList<Activity> activities = PlusUtils.getAllPosts(pageId, f, t, null);
-		
-//		ArrayList<Comment> comments = PlusUtils.getComments(activities);
-//		
-//		ArrayList<String> authors = PlusUtils.getUniqueAuthors(comments);
-//		out.println("Size: " + authors.size() + "<br>");
-//		Iterator<String> iter = authors.iterator();
-//		while (iter.hasNext()) {
-//			String curr = iter.next();
-//			out.println(curr + "<br>");
-//		}
-				
-		out.println("Sized: " + activities.size() + "<br>");
-		Iterator<Activity> iterActivity = activities.iterator();
-		while (iterActivity.hasNext()) {
-			Activity currActivity = iterActivity.next();
-			out.println("<br><br><br>Autore: " + currActivity.getActor().getDisplayName() + "<br>");
-			out.println("Data: " + currActivity.getPublished() + "<br>");
-			out.println("Plusoners: " + currActivity.getObject().getPlusoners().size() + "<br>Total: " + currActivity.getObject().getPlusoners().getTotalItems() + "<br>");
-			out.println("PLUS STRING: " + currActivity.getObject().getPlusoners().toPrettyString() + "<br>");
-			out.println("Replies: " + currActivity.getObject().getReplies().size() + "<br>");
-			out.println("Replies: " + currActivity.getObject().getReplies().toPrettyString() + "<br>");
-			out.println("Shares: " + currActivity.getObject().getResharers().size() + "<br>");
-			out.println("Shares: " + currActivity.getObject().getResharers().toPrettyString() + "<br>");
-			out.println("Content: " + currActivity.getObject().getContent() + "<br>");
-						
-			ArrayList<Comment> comments = PlusUtils.getAllComments(currActivity);
-			Iterator<Comment> iterComm = comments.iterator();
-			while (iterComm.hasNext()) {
-				Comment currComm = iterComm.next();
-				out.println("<p>Autore: " + currComm.getActor().getDisplayName() + "<br>");
-				out.println("<p>Plusoners: " + currComm.getPlusoners().size() + "<br>");
-				out.println("<p>Published: " + currComm.getPublished() + "<br>");
-				out.println("<p>Content: " + currComm.getObject().getContent() + "<br>");
-			}
-			
-		}
-		
-//		resp.setContentType("text/html;charset=UTF-8");
-//		PrintWriter out = resp.getWriter();
-//		
-//		String result = "";
-//		
-//		ArrayList<String> idSindaci = new ArrayList<String>();
-//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-//		Query q = new Query("sindaco");
-//		PreparedQuery pq = datastore.prepare(q);
-//		for (Entity res : pq.asIterable()) {
-//			String idPage = res.getKey().getName();
-//			idSindaci.add(idPage);
-//		}
-//		
-//		
-//		
 
+
+		//Get all Post
+		ArrayList<Post> posts = FacebookUtils.getAllPosts("113335124914", f, t, null);
+
+		ArrayList<Post> postFromPage = new ArrayList<Post>();
+		ArrayList<Post> postFromFan = new ArrayList<Post>();
+
+		Iterator<Post> iterPost = posts.iterator();
+		while (iterPost.hasNext()) {
+			Post currPost = iterPost.next();
+			if (currPost.getFrom().getId().equals("113335124914")) {
+				postFromPage.add(currPost);
+			} else {
+				postFromFan.add(currPost);
+			}
+		}
+
+		//Get all Comments
+		ArrayList<Comment> comments = FacebookUtils.getComments(postFromPage);		
+
+		//Get all Unique Authors of Comments
+		ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments);
+		out.println("SIZE: " + uniqueAuth.size());
+		mail = mail + "SIZE1: " + uniqueAuth.size() + "\n";
+//		Iterator<String> iter = uniqueAuth.iterator();
+//		while (iter.hasNext()) {
+//			out.println(iter.next() + "<br>");
+//		}
+		
+		
+		Date f1 = null;
+		Date t1 = null;
+		try {
+			f1 = DateUtils.parseDateAndTime("04-08-2013 00:00:00");
+			t1 = DateUtils.parseDateAndTime("07-08-2013 00:00:00");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+
+		//Get all Post
+		ArrayList<Post> posts1 = FacebookUtils.getAllPosts("113335124914", f1, t1, null);
+
+		ArrayList<Post> postFromPage1 = new ArrayList<Post>();
+		ArrayList<Post> postFromFan1 = new ArrayList<Post>();
+
+		Iterator<Post> iterPost1 = posts1.iterator();
+		while (iterPost1.hasNext()) {
+			Post currPost = iterPost1.next();
+			if (currPost.getFrom().getId().equals("113335124914")) {
+				postFromPage1.add(currPost);
+			} else {
+				postFromFan1.add(currPost);
+			}
+		}
+
+		//Get all Comments
+		ArrayList<Comment> comments1 = FacebookUtils.getComments(postFromPage1);		
+
+		//Get all Unique Authors of Comments
+		ArrayList<String> uniqueAuth1 = FacebookUtils.getUniqueAuthors(comments1);
+		out.println("SIZE: " + uniqueAuth1.size());
+		mail = mail + "SIZE2: " + uniqueAuth1.size() + "\n";
+		
+		
+		uniqueAuth.addAll(uniqueAuth1);
+		out.println("SIZE: " + uniqueAuth.size());
+		mail = mail + "SIZE3: " + uniqueAuth.size() + "\n";
+		MailUtils.sendMail("paserv%40gmail.com", "Ciao", mail, "al", "dd");
+		
 	}
 
 
