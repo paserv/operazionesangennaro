@@ -11,11 +11,11 @@
 </head>
 
 <body>
-<form method="post" action="FBpsarsplittask">
+<!-- <form method="post" action="FBpsarsplittask"> -->
 <div class="header">
 IdPagina: 
 	<input type="text" id="pageId" name="pageId" />
-Social Network (per ora solo FB): 
+Social Network: 
 	<input type="text" id="socialNet" name="socialNet" />
 From: 
 	<input type="text" id="from" name="from" />
@@ -25,17 +25,57 @@ Mail:
 	<input type="text" id="mail" name="mail" />
 	<button id="getData">Get Data</button>
 </div>
-</form>
+<!-- </form> -->
     
+<div id="results"></div>
 
 <script type="text/javascript" src="js/jquery-2.0.0.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.10.3.js"></script>
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>	
-<script>
+
+<script type="text/javascript">
 $(function() {
 	$('#from').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
 	$('#to').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
 });
+
+$(document).ready(function() {
+
+    $('#getData').click(function(){
+
+        var pageId = $('#pageId').val();
+        var socialNet = $('#socialNet').val();
+        var from = $('#from').val();
+        var to = $('#to').val();
+        var mail = $('#mail').val();
+
+        var idField;
+        var servlet;
+        if (socialNet == "Facebook") {
+        	idField = "IDFacebook";
+        	servlet = "FBpsarsplittask";
+        }
+        if (socialNet == "Plus") {
+        	idField = "IDPlus";
+        	servlet = "PLpsarsplittask";
+        }
+        
+        var dataString = "pageId=" + pageId + "&from=" + from + "&to=" + to + "&mail=" + mail + "&IDField=" + idField;
+		alert(servlet + " " + dataString);
+        $.ajax({
+        type: "POST",
+        url: servlet,
+        data: dataString,
+        success: function(data){
+        $('#results').show();
+        $('#results').html(data);
+    }
+ });
+});
+
+
+});
+
 </script>
 </body>
 </html>
