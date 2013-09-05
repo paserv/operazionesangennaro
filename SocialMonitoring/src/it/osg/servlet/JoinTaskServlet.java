@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
@@ -39,15 +46,15 @@ public abstract class JoinTaskServlet extends HttpServlet {
 		String mail = req.getParameter("mail");
 		String timestamp = req.getParameter("timestamp");
 		String pageId = req.getParameter("pageId");
-		String socialNet = req.getParameter("socialNet");
+		String IDField = req.getParameter("IDField");
 
 		long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
 
 		if (isTransactionEnded(idTransaction, numTask)) {
 
 			MailUtils.sendMail(mail, getSubjectMail(pageId), getBodyMail(from, to, timestamp, pageId, elapsedTime), getAttachFileName(pageId), getAttachFile(idTransaction, from, to));
-			ShardedCounter counter = new ShardedCounter();
-			counter.delete(idTransaction);
+//			ShardedCounter counter = new ShardedCounter();
+//			counter.delete(idTransaction);
 
 		} else {
 			if (getTimeout() - elapsedTime > 0) {
@@ -59,7 +66,7 @@ public abstract class JoinTaskServlet extends HttpServlet {
 				}
 				//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 				Queue queue = QueueFactory.getQueue(getQueueName());
-				queue.add(TaskOptions.Builder.withUrl("/" + getJoinTaskName()).param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId).param("socialNet", socialNet));	
+				queue.add(TaskOptions.Builder.withUrl("/" + getJoinTaskName()).param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId).param("IDField", IDField));	
 			} else {
 				//TODO SALVA IL SALVABILE ED INVIA LA MAIL
 			}
@@ -73,10 +80,19 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	}
 
 	private boolean isTransactionEnded (String idTransaction, String numTask) {
-		ShardedCounter counter = new ShardedCounter();
-		long totalTask = Long.valueOf(numTask);
-		long executedTask = counter.getCount(idTransaction);
-		return totalTask == executedTask;
+//		ShardedCounter counter = new ShardedCounter();
+//		long totalTask = Long.valueOf(numTask);
+//		long executedTask = counter.getCount(idTransaction);
+//		return totalTask == executedTask;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
+		q = new Query("task").setFilter(idFilter);
+		pq = datastore.prepare(q);
+		int executedTask = pq.countEntities();
+		if (Integer.valueOf(numTask) == executedTask) return true;
+		else return false;
 	}
 
 
