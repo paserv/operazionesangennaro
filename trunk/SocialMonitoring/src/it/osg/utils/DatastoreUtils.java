@@ -49,7 +49,7 @@ public class DatastoreUtils {
 		q = new Query(tableName);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
-			if (ent.getProperty(idKind) != null && !(ent.getProperty(idKind) instanceof String)) {
+			if (ent.getProperty(idKind) != null) {
 				String currKey = String.valueOf(ent.getProperty(idKind));
 				result.add(currKey);
 			}
@@ -119,7 +119,7 @@ public class DatastoreUtils {
 		}
 	}
 	
-	public static ArrayList<PSARData> getPsarData(String table, String idTransaction) {
+	public static ArrayList<PSARData> getPsarDataFB(String table, String idTransaction) {
 		ArrayList<PSARData> result = new ArrayList<PSARData>();
 		Query q;
 		PreparedQuery pq;
@@ -135,12 +135,35 @@ public class DatastoreUtils {
 			curr.commentsCount = (Double) ent.getProperty("totParzComments");
 			curr.likesCount = (Double) ent.getProperty("totParzLikes");
 			curr.sharesCount = (Double) ent.getProperty("totParzShares");
-			String authors = ent.getProperty("authors").toString();
-			String[] splittedAuthors = authors.split(",");
-			for (int i = 0; i < splittedAuthors.length; i++) {
-				String currAuth = splittedAuthors[i];
-				curr.authors.add(currAuth);
-			}
+			String authors = ((Text) ent.getProperty("authors")).getValue();
+			curr.authors = ArrayUtils.splitAndAdd(authors, ",");
+//			String[] splittedAuthors = authors.split(",");
+//			for (int i = 0; i < splittedAuthors.length; i++) {
+//				String currAuth = splittedAuthors[i];
+//				curr.authors.add(currAuth);
+//			}
+			result.add(curr);
+		}
+		return result;
+	}
+	
+	public static ArrayList<PSARData> getPsarDataPL(String table, String idTransaction) {
+		ArrayList<PSARData> result = new ArrayList<PSARData>();
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
+		q = new Query(table).setFilter(idFilter);
+		pq = DS.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			PSARData curr = new PSARData();
+			curr.idTransaction = (String) ent.getProperty("idTransaction");
+			curr.pageId = (String) ent.getProperty("pageId");
+			curr.postFromPageCount = (Double) ent.getProperty("totParzActFromPage");
+			curr.commentsCount = (Double) ent.getProperty("totParzComments");
+			curr.likesCount = (Double) ent.getProperty("totParzPluses");
+			curr.sharesCount = (Double) ent.getProperty("totParzShares");
+			String authors = ((Text) ent.getProperty("authors")).getValue();
+			curr.authors = ArrayUtils.splitAndAdd(authors, ",");
 			result.add(curr);
 		}
 		return result;
