@@ -41,8 +41,8 @@ public abstract class SubTaskServlet extends HttpServlet  {
 		runSubTask(idTransaction, pageId, from, to);
 		
 		//SAVE DATA TO DATASTORE AND INCREMENT 1 TASK
-		ShardedCounter counter = new ShardedCounter();
-		counter.increment(idTransaction);
+//		ShardedCounter counter = new ShardedCounter();
+//		counter.increment(idTransaction);
 		
 			
 	}

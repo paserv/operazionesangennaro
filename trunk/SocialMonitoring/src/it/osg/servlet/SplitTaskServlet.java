@@ -38,7 +38,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 
 		//INPUT DATA
 		String pageId = req.getParameter("pageId");
-		String socialNet = req.getParameter("socialNet");
+		String IDField = req.getParameter("IDField");
 		String from = req.getParameter("from");
 		String to = req.getParameter("to");	
 		String mail = req.getParameter("mail");
@@ -52,7 +52,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 			String idTransaction = Utils.MD5(pageId + mail + timestamp);
 
 			if (!Utils.isDouble(pageId)) {
-				pages = DatastoreUtils.getPropertyList(pageId, socialNet);
+				pages = DatastoreUtils.getPropertyList(pageId, IDField);
 			} else {
 				pages.add(pageId);
 			}
@@ -93,7 +93,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 			}
 
 			//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
-			queue.add(TaskOptions.Builder.withUrl("/" + getJointask()).param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("socialNet", socialNet).param("mail", mail).param("timestamp", timestamp));	
+			queue.add(TaskOptions.Builder.withUrl("/" + getJointask()).param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("IDField", IDField).param("mail", mail).param("timestamp", timestamp));	
 
 		} catch (Exception ex) {
 			strCallResult = "Fail: " + ex.getMessage();
