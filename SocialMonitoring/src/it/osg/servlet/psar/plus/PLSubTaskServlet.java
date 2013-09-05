@@ -62,7 +62,9 @@ public class PLSubTaskServlet extends SubTaskServlet  {
 
 		currEntity.setProperty("totParzActFromPage", totParzActFromPage);
 		currEntity.setProperty("totParzComments", totParzComments);
-		currEntity.setProperty("authors", new Text(authors));
+		if (!authors.equalsIgnoreCase("")) {
+			currEntity.setProperty("authors", new Text(authors));
+		}
 		currEntity.setProperty("totParzPluses", totParzPluses);
 		currEntity.setProperty("totParzShares", totParzShares);
 
