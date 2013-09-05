@@ -45,7 +45,7 @@ public class FacebookUtils {
 
 
 	public static Date getActivityInterval (String pageId){
-		
+
 		Facebook facebook = getFB();
 		Date f = null;
 		Date t = null;
@@ -82,33 +82,30 @@ public class FacebookUtils {
 
 	public static Hashtable<String, Object> getBaseInfo (String pageId) {
 
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
-		//DatastoreUtils.addRow("test", "json", new Text(jsonString));
-		
-//		Facebook facebook = getFB();
-//		try {
-//			User user = facebook.getUser(pageId, new Reading().fields("likes", "talking_about_count", "name"));
-//			String jsonString = DataObjectFactory.getRawJSON(user);
-			Object objJson = JSONValue.parse(jsonString);
-			JSONObject json =(JSONObject) objJson;
 
-			String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
-			String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
-			String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
-			//TODO retrieve anche degli altri campi
+		Object objJson = JSONValue.parse(jsonString);
+		JSONObject json =(JSONObject) objJson;
 
-			result.put("likes", likeCount);
-			result.put("talking_about_count", talkingAboutCount);
-			result.put("name", pageName);
-//		} catch (FacebookException e) {
-//			e.printStackTrace();
-//		}
+		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
+		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
+		String pageName = JSONObjectUtil.retrieveJsonPath(json, "name");
+		//TODO retrieve anche degli altri campi
+
+		result.put("likes", likeCount);
+		result.put("talking_about_count", talkingAboutCount);
+		result.put("name", pageName);
 
 		return result;
 	}
-	
-	
+
+
 	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) {
 
 		ArrayList<Post> result = new ArrayList<Post>();
