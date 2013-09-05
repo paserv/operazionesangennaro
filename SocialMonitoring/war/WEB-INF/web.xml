@@ -128,6 +128,16 @@
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Add To Queue</servlet-name>
+		<servlet-class>it.osg.servlet.util.AddToQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Add To Queue</servlet-name>
+		<url-pattern>/atq</url-pattern>
+	</servlet-mapping>
 	<!-- VARIE -->
 	
 
