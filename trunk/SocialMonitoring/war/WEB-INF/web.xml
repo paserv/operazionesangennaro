@@ -30,6 +30,37 @@
 		<servlet-name>FacebookPsarJoinTaskServlet</servlet-name>
 		<url-pattern>/FBpsarjointask</url-pattern>
 	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>PlusPsarSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.plus.PLSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PlusPsarSplitTaskServlet</servlet-name>
+		<url-pattern>/PLpsarsplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PlusPsarSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.plus.PLSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PlusPsarSubTaskServlet</servlet-name>
+		<url-pattern>/PLpsarsubtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PlusPsarJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.plus.PLJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>PlusPsarJoinTaskServlet</servlet-name>
+		<url-pattern>/PLpsarjointask</url-pattern>
+	</servlet-mapping>
 	<!-- FINE PSAR -->
 
 
@@ -86,6 +117,16 @@
 	<servlet-mapping>
 		<servlet-name>BulkUpload</servlet-name>
 		<url-pattern>/bulk/bulkupload</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Test Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.util.TestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Test Servlet</servlet-name>
+		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
 	<!-- VARIE -->
 	
