@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,6 +25,7 @@ import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
+import facebook4j.Tag;
 import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.json.DataObjectFactory;
@@ -47,6 +49,36 @@ public class FacebookUtils {
 	}
 
 
+	public static void getSomething (String pageId){
+		Date f = null;
+		Date t = null;
+		try {
+			f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
+			t = DateUtils.addMonthToDate(f, 1);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, null);
+		Iterator<Post> iterPost = posts.iterator();
+		while (iterPost.hasNext()) {
+			Post currPost = iterPost.next();
+			List<Tag> tags = currPost.getMessageTags();
+			Iterator<Tag> iterTags = tags.iterator();
+			while (iterTags.hasNext()) {
+				Tag currTag = iterTags.next();
+				currTag.getName();
+			}
+			
+			ArrayList<Comment> comms = FacebookUtils.getAllComments(currPost);
+			Iterator<Comment> iterComms = comms.iterator();
+			while (iterComms.hasNext()) {
+				Comment currComm = iterComms.next();
+			}
+		}
+		
+		
+	}
+	
 	public static Date getActivityInterval (String pageId){
 
 		Facebook facebook = getFB();
