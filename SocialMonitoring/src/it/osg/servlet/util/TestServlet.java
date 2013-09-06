@@ -43,7 +43,7 @@ public class TestServlet extends HttpServlet {
 		Date t = null;
 		try {
 			f = DateUtils.parseDateAndTime("01-04-2013 00:00:00");
-			t = DateUtils.addDayToDate(f, 7);
+			t = DateUtils.addDayToDate(f, 1);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
