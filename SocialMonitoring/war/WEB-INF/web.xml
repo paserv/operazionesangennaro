@@ -138,8 +138,44 @@
 		<servlet-name>Add To Queue</servlet-name>
 		<url-pattern>/atq</url-pattern>
 	</servlet-mapping>
-	<!-- VARIE -->
 	
+	<servlet>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<servlet-class>it.osg.servlet.util.RetrieveDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+	<!-- FINE VARIE -->
+	
+
+	<!-- JERSEY -->
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>it.osg.service.rest.impl</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>it.osg.security.ResponseCorsFilter</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- <servlet-mapping> <servlet-name>Jersey Web Application</servlet-name> 
+		<url-pattern>/resources/*</url-pattern> </servlet-mapping> -->
+
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<!-- FINE JERSEY -->
+
+
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

@@ -33,13 +33,13 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected long getTimeout() {
-		return (Long) DatastoreUtils.getValue("conf", "property", "jointimeout", "value");
+		return (Long.valueOf((String) DatastoreUtils.getValue("conf", "property", "jointimeout", "value")));
 	}
 
 
 	@Override
 	protected long getDelay() {
-		return (Long) DatastoreUtils.getValue("conf", "property", "joindelay", "value");
+		return Long.valueOf((String) DatastoreUtils.getValue("conf", "property", "joindelay", "value"));
 	}
 
 

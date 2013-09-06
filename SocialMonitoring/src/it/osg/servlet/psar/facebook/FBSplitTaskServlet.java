@@ -13,8 +13,8 @@ public class FBSplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public int getStep() {
-		long res = (Long) DatastoreUtils.getValue("conf", "property", "splitstep", "value");
-		return Integer.parseInt((String.valueOf(res)));
+		String res = (String) DatastoreUtils.getValue("conf", "property", "splitstep", "value");
+		return Integer.parseInt((res));
 	}
 
 
