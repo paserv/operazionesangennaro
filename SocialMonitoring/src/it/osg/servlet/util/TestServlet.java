@@ -55,34 +55,45 @@ public class TestServlet extends HttpServlet {
 			out.println("Post Type: " + currPost.getType() + "<br>");
 			out.println("Post From: " + currPost.getFrom().getName() + "<br>");
 			out.println("Message: " + currPost.getMessage() + "<br>");
+			
 			List<Tag> tags = currPost.getMessageTags();
-			Iterator<Tag> iterTags = tags.iterator();
-			while (iterTags.hasNext()) {
-				Tag currTag = iterTags.next();
-				out.println("&nbsp;Tag Name: " + currTag.getName() + "<br>");
-				out.println("&nbsp;Tag Type: " + currTag.getType() + "<br>");
-				out.println("&nbsp;Tag Metadata: " + currTag.getMetadata() + "<br>");
+			if (tags != null) {
+				Iterator<Tag> iterTags = tags.iterator();
+				while (iterTags.hasNext()) {
+					Tag currTag = iterTags.next();
+					out.println("&nbsp;Tag Name: " + currTag.getName() + "<br>");
+					out.println("&nbsp;Tag Type: " + currTag.getType() + "<br>");
+					out.println("&nbsp;Tag Metadata: " + currTag.getMetadata() + "<br>");
+				}
 			}
+			
 			List<IdNameEntity> tos = currPost.getTo();
-			Iterator<IdNameEntity> iterTo = tos.iterator();
-			while (iterTo.hasNext()) {
-				IdNameEntity currTo = iterTo.next();
-				out.println("&nbsp;To Id: " + currTo.getId() + "<br>");
-				out.println("&nbsp;To Name: " + currTo.getName() + "<br>");
+			if (tos != null) {
+				Iterator<IdNameEntity> iterTo = tos.iterator();
+				while (iterTo.hasNext()) {
+					IdNameEntity currTo = iterTo.next();
+					out.println("&nbsp;To Id: " + currTo.getId() + "<br>");
+					out.println("&nbsp;To Name: " + currTo.getName() + "<br>");
+				}
 			}
+			
 			List<Property> props = currPost.getProperties();
-			Iterator<Property> iterProps = props.iterator();
-			while (iterProps.hasNext()) {
-				Property currProp = iterProps.next();
-				out.println("&nbsp;Prop name: " + currProp.getName() + "<br>");
-				out.println("&nbsp;Prop Text: " + currProp.getText() + "<br>");
+			if (props != null) {
+				Iterator<Property> iterProps = props.iterator();
+				while (iterProps.hasNext()) {
+					Property currProp = iterProps.next();
+					out.println("&nbsp;Prop name: " + currProp.getName() + "<br>");
+					out.println("&nbsp;Prop Text: " + currProp.getText() + "<br>");
+				}
 			}
+			
 			
 			ArrayList<Comment> comms = FacebookUtils.getAllComments(currPost);
 			Iterator<Comment> iterComms = comms.iterator();
 			while (iterComms.hasNext()) {
 				Comment currComm = iterComms.next();
 				out.println("&nbsp;&nbsp;Comment ID: " + currComm.getId() + "<br>");
+				out.println("&nbsp;&nbsp;Comment From: " + currComm.getFrom().getName() + "<br>");
 				out.println("&nbsp;&nbsp;Comment Message: " + currComm.getMessage() + "<br>");
 				out.println("&nbsp;&nbsp;Comment Metadata: " + currComm.getMetadata() + "<br>");
 			}
