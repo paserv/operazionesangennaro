@@ -43,17 +43,21 @@
 	
 	<form method="post" action="data">
 		<table width="80%" align="center">
-	    Tabella
-	    <input type="text" id="tabella" name="tabella" />
+			<tr>
+				<td>
+				Tabella
+	    		<input type="text" id="tabella" name="tabella" />
 	    
-	    Operazione
-	    <select id="operazione" name="operazione" >
-	  		<option value="select">Select</option>
-	  		<option value="delete">Delete</option>
-	  		<option value="test">Test</option>
-	 	</select>
+	    		Operazione
+			    <select id="operazione" name="operazione" >
+			  		<option value="select">Select</option>
+			  		<option value="delete">Delete</option>
+			  		<option value="test">Test</option>
+			 	</select>
 	    
-	    <button id="getData">Get Data</button>
+	    		<button id="getData">Get Data</button>
+	    		</td>
+			</tr>
 	    </table>
 	</form>
 </body>
