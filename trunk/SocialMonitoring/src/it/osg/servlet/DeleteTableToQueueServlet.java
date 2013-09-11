@@ -1,6 +1,7 @@
 package it.osg.servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -11,28 +12,46 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 
-public class DeleteTableServlet extends HttpServlet {
+public class DeleteTableToQueueServlet extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+		
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
-		String tableName = req.getParameter("tablename");
+		ArrayList<String> tablesToDelete = new ArrayList<String>();
+		String queueName = "";
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		q = new Query(tableName);
+		q = new Query("conf");
 		pq = datastore.prepare(q);
 		for (Entity res : pq.asIterable()) {
-			datastore.delete(res.getKey());
+			if (((String) res.getProperty("property")).equalsIgnoreCase("deletetable")) {
+				tablesToDelete.add((String) res.getProperty("value"));
+			}
+			if (((String) res.getProperty("property")).equalsIgnoreCase("deletetablequeue")) {
+				queueName = (String) res.getProperty("value");
+			}
 		}
+		
+		for (int i = 0; i < tablesToDelete.size(); i++) {
+			String currTable = tablesToDelete.get(i);
+			Queue queue = QueueFactory.getQueue(queueName);
+			queue.add(TaskOptions.Builder.withUrl("/deletetable").param("tablename", currTable));
+		}
+		
 	}
 	
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		doGet(req, resp);
 	}
+	
 	
 }
