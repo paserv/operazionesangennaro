@@ -67,43 +67,23 @@
 
 	<!-- CRON JOB DI PULIZIA -->
 	<servlet>
-		<servlet-name>DeleteTaskLogServlet</servlet-name>
-		<servlet-class>it.osg.servlet.manutenzione.DeleteTaskLogServlet</servlet-class>
+		<servlet-name>DeleteTableServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteTableServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>DeleteTaskLogServlet</servlet-name>
-		<url-pattern>/deletetasklog</url-pattern>
+		<servlet-name>DeleteTableServlet</servlet-name>
+		<url-pattern>/deletetable</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>DeleteNodeLogServlet</servlet-name>
-		<servlet-class>it.osg.servlet.manutenzione.DeleteNodeLogServlet</servlet-class>
+		<servlet-name>DeleteTableToQueueServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteTableToQueueServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>DeleteNodeLogServlet</servlet-name>
-		<url-pattern>/deletenodelog</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>DeleteEdgeLogServlet</servlet-name>
-		<servlet-class>it.osg.servlet.manutenzione.DeleteEdgeLogServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>DeleteEdgeLogServlet</servlet-name>
-		<url-pattern>/deleteedgelog</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>DeleteBaseInfoServlet</servlet-name>
-		<servlet-class>it.osg.servlet.manutenzione.DeleteBaseInfoServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>DeleteBaseInfoServlet</servlet-name>
-		<url-pattern>/deletebaseinfo</url-pattern>
+		<servlet-name>DeleteTableToQueueServlet</servlet-name>
+		<url-pattern>/deletetabletoqueue</url-pattern>
 	</servlet-mapping>
 	<!-- FINE CRON JOB DI PULIZIA -->
 	

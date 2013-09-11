@@ -49,35 +49,6 @@ public class FacebookUtils {
 	}
 
 
-	public static void getSomething (String pageId){
-		Date f = null;
-		Date t = null;
-		try {
-			f = DateUtils.parseDateAndTime("01-02-2004 00:00:00");
-			t = DateUtils.addMonthToDate(f, 1);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, null);
-		Iterator<Post> iterPost = posts.iterator();
-		while (iterPost.hasNext()) {
-			Post currPost = iterPost.next();
-			List<Tag> tags = currPost.getMessageTags();
-			Iterator<Tag> iterTags = tags.iterator();
-			while (iterTags.hasNext()) {
-				Tag currTag = iterTags.next();
-				currTag.getName();
-			}
-			
-			ArrayList<Comment> comms = FacebookUtils.getAllComments(currPost);
-			Iterator<Comment> iterComms = comms.iterator();
-			while (iterComms.hasNext()) {
-				Comment currComm = iterComms.next();
-			}
-		}
-		
-		
-	}
 	
 	public static Date getActivityInterval (String pageId){
 
@@ -118,13 +89,14 @@ public class FacebookUtils {
 	public static Hashtable<String, Object> getBaseInfo (String pageId) {
 
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
-
+		DatastoreUtils.addRow("test", "json", new Text(jsonString));
+		
 		Object objJson = JSONValue.parse(jsonString);
 		JSONObject json =(JSONObject) objJson;
 
