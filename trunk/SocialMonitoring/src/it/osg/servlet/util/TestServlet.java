@@ -39,11 +39,15 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 		
+		String dateFrom = req.getParameter("from");
+		String dateTo = req.getParameter("to");
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime("01-04-2013 00:00:00");
-			t = DateUtils.addDayToDate(f, 1);
+//			f = DateUtils.parseDateAndTime("01-09-2013 00:00:00");
+//			t = DateUtils.addDayToDate(f, 1);
+			f = DateUtils.parseDateAndTime(dateFrom);
+			t = DateUtils.parseDateAndTime(dateTo);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
