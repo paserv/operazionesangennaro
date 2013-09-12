@@ -1,5 +1,6 @@
 package it.osg.service.rest.impl;
 
+import it.osg.model.Graph;
 import it.osg.model.IdName;
 import it.osg.service.GraphService;
 
@@ -49,5 +50,6 @@ public class ServiceImpl extends GraphService {
 		return Response.ok().entity(entity).build();
 	}
 	
+
 	
 }
