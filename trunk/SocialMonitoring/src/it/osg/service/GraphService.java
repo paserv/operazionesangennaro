@@ -21,7 +21,8 @@ public abstract class GraphService {
 		ArrayList<Graph> result = GraphSourceGenerator.getData(className, objects);
 		
 		final GenericEntity<List<Graph>> entity = new GenericEntity<List<Graph>>(result) { };
-		return Response.ok().entity(entity).build();
+//		return Response.ok().entity(entity).build();
+		return Response.ok(entity).build();
 
 	} 
 

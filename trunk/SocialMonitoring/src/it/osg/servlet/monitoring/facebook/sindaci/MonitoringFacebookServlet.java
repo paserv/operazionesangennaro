@@ -1,5 +1,6 @@
-package it.osg.servlet.monitoring;
+package it.osg.servlet.monitoring.facebook.sindaci;
 
+import it.osg.utils.Constants;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.JSONObjectUtil;
 
@@ -17,23 +18,23 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 
 @SuppressWarnings("serial")
-public class MonitorServlet extends HttpServlet {
+public class MonitoringFacebookServlet extends HttpServlet {
 
-	public static String monitorTable = "monitor";
-	private static String graphAPIUrl = "https://graph.facebook.com/";
+	
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 		String idPage = req.getParameter("idPage");
+		String monitoringTable = req.getParameter("monitoringTable");
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + idPage);
+		String jsonString = JSONObjectUtil.retrieveJson(Constants.graphAPIUrl + idPage);
 		ArrayList<Hashtable<String, Object>> analisi = FacebookUtils.likeTalkAnalysis(jsonString);
 
 		Iterator<Hashtable<String, Object>> iterAna = analisi.iterator();
 		while (iterAna.hasNext()) {
-			Entity currEntity = new Entity(monitorTable);
+			Entity currEntity = new Entity(monitoringTable);
 			currEntity.setProperty("idFacebook", idPage);
 			Hashtable<String, Object> currRow = iterAna.next();
 			Enumeration<String> enumer = currRow.keys();
