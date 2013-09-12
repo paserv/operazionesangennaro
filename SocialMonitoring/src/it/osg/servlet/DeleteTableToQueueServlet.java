@@ -1,5 +1,7 @@
 package it.osg.servlet;
 
+import it.osg.utils.Constants;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ public class DeleteTableToQueueServlet extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		q = new Query("conf");
+		q = new Query(Constants.SETTINGS_TABLE);
 		pq = datastore.prepare(q);
 		for (Entity res : pq.asIterable()) {
 			if (((String) res.getProperty("property")).equalsIgnoreCase("deletetable")) {

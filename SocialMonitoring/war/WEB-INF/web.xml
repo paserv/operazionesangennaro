@@ -63,6 +63,27 @@
 	</servlet-mapping>
 	<!-- FINE PSAR -->
 
+	<!-- MONITORING -->
+	<servlet>
+		<servlet-name>MonitoringFacebookServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.sindaci.MonitoringFacebookServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringFacebookServletQueue</servlet-name>
+		<url-pattern>/monitorfacebookqueue</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MonitoringFacebookServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.sindaci.MonitoringFacebookServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringFacebookServlet</servlet-name>
+		<url-pattern>/monitorfacebook</url-pattern>
+	</servlet-mapping>
+	<!-- FINE MONITORING -->
 
 
 	<!-- CRON JOB DI PULIZIA -->
@@ -141,7 +162,7 @@
 		</init-param>
 		<init-param>
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
-			<param-value>it.osg.security.ResponseCorsFilter</param-value>
+			<param-value>it.osg.service.security.ResponseCorsFilter</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

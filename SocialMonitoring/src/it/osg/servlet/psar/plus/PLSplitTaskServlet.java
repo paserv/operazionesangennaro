@@ -1,6 +1,7 @@
 package it.osg.servlet.psar.plus;
 
 import it.osg.servlet.SplitTaskServlet;
+import it.osg.utils.Constants;
 import it.osg.utils.DatastoreUtils;
 
 public class PLSplitTaskServlet extends SplitTaskServlet {
@@ -13,7 +14,7 @@ public class PLSplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public int getStep() {
-		String res = (String) DatastoreUtils.getValue("conf", "property", "splitstep", "value");
+		String res = (String) DatastoreUtils.getValue(Constants.SETTINGS_TABLE, "property", "splitstep", "value");
 		return Integer.parseInt(res);
 	}
 

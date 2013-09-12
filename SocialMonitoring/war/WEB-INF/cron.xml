@@ -6,4 +6,10 @@
 		</description>
 		<schedule>every day 03:00</schedule>
 	</cron>
+	<cron>
+		<url>/monitorfacebookqueue</url>
+		<description>Monitor Pages contained in sindaco table every 6 hours
+		</description>
+		<schedule>every 6 hours synchronized</schedule>
+	</cron>
 </cronentries>

@@ -2,7 +2,7 @@ package it.osg.datasource.facebook.time;
 
 import it.osg.datasource.GraphSourceGenerator;
 import it.osg.model.Graph;
-import it.osg.servlet.monitoring.MonitorServlet;
+import it.osg.utils.Constants;
 import it.osg.utils.DateUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ public class PickedData extends GraphSourceGenerator {
 				Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, t);
 				Filter transmissionFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, (String) objects[0]);
 				Filter fromToTransmissionFilter = CompositeFilterOperator.and(transmissionFilter, fromFilter, toFilter);
-				q = new Query(MonitorServlet.monitorTable).setFilter(fromToTransmissionFilter).addSort("date", SortDirection.ASCENDING);
+				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(fromToTransmissionFilter).addSort("date", SortDirection.ASCENDING);
 			} else {
-				q = new Query(MonitorServlet.monitorTable).addSort("date", SortDirection.ASCENDING);
+				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).addSort("date", SortDirection.ASCENDING);
 			}
 
 

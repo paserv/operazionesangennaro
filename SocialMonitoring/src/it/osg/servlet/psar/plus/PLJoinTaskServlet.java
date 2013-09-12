@@ -3,6 +3,7 @@ package it.osg.servlet.psar.plus;
 import it.osg.model.PSARData;
 import it.osg.servlet.JoinTaskServlet;
 import it.osg.utils.ArrayUtils;
+import it.osg.utils.Constants;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import it.osg.utils.PlusUtils;
@@ -33,13 +34,13 @@ public class PLJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected long getTimeout() {
-		return (Long.valueOf((String) DatastoreUtils.getValue("conf", "property", "jointimeout", "value")));
+		return (Long.valueOf((String) DatastoreUtils.getValue(Constants.SETTINGS_TABLE, "property", "jointimeout", "value")));
 	}
 
 
 	@Override
 	protected long getDelay() {
-		return Long.valueOf((String) DatastoreUtils.getValue("conf", "property", "joindelay", "value"));
+		return Long.valueOf((String) DatastoreUtils.getValue(Constants.SETTINGS_TABLE, "property", "joindelay", "value"));
 	}
 
 
