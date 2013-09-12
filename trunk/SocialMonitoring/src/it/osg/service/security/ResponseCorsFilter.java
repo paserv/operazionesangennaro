@@ -14,9 +14,9 @@ public class ResponseCorsFilter implements ContainerResponseFilter {
  
     	
         ResponseBuilder resp = Response.fromResponse(contResp.getResponse());
-        resp.header("Access-Control-Allow-Origin", "*");
-        resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        resp.header("Content-Type", "application/json");
+        resp.header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+//        resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+//        resp.header("Content-Type", "application/json");
         String reqHead = req.getHeaderValue("Access-Control-Request-Headers");
         
         if(null != reqHead && !reqHead.equals(null)){
