@@ -1,6 +1,5 @@
 package it.osg.service.rest.impl;
 
-import it.osg.model.Graph;
 import it.osg.model.IdName;
 import it.osg.service.GraphService;
 
