@@ -3,7 +3,7 @@ var rootURL;
 var jsonObj= [];
 var numSelected;
 var counter;
-var rootURL = "http://02-monitorfacebookpages.appspot.com/rest/resource/";
+var rootURL = "http://07-monitorfacebookpages.appspot.com/rest/resource/";
 
 $(function() {
 	$('#from').datetimepicker({dateFormat: "dd-mm-yy", timeFormat: "HH:mm:ss"});
@@ -23,7 +23,7 @@ $('#btnSearch').click(function() {
 	if ($('#debug').is(":checked"))	{
 		rootURL = "http://localhost:8888/rest/resource/";
 	} else {
-		rootURL = "http://02-monitorfacebookpages.appspot.com/rest/resource/";
+		rootURL = "http://07-monitorfacebookpages.appspot.com/rest/resource/";
 	}
 
 	//Calcolo il numero di trasmissioni selezionate
@@ -52,7 +52,7 @@ $('#transmission').keypress(function(e){
 		if ($('#debug').is(":checked"))	{
 			rootURL = "http://localhost:8888/rest/resource/";
 		} else {
-			rootURL = "http://02-monitorfacebookpages.appspot.com/rest/resource/";
+			rootURL = "http://07-monitorfacebookpages.appspot.com/rest/resource/";
 		}
 
 		//Calcolo il numero di trasmissioni selezionate
@@ -75,7 +75,7 @@ $('#transmission').keypress(function(e){
 function getMonitoredEntities () {
 	$.ajax({
 		type: 'GET',
-		url: rootURL + "conf/monitoredentities/sindaco",
+		url: "http://07-monitorfacebookpages.appspot.com/rest/table/resource/anagraficaSindaco/IDFacebook",
 		dataType: "json",
 		success: function(data) {
 				console.log(data);
@@ -101,7 +101,7 @@ function getServices(rootURL) {
 			success: function(data) {
 				//Contatore che indica quante volte è stato invocato il servizio
 				counter++;
-
+				console.log(data);
 				if ($('#groupingunit').val() != 'none') {
 					jsonObj[i] = {
 							name: $(selected).text(),
