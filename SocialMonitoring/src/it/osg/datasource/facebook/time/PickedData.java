@@ -54,7 +54,7 @@ public class PickedData extends GraphSourceGenerator {
 
 			// Use PreparedQuery interface to retrieve results
 			PreparedQuery pq = datastore.prepare(q);
-
+			Long previousOrdinate = 0L;
 			for (Entity ent : pq.asIterable()) {
 				System.out.println("CIAO");
 				String axisReturned = "";
@@ -70,6 +70,14 @@ public class PickedData extends GraphSourceGenerator {
 				Object datastoreOrdinate = ent.getProperty((String) objects[4]);
 				if (datastoreOrdinate instanceof Long) {
 					ordinateReturned = (Long) datastoreOrdinate;
+					if (ordinateReturned.compareTo(0L) == 0) {
+						ordinateReturned = previousOrdinate;
+					} else {
+						previousOrdinate = ordinateReturned;
+					}
+						
+				} else {
+					ordinateReturned = previousOrdinate;
 				}
 
 				Graph gd = new Graph(axisReturned, ordinateReturned);
