@@ -55,9 +55,10 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 		youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(API_KEY)).build();
 		
 		try {
+			
 			YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails");
-			activityRequest.setChannelId("UC_x5XG1OV2P6uZZ5FSM9Ttw");
-			activityRequest.setFields("items(id,snippet/title)");
+			activityRequest.setChannelId("UCzovlWQBDtQCpYWZl1ly4jg");
+			activityRequest.setFields("items(id,snippet/title)").setMaxResults(50L);
 			ActivityListResponse activities = activityRequest.execute();
 			List<Activity> listOfChannels = activities.getItems();
 
@@ -84,12 +85,12 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 
 		out.println("END");
 		
-		analytics = new YouTubeAnalytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeAnalyticsRequestInitializer(API_KEY)).build();
-		YouTubeAnalytics.Reports rep = analytics.reports();
-		
-		ResultTable result = rep.query("channel==UC_x5XG1OV2P6uZZ5FSM9Ttw", "2012-01-01", "2012-01-14", "views,uniques").execute();
-		
-		out.println(result.toPrettyString());
+//		analytics = new YouTubeAnalytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeAnalyticsRequestInitializer(API_KEY)).build();
+//		YouTubeAnalytics.Reports rep = analytics.reports();
+//		
+//		ResultTable result = rep.query("channel==UC_x5XG1OV2P6uZZ5FSM9Ttw", "2012-01-01", "2012-01-14", "views,uniques").execute();
+//		
+//		out.println(result.toPrettyString());
 		
 //		YouTubeAnalytics.Reports rep = analytics.reports();
 //		rep.query(arg0, arg1, arg2, arg3);
