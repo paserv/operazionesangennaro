@@ -3,6 +3,7 @@ package test;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -50,6 +51,7 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 
 		youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(API_KEY)).build();
+		
 		try {
 			YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails");
 			activityRequest.setChannelId("UC_x5XG1OV2P6uZZ5FSM9Ttw");
@@ -57,7 +59,13 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 			ActivityListResponse activities = activityRequest.execute();
 			List<Activity> listOfChannels = activities.getItems();
 
-			
+			Iterator<Activity> iter = listOfChannels.iterator();
+			while (iter.hasNext()) {
+				Activity curr = iter.next();
+				out.println("ID: " + curr.getId() + "<br>");
+				out.println("Kind: " + curr.getKind() + "<br>");
+				out.println("Snippet: " + curr.getSnippet() + "<br>");
+			}
 			
 //			Channel defaultChannel = listOfChannels.get(0);
 //			String channelId = defaultChannel.getId();
@@ -73,6 +81,12 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 		}
 
 		out.println("END");
+		
+		analytics = new YouTubeAnalytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(API_KEY)).build();
+		
+		out.println("END");
+//		YouTubeAnalytics.Reports rep = analytics.reports();
+//		rep.query(arg0, arg1, arg2, arg3);
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
