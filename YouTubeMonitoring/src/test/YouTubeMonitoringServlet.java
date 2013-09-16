@@ -21,6 +21,8 @@ import com.google.api.services.youtube.model.ActivityListResponse;
 import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtubeAnalytics.YouTubeAnalytics;
+import com.google.api.services.youtubeAnalytics.YouTubeAnalyticsRequestInitializer;
+import com.google.api.services.youtubeAnalytics.model.ResultTable;
 
 public class YouTubeMonitoringServlet extends HttpServlet {
 
@@ -82,9 +84,13 @@ public class YouTubeMonitoringServlet extends HttpServlet {
 
 		out.println("END");
 		
-		analytics = new YouTubeAnalytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(API_KEY)).build();
+		analytics = new YouTubeAnalytics.Builder(HTTP_TRANSPORT, JSON_FACTORY, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeAnalyticsRequestInitializer(API_KEY)).build();
+		YouTubeAnalytics.Reports rep = analytics.reports();
 		
-		out.println("END");
+		ResultTable result = rep.query("channel==UC_x5XG1OV2P6uZZ5FSM9Ttw", "2012-01-01", "2012-01-14", "views,uniques").execute();
+		
+		out.println(result.toPrettyString());
+		
 //		YouTubeAnalytics.Reports rep = analytics.reports();
 //		rep.query(arg0, arg1, arg2, arg3);
 	}
