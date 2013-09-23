@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- PSAR -->
 	<servlet>
@@ -30,8 +34,8 @@
 		<servlet-name>FacebookPsarJoinTaskServlet</servlet-name>
 		<url-pattern>/FBpsarjointask</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet>
 		<servlet-name>PlusPsarSplitTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.psar.plus.PLSplitTaskServlet</servlet-class>
@@ -73,7 +77,7 @@
 		<servlet-name>MonitoringFacebookServletQueue</servlet-name>
 		<url-pattern>/monitorfacebookqueue</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
 		<servlet-class>it.osg.servlet.monitoring.facebook.sindaci.MonitoringFacebookServlet</servlet-class>
@@ -107,8 +111,8 @@
 		<url-pattern>/deletetabletoqueue</url-pattern>
 	</servlet-mapping>
 	<!-- FINE CRON JOB DI PULIZIA -->
-	
-	
+
+
 	<!-- VARIE -->
 	<servlet>
 		<servlet-name>BulkUpload</servlet-name>
@@ -119,7 +123,7 @@
 		<servlet-name>BulkUpload</servlet-name>
 		<url-pattern>/bulk/bulkupload</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Test Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.util.TestServlet</servlet-class>
@@ -129,7 +133,7 @@
 		<servlet-name>Test Servlet</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Add To Queue</servlet-name>
 		<servlet-class>it.osg.servlet.util.AddToQueue</servlet-class>
@@ -139,7 +143,7 @@
 		<servlet-name>Add To Queue</servlet-name>
 		<url-pattern>/atq</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.util.RetrieveDataServlet</servlet-class>
@@ -149,8 +153,18 @@
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<url-pattern>/data</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>YouTubeMonitoringSimpleAPIAccessServlet</servlet-name>
+		<servlet-class>test.YouTubeMonitoringSimpleAPIAccessServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>YouTubeMonitoringSimpleAPIAccessServlet</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
 	<!-- FINE VARIE -->
-	
+
 
 	<!-- JERSEY -->
 	<servlet>
@@ -186,7 +200,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>

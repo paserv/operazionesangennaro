@@ -36,5 +36,7 @@
 	<classpathentry kind="lib" path="jersey/jersey-servlet-1.17.jar"/>
 	<classpathentry kind="lib" path="jersey/jettison-1.1.jar"/>
 	<classpathentry kind="lib" path="jersey/jsr311-api-1.1.1.jar"/>
+	<classpathentry kind="lib" path="youtube/google-api-services-youtube-v3-rev77-1.17.0-rc.jar"/>
+	<classpathentry kind="lib" path="youtube/google-api-services-youtubeAnalytics-v1-rev24-1.17.0-rc.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
