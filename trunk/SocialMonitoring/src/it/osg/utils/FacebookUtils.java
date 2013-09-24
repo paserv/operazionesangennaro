@@ -32,19 +32,23 @@ import facebook4j.json.DataObjectFactory;
 
 public class FacebookUtils {
 
-	private static String appID= "156346967866710";
-	private static String appKey= "e0f880cc248e811c98952d9a44a27ce4";
-	private static String accessToken = "156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk";
+//	private static String appID= "156346967866710";
+//	private static String appKey= "e0f880cc248e811c98952d9a44a27ce4";
+//	private static String accessToken = "156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk";
+//
+//	private static String graphAPIUrl = "https://graph.facebook.com/";
 
-	private static String graphAPIUrl = "https://graph.facebook.com/";
-
-
+	private static Facebook facebook = null;
+	
 	public static Facebook getFB() {
-		Facebook facebook = new FacebookFactory().getInstance();
-		facebook.setOAuthAppId(appID, appKey);
+		if (facebook != null) {
+			return facebook;
+		}
+		Facebook fac = new FacebookFactory().getInstance();
+		fac.setOAuthAppId(Constants.FACEBOOK_APP_ID, Constants.FACEBOOK_APP_KEY);
 		//facebook.setOAuthPermissions(commaSeparetedPermissions);
-		facebook.setOAuthAccessToken(new AccessToken(accessToken, null));
-
+		fac.setOAuthAccessToken(new AccessToken(Constants.FACEBOOK_ACCESS_TOKEN, null));
+		facebook = fac;
 		return facebook;
 	}
 
@@ -94,7 +98,7 @@ public class FacebookUtils {
 			e.printStackTrace();
 		}
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		String jsonString = JSONObjectUtil.retrieveJson(graphAPIUrl + pageId);
+		String jsonString = JSONObjectUtil.retrieveJson(Constants.FACEBOOK_GRAPH_API_ROOT_URL + pageId);
 //		DatastoreUtils.addRow("test", "json", new Text(jsonString));
 		
 		Object objJson = JSONValue.parse(jsonString);

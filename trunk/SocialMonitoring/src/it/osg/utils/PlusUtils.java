@@ -23,14 +23,19 @@ import facebook4j.Post;
 
 public class PlusUtils {
 
-	private static final String API_KEY = "AIzaSyB8YOf4t4cwdahoOgb8QPyLF4asGXtNlvo";
+	//private static final String API_KEY = "AIzaSyB8YOf4t4cwdahoOgb8QPyLF4asGXtNlvo";
 	private static final long MAX_RESULT = 10L;
+	
+	private static Plus plus = null;
 
 	public static Plus getPlus() {
+		if (plus != null) {
+			return plus;
+		}
 		HttpTransport httpTransport = new UrlFetchTransport();
 		JsonFactory jsonFactory = new JacksonFactory();
-		Plus plus = new Plus.Builder(httpTransport, jsonFactory, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new PlusRequestInitializer(API_KEY)).build();
-
+		Plus pl = new Plus.Builder(httpTransport, jsonFactory, null).setApplicationName("TEST").setGoogleClientRequestInitializer(new PlusRequestInitializer(Constants.PLUS_API_KEY)).build();
+		plus = pl;
 		return plus;
 	}
 

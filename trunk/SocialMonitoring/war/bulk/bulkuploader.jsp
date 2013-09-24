@@ -41,7 +41,7 @@
 	<br>
 	<br>
 	
-	<form method="post" action="data">
+	<form method="post" action="../data">
 		<table width="80%" align="center">
 			<tr>
 				<td>
