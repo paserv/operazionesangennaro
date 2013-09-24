@@ -12,12 +12,15 @@ import it.osg.utils.Constants;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.MailUtils;
+import it.osg.utils.YouTubeUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.api.services.youtube.model.Activity;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -44,67 +48,148 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 
-		ArrayList<Graph> result = new ArrayList<Graph>();
-
+		ArrayList<String> input = new ArrayList<String>();
+		input.add("ignaziomarinotv");
+		input.add("NicolaOttaviani");
+		input.add("pisapiaXmilano");
+		input.add("delbonoemilio");
+		input.add("simoneuggetti");
+		input.add("FassinoSindaco");
+		input.add("ritarossasindaco");
+		input.add("borgnasindaco");
+		input.add("FabrizioBrignolo");
+		input.add("AndreaBallareSindaco");
+		input.add("videodemagistris");
+		input.add("Mr21061983");
+		input.add("faustopepe");
+		input.add("piodelgaudiosindaco");
+		input.add("cialentemassimo");
+		input.add("merola2011");
+		input.add("TheModenaperpighi");
+		input.add("fabriziomatteucci");
+		input.add("sindacobalzani");
+		input.add("andreagnassi");
+		input.add("TvPaoloPerrone");
+		input.add("BZforSpagnolli");
+		input.add("adducesocial");
+		input.add("CosoliniSindaco");
+		input.add("Romoli2012");
+		input.add("claudiopedrotti");
+		input.add("lceriscioli");
+		input.add("nellabrambatti");
+		input.add("GANAUSINDACO");
+		input.add("MarioOcchiuto");
+		input.add("michelecampisi");
+		input.add("DamianoSindacoTP");
+		input.add("marcodoriachannel");
+		input.add("FedericiMassimo");
+		input.add("Marcofilippeschi1");
+		input.add("AlessandroTambellini");
+		input.add("Bonifaziemilio");
+		input.add("AchilleVariati");
+		
+		Iterator<String> iter = input.iterator();
+		while (iter.hasNext()) {
+			String curr = iter.next();
+			out.println(curr + ";" + YouTubeUtils.getUserId(curr) + "<br>");
+		}
+ 		
+		out.println("<br>");
+		out.println("<br>");
+		out.println("<br>");
+		out.println("<br>");
 		Date f = null;
 		Date t = null;
 		try {
 
-			f = DateUtils.parseDateAndTime((String) "01-09-2013 00:00:00");
+			f = DateUtils.parseDateAndTime((String) "01-09-2012 00:00:00");
 			t = DateUtils.parseDateAndTime((String) "16-09-2013 00:00:00");
-
-
-			// Get the Datastore Service
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Query q;
-			if (f != null && t != null) {
-				Filter fromFilter = new FilterPredicate("date", FilterOperator.GREATER_THAN_OR_EQUAL, f);
-				Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, t);
-				Filter transmissionFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, (String) "113335124914");
-				Filter fromToTransmissionFilter = CompositeFilterOperator.and(transmissionFilter, fromFilter, toFilter);
-				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(fromToTransmissionFilter).addSort("date", SortDirection.ASCENDING);
-			} else {
-				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).addSort("date", SortDirection.ASCENDING);
-			}
-
-
-			// Use PreparedQuery interface to retrieve results
-			PreparedQuery pq = datastore.prepare(q);
-			Long previousOrdinate = 0L;
-			for (Entity ent : pq.asIterable()) {
-				String axisReturned = "";
-				Long ordinateReturned = 0L;
-
-				Object datastoreAxis = ent.getProperty((String) "date");
-				if (datastoreAxis instanceof Date) {
-					axisReturned = DateUtils.formatDateAndTime((Date) datastoreAxis);
-				} else {
-					axisReturned = datastoreAxis.toString();
-				}
-
-				Object datastoreOrdinate = ent.getProperty((String) "like_count");
-				if (datastoreOrdinate instanceof Long) {
-					ordinateReturned = (Long) datastoreOrdinate;
-					if (ordinateReturned.compareTo(0L) == 0) {
-						ordinateReturned = previousOrdinate;
-						out.println("ordinateReturned is 0 previous is " + ordinateReturned);
-					} else {
-						previousOrdinate = ordinateReturned;
-						out.println("ordinateReturned is " + ordinateReturned);
-					}
-				} else {
-					out.println("ordinateReturned is " + ordinateReturned + " previous is " + previousOrdinate);
-					ordinateReturned = previousOrdinate;
-				}
-
-				Graph gd = new Graph(axisReturned, ordinateReturned);
-				result.add(gd);
-				out.println("Coordinate: " + gd.toString() + "<br>");
-
-			} 
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		out.println(YouTubeUtils.getUserId("matteorenzi"));
+		out.println("<br>");
+		
+		Hashtable<String, String> baseInfo = YouTubeUtils.getBaseInfo(req.getParameter("id1"));
+		out.println("subscribers " + baseInfo.get("subscribers") + "<br>");
+		out.println("views " + baseInfo.get("views") + "<br>");
+		out.println("joineddate " + baseInfo.get("joineddate") + "<br>");
+		out.println("baseInfo " + baseInfo.toString());
+		
+		out.println("<br>");
+		
+		List<Activity> act = YouTubeUtils.getActivities(req.getParameter("id2"), f, t);
+		out.println("videos " + act.size() + "<br>");
+		Hashtable<String, BigInteger> res = YouTubeUtils.getAllUserInteraction(act);
+		out.println("viewcount " + res.get("viewcount") + "<br>");
+		out.println("likecount " + res.get("likecount") + "<br>");
+		out.println("dislikecount " + res.get("dislikecount") + "<br>");
+		out.println("favouritecount " + res.get("favouritecount") + "<br>");
+		out.println("commentcount " + res.get("commentcount") + "<br>");
+		out.println("res " + res.toString());
+		
+//		ArrayList<Graph> result = new ArrayList<Graph>();
+//
+//		Date f = null;
+//		Date t = null;
+//		try {
+//
+//			f = DateUtils.parseDateAndTime((String) "01-09-2013 00:00:00");
+//			t = DateUtils.parseDateAndTime((String) "16-09-2013 00:00:00");
+//
+//
+//			// Get the Datastore Service
+//			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//			Query q;
+//			if (f != null && t != null) {
+//				Filter fromFilter = new FilterPredicate("date", FilterOperator.GREATER_THAN_OR_EQUAL, f);
+//				Filter toFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, t);
+//				Filter transmissionFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, (String) "113335124914");
+//				Filter fromToTransmissionFilter = CompositeFilterOperator.and(transmissionFilter, fromFilter, toFilter);
+//				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(fromToTransmissionFilter).addSort("date", SortDirection.ASCENDING);
+//			} else {
+//				q = new Query(Constants.FACEBOOK_MONITOR_TABLE).addSort("date", SortDirection.ASCENDING);
+//			}
+//
+//
+//			// Use PreparedQuery interface to retrieve results
+//			PreparedQuery pq = datastore.prepare(q);
+//			Long previousOrdinate = 0L;
+//			for (Entity ent : pq.asIterable()) {
+//				String axisReturned = "";
+//				Long ordinateReturned = 0L;
+//
+//				Object datastoreAxis = ent.getProperty((String) "date");
+//				if (datastoreAxis instanceof Date) {
+//					axisReturned = DateUtils.formatDateAndTime((Date) datastoreAxis);
+//				} else {
+//					axisReturned = datastoreAxis.toString();
+//				}
+//
+//				Object datastoreOrdinate = ent.getProperty((String) "like_count");
+//				if (datastoreOrdinate instanceof Long) {
+//					ordinateReturned = (Long) datastoreOrdinate;
+//					if (ordinateReturned.compareTo(0L) == 0) {
+//						ordinateReturned = previousOrdinate;
+//						out.println("ordinateReturned is 0 previous is " + ordinateReturned);
+//					} else {
+//						previousOrdinate = ordinateReturned;
+//						out.println("ordinateReturned is " + ordinateReturned);
+//					}
+//				} else {
+//					out.println("ordinateReturned is " + ordinateReturned + " previous is " + previousOrdinate);
+//					ordinateReturned = previousOrdinate;
+//				}
+//
+//				Graph gd = new Graph(axisReturned, ordinateReturned);
+//				result.add(gd);
+//				out.println("Coordinate: " + gd.toString() + "<br>");
+//
+//			} 
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 
 
 

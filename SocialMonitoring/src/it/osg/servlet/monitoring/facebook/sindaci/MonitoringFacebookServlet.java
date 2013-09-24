@@ -29,7 +29,7 @@ public class MonitoringFacebookServlet extends HttpServlet {
 
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		String jsonString = JSONObjectUtil.retrieveJson(Constants.graphAPIUrl + idPage);
+		String jsonString = JSONObjectUtil.retrieveJson(Constants.FACEBOOK_GRAPH_API_ROOT_URL + idPage);
 		ArrayList<Hashtable<String, Object>> analisi = FacebookUtils.likeTalkAnalysis(jsonString);
 
 		Iterator<Hashtable<String, Object>> iterAna = analisi.iterator();
