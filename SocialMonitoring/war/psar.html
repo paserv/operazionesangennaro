@@ -20,6 +20,7 @@ Social Network:
 	<select id="socialNet" name="socialNet" onchange="getIds()">
 		<option value="Plus">Plus</option>
 		<option value="Facebook">Facebook</option>
+		<option value="Youtube">Youtube</option>
 	</select>
 From: 
 	<input type="text" id="from" name="from" />
@@ -63,6 +64,10 @@ $(document).ready(function() {
         	idField = "IDPlus";
         	servlet = "PLpsarsplittask";
         }
+        if (socialNet == "Youtube") {
+        	idField = "IDYoutube";
+        	servlet = "YOpsarsplittask";
+        }
         
         var dataString = "pageId=" + pageId + "&from=" + from + "&to=" + to + "&mail=" + mail + "&IDField=" + idField;
         $.ajax({
@@ -89,6 +94,9 @@ function getIds () {
 	}
 	if (socialNet == "Plus") {
     	idField = "IDPlus";
+    }
+    if (socialNet == "Youtube") {
+    	idField = "IDYoutube";
     }
 	$.ajax({
 		type: 'GET',

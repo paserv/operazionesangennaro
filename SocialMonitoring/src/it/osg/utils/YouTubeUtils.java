@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -47,22 +48,38 @@ public class YouTubeUtils {
 	}
 
 	public static List<Activity> getActivities(String userId, Date from, Date to) {
+		List<Activity> result = new ArrayList<Activity>();
 		DateTime fr = new DateTime(from);
 		DateTime t = new DateTime(to);
 		try {
 			YouTube.Activities.List activityRequest = getYT().activities().list("id,snippet,contentDetails");
 			activityRequest.setChannelId(userId);
-			activityRequest.setFields("items(id,snippet,contentDetails)");
-//			activityRequest.setMaxResults(50L);
+			activityRequest.setFields("items(id,snippet,contentDetails,nextPageToken)");
+			activityRequest.setMaxResults(10L);
 			activityRequest.setPublishedAfter(fr);
 			activityRequest.setPublishedBefore(t);
 			ActivityListResponse activities = activityRequest.execute();
 			List<Activity> activityList = activities.getItems();
-			return activityList;
+			
+			while (activityList != null && activityList.size() > 0) {
+				for (Activity a : activityList) {
+					result.add(a);
+				}
+				String nextToken = activities.getNextPageToken();
+				if (nextToken == null) {
+					break;
+				}
+//				activityRequest = getYT().activities().list("id,snippet,contentDetails").setChannelId(userId).setFields("items(id,snippet,contentDetails)").setPublishedAfter(fr).setPublishedBefore(t).setPageToken(activities.getNextPageToken());
+				activityRequest.setPageToken(nextToken);
+				activities = activityRequest.execute();
+				activityList = activities.getItems();
+			}
+			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return result;
 	}
 
 	public static Hashtable<String, BigInteger> getAllUserInteraction(List<Activity> activ) {

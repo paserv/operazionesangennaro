@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- PSAR -->
+	<!-- FACEBOOK -->
 	<servlet>
 		<servlet-name>FacebookPsarSplitTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.psar.facebook.FBSplitTaskServlet</servlet-class>
@@ -31,7 +32,7 @@
 		<url-pattern>/FBpsarjointask</url-pattern>
 	</servlet-mapping>
 
-
+	<!-- PLUS -->
 	<servlet>
 		<servlet-name>PlusPsarSplitTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.psar.plus.PLSplitTaskServlet</servlet-class>
@@ -60,6 +61,38 @@
 	<servlet-mapping>
 		<servlet-name>PlusPsarJoinTaskServlet</servlet-name>
 		<url-pattern>/PLpsarjointask</url-pattern>
+	</servlet-mapping>
+	
+	<!-- YOUTUBE -->
+	<servlet>
+		<servlet-name>YoutubePsarSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.youtube.YOSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>YoutubePsarSplitTaskServlet</servlet-name>
+		<url-pattern>/YOpsarsplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>YoutubePsarSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.youtube.YOSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>YoutubePsarSubTaskServlet</servlet-name>
+		<url-pattern>/YOpsarsubtask</url-pattern>
+	</servlet-mapping>
+
+	
+	<servlet>
+		<servlet-name>YoutubePsarJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.youtube.YOJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>YoutubePsarJoinTaskServlet</servlet-name>
+		<url-pattern>/YOpsarjointask</url-pattern>
 	</servlet-mapping>
 	<!-- FINE PSAR -->
 
