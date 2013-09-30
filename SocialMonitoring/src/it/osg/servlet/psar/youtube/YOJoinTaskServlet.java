@@ -2,11 +2,10 @@ package it.osg.servlet.psar.youtube;
 
 import it.osg.model.PSARData;
 import it.osg.servlet.JoinTaskServlet;
-import it.osg.utils.ArrayUtils;
 import it.osg.utils.Constants;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
-import it.osg.utils.PlusUtils;
+import it.osg.utils.YouTubeUtils;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 	protected String getAttachFile(String idTransaction, String from, String to) {
 
 		//TODO
-		String dataCSV = "Nome Sindaco;Nome Pagina;ID Plus;Regione;Provincia;Sesso;Anno di Nascita;Partito;Totale Activities;Totale Comments;Unique Authors;Totale Plus;Totale Shares;Media Activities al giorno;Media Comments al giorno;Media Unique Authors per Activity;Media Plus per Activity;Media Shares per Activity;Media Comments per Author;Area ISTAT;Fascia Eta ISTAT\n";
+		String dataCSV = "Nome Sindaco;ID YouTube;Regione;Provincia;Sesso;Anno di Nascita;Partito;Totale Views;Totale Subscribers;Apertura Account;Activities;Views;Likes;DisLikes;Favourites;Comments;Area ISTAT;Fascia Eta ISTAT\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -84,7 +83,7 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 			e1.printStackTrace();
 		}
 
-		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataPL("task", idTransaction);
+		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataYT("task", idTransaction);
 
 		Hashtable<String, PSARData> joinedData = aggregatePsarData(psarData);
 
@@ -94,19 +93,20 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 			PSARData currPsar = joinedData.get(currKey);
 
 			//DATI RICAVATI
-			double mediaPostFromPage = currPsar.postFromPageCount/numGiorni;
-			double commentsPerPost = currPsar.commentsCount/currPsar.postFromPageCount;
-			double uniqueAuthors = ArrayUtils.removeDuplicate(currPsar.authors).size();
-			double mediaLikePerPost = currPsar.likesCount/currPsar.postFromPageCount;
-			double sharesPerPost = currPsar.sharesCount/currPsar.postFromPageCount;
-			double commentsPerAuthor = currPsar.commentsCount/uniqueAuthors;
-			double uniqueAuthorsPerPost = uniqueAuthors/currPsar.postFromPageCount;
-
+			double mediaComments = currPsar.commentsCount/numGiorni;
+			double mediaLikes = currPsar.likesCount;
+			double likesPerActivity = currPsar.likesCount/currPsar.postFromPageCount;
+			double commentsPerActivity = currPsar.commentsCount/currPsar.postFromPageCount;
+			
 			//DA CERCARE
-			double totFollower = 0;
-			String pageName = "";
-			Hashtable<String, String> baseInfo = PlusUtils.getBaseInfo(currKey);
-			pageName = baseInfo.get("displayname");
+			String subscribers = "";
+			String views = "";
+			String joineddate = "";
+			Hashtable<String, String> baseInfo = YouTubeUtils.getBaseInfo(currKey);
+			subscribers = baseInfo.get("subscribers");
+			views = baseInfo.get("views");
+			joineddate = baseInfo.get("joineddate");
+			
 			
 			//PRESENTI NEL DB
 			//Già presenti nel DB
@@ -119,7 +119,7 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 			String partito = "";
 			String sindacoName = "";
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Filter DBInfo = new FilterPredicate("IDPlus", FilterOperator.EQUAL, currKey);
+			Filter DBInfo = new FilterPredicate("IDYoutube", FilterOperator.EQUAL, currKey);
 			Query q = new Query("anagraficaSindaco").setFilter(DBInfo);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
@@ -133,12 +133,11 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 				sesso = (String) ent.getProperty("sesso");
 			}
 
-			dataCSV = dataCSV + sindacoName + ";" + pageName + ";" + currKey + ";" +
+			dataCSV = dataCSV + sindacoName + ";" + currKey + ";" +
 					regione + ";" + provincia + ";" + sesso + ";" + annoNascita + ";" + partito + ";" +
-					currPsar.postFromPageCount + ";" + currPsar.commentsCount + ";" +
-					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + ";" + mediaPostFromPage + ";" +
-					+ commentsPerPost + ";" + uniqueAuthorsPerPost + ";" + mediaLikePerPost + ";" +
-					sharesPerPost + ";" + commentsPerAuthor + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
+					views + ";" + subscribers + ";" + joineddate + ";" +
+					currPsar.postFromPageCount + ";" + currPsar.viewCount + ";" + currPsar.likesCount + ";" + currPsar.dislikesCount + ";" +
+					+ currPsar.favouriteCount + ";" + currPsar.commentsCount + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
 
 		}
 
@@ -155,9 +154,10 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 				PSARData alreadyPresentData = result.get(curr.pageId);
 				alreadyPresentData.commentsCount = alreadyPresentData.commentsCount + curr.commentsCount;
 				alreadyPresentData.likesCount = alreadyPresentData.likesCount + curr.likesCount;
+				alreadyPresentData.dislikesCount = alreadyPresentData.dislikesCount + curr.dislikesCount;
 				alreadyPresentData.postFromPageCount = alreadyPresentData.postFromPageCount + curr.postFromPageCount;
-				alreadyPresentData.sharesCount = alreadyPresentData.sharesCount + curr.sharesCount;
-				alreadyPresentData.authors.addAll(curr.authors);
+				alreadyPresentData.favouriteCount = alreadyPresentData.favouriteCount + curr.favouriteCount;
+				alreadyPresentData.viewCount = alreadyPresentData.viewCount + curr.viewCount;
 			} else {
 				result.put(curr.pageId, curr);
 			}

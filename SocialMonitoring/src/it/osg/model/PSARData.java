@@ -13,4 +13,8 @@ public class PSARData {
 	public double likesCount;
 	public double sharesCount;
 	
+	public double viewCount;
+	public double dislikesCount;
+	public double favouriteCount;
+	
 }
