@@ -175,6 +175,28 @@ public class DatastoreUtils {
 		return result;
 	}
 	
+	public static ArrayList<PSARData> getPsarDataYT(String table, String idTransaction) {
+		ArrayList<PSARData> result = new ArrayList<PSARData>();
+		Query q;
+		PreparedQuery pq;
+		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
+		q = new Query(table).setFilter(idFilter);
+		pq = DS.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			PSARData curr = new PSARData();
+			curr.idTransaction = (String) ent.getProperty("idTransaction");
+			curr.pageId = (String) ent.getProperty("pageId");
+			curr.postFromPageCount = (Double) ent.getProperty("activitiescount");
+			curr.viewCount = (Double) ent.getProperty("viewcount");
+			curr.likesCount = (Double) ent.getProperty("likecount");
+			curr.dislikesCount = (Double) ent.getProperty("dislikecount");
+			curr.favouriteCount = (Double) ent.getProperty("favouritecount");
+			curr.commentsCount = (Double) ent.getProperty("commentcount");
+			
+			result.add(curr);
+		}
+		return result;
+	}
 
 
 	public static ArrayList<Node> getNodes (String table, String idTransaction) {

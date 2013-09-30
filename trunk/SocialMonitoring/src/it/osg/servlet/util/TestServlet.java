@@ -139,9 +139,9 @@ public class TestServlet extends HttpServlet {
 		
 		
 		YouTube youtube = new YouTube.Builder(new UrlFetchTransport(), new JacksonFactory(), null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(Constants.YOUTUBE_API_KEY)).build();
-		YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails,nextPageToken");
+		YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails");
 		activityRequest.setChannelId(req.getParameter("id1"));
-		activityRequest.setFields("items(id,snippet,contentDetails)");
+		activityRequest.setFields("items(id,snippet,contentDetails),nextPageToken");
 		activityRequest.setMaxResults(10L);
 		activityRequest.setPublishedAfter(new DateTime(f));
 		activityRequest.setPublishedBefore(new DateTime(t));

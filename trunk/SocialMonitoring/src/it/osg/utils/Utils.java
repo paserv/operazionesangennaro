@@ -68,5 +68,16 @@ public class Utils {
 		}
 		return d;
 	}
+	
+	public static String removeChar(String string, String character) {
+		string = string.replace(character, "");
+		return string;
+		
+	}
 
+	public static void main(String[] args) {
+		String str = "100,98,912";
+		System.out.println(removeChar(str, ","));
+	}
+	
 }

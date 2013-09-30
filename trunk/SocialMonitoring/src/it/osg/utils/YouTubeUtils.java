@@ -54,7 +54,7 @@ public class YouTubeUtils {
 		try {
 			YouTube.Activities.List activityRequest = getYT().activities().list("id,snippet,contentDetails");
 			activityRequest.setChannelId(userId);
-			activityRequest.setFields("items(id,snippet,contentDetails,nextPageToken)");
+			activityRequest.setFields("items(id,snippet,contentDetails),nextPageToken");
 			activityRequest.setMaxResults(10L);
 			activityRequest.setPublishedAfter(fr);
 			activityRequest.setPublishedBefore(t);
@@ -82,32 +82,32 @@ public class YouTubeUtils {
 		return result;
 	}
 
-	public static Hashtable<String, BigInteger> getAllUserInteraction(List<Activity> activ) {
-		Hashtable<String, BigInteger> result = new Hashtable<String, BigInteger>();
-		result.put("viewcount", BigInteger.valueOf(0));
-		result.put("likecount", BigInteger.valueOf(0));
-		result.put("dislikecount", BigInteger.valueOf(0));
-		result.put("favouritecount", BigInteger.valueOf(0));
-		result.put("commentcount", BigInteger.valueOf(0));
+	public static Hashtable<String, Double> getAllUserInteraction(List<Activity> activ) {
+		Hashtable<String, Double> result = new Hashtable<String, Double>();
+		result.put("viewcount", 0D);
+		result.put("likecount", 0D);
+		result.put("dislikecount", 0D);
+		result.put("favouritecount", 0D);
+		result.put("commentcount", 0D);
 		Iterator<Activity> iterAct = activ.iterator();
 		while (iterAct.hasNext()) {
-			Hashtable<String, BigInteger> activityUserInteraction = getUserInteraction(iterAct.next());
-			result.put("viewcount", result.get("viewcount").add(activityUserInteraction.get("viewcount")));
-			result.put("likecount", result.get("likecount").add(activityUserInteraction.get("likecount")));
-			result.put("dislikecount", result.get("dislikecount").add(activityUserInteraction.get("dislikecount")));
-			result.put("favouritecount", result.get("favouritecount").add(activityUserInteraction.get("favouritecount")));
-			result.put("commentcount", result.get("commentcount").add(activityUserInteraction.get("commentcount")));
+			Hashtable<String, Double> activityUserInteraction = getUserInteraction(iterAct.next());
+			result.put("viewcount", result.get("viewcount") + activityUserInteraction.get("viewcount"));
+			result.put("likecount", result.get("likecount") + activityUserInteraction.get("likecount"));
+			result.put("dislikecount", result.get("dislikecount") + activityUserInteraction.get("dislikecount"));
+			result.put("favouritecount", result.get("favouritecount") + activityUserInteraction.get("favouritecount"));
+			result.put("commentcount", result.get("commentcount") + activityUserInteraction.get("commentcount"));
 		}
 		return result;
 	}
 
-	public static Hashtable<String, BigInteger> getUserInteraction(Activity act) {
-		Hashtable<String, BigInteger> result = new Hashtable<String, BigInteger>();
-		result.put("viewcount", BigInteger.valueOf(0));
-		result.put("likecount", BigInteger.valueOf(0));
-		result.put("dislikecount", BigInteger.valueOf(0));
-		result.put("favouritecount", BigInteger.valueOf(0));
-		result.put("commentcount", BigInteger.valueOf(0));
+	public static Hashtable<String, Double> getUserInteraction(Activity act) {
+		Hashtable<String, Double> result = new Hashtable<String, Double>();
+		result.put("viewcount", 0D);
+		result.put("likecount", 0D);
+		result.put("dislikecount", 0D);
+		result.put("favouritecount", 0D);
+		result.put("commentcount", 0D);
 		if (act.getContentDetails() != null && act.getContentDetails().getUpload() != null) {
 			String videoId = act.getContentDetails().getUpload().getVideoId();
 			try {
@@ -118,11 +118,11 @@ public class YouTubeUtils {
 				if (videoList.get(0) != null) {
 					Video myVid = videoList.get(0);
 					if (myVid.getStatistics() != null) {
-						result.put("viewcount", myVid.getStatistics().getViewCount());
-						result.put("likecount", myVid.getStatistics().getLikeCount());
-						result.put("dislikecount", myVid.getStatistics().getDislikeCount());
-						result.put("favouritecount", myVid.getStatistics().getFavoriteCount());
-						result.put("commentcount", myVid.getStatistics().getCommentCount());
+						result.put("viewcount", myVid.getStatistics().getViewCount().doubleValue());
+						result.put("likecount", myVid.getStatistics().getLikeCount().doubleValue());
+						result.put("dislikecount", myVid.getStatistics().getDislikeCount().doubleValue());
+						result.put("favouritecount", myVid.getStatistics().getFavoriteCount().doubleValue());
+						result.put("commentcount", myVid.getStatistics().getCommentCount().doubleValue());
 					}
 				}
 			} catch (IOException e) {
@@ -138,11 +138,11 @@ public class YouTubeUtils {
 		try {
 			Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
 			Elements aboutInfo = doc.select("span.about-stat-value");
-			if (aboutInfo != null && aboutInfo.get(0) != null) {
-				result.put("subscribers", aboutInfo.get(0).text());
+			if (aboutInfo != null && aboutInfo.size() > 0 && aboutInfo.get(0) != null) {
+				result.put("subscribers", aboutInfo.get(0).text().replace(",", ""));
 			}
-			if (aboutInfo != null && aboutInfo.get(1) != null) {
-				result.put("views", aboutInfo.get(1).text());
+			if (aboutInfo != null && aboutInfo.size() > 1 && aboutInfo.get(1) != null) {
+				result.put("views", aboutInfo.get(1).text().replace(",", ""));
 			}
 			Element joinedDate = doc.select("span.value").first();
 			if (joinedDate != null) {
