@@ -56,7 +56,7 @@ public class PickedData extends GraphSourceGenerator {
 			PreparedQuery pq = datastore.prepare(q);
 			Long previousOrdinate = 0L;
 			for (Entity ent : pq.asIterable()) {
-				System.out.println("CIAO");
+				
 				String axisReturned = "";
 				Long ordinateReturned = 0L;
 
