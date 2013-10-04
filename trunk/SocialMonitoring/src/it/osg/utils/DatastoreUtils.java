@@ -141,6 +141,10 @@ public class DatastoreUtils {
 				String authors = ((Text) ent.getProperty("authors")).getValue();
 				curr.authors = ArrayUtils.splitAndAdd(authors, ",");
 			}
+			
+			curr.commentsToPostFromFan = (Double) ent.getProperty("totParzCommentsToPostFromFan");
+			curr.commnetsFromPageToPostFromFan = (Double) ent.getProperty("totParzCommnetsFromPageToPostFromFan");
+			curr.commnetsFromPageToPostFromPage = (Double) ent.getProperty("totParzCommnetsFromPageToPostFromPage");
 //			String[] splittedAuthors = authors.split(",");
 //			for (int i = 0; i < splittedAuthors.length; i++) {
 //				String currAuth = splittedAuthors[i];

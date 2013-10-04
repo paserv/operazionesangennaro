@@ -33,6 +33,12 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		String authors = "";
 		double totParzLikes = 0;
 		double totParzShares = 0;
+		
+		double totParzCommentsToPostFromFan = 0;
+		double totParzCommnetsFromPageToPostFromPage = 0;
+		double totParzCommnetsFromPageToPostFromPageNoDuplicate = 0;
+		double totParzCommnetsFromPageToPostFromFan = 0;
+		double totParzCommnetsFromPageToPostFromFanNoDuplicate = 0;
 
 		//Get all Post
 		ArrayList<Post> posts = FacebookUtils.getAllPosts(pageId, f, t, null);
@@ -56,6 +62,10 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		//Get all Comments
 		ArrayList<Comment> comments = FacebookUtils.getComments(postFromPage);
 		totParzComments = comments.size();
+		
+		//Get all Comments from FAN
+		ArrayList<Comment> commentsToPostFromFan = FacebookUtils.getComments(postFromFan);
+		totParzCommentsToPostFromFan = commentsToPostFromFan.size();
 
 		//Get all Unique Authors of Comments
 		ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments);
@@ -71,6 +81,10 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		//Get all Shares to Posts
 		totParzShares = FacebookUtils.getShares(postFromPage);
 
+		//GET COMMENTS FROM PAGEID
+		totParzCommnetsFromPageToPostFromPage = FacebookUtils.getCommentsFromIdCount(pageId, comments);
+		totParzCommnetsFromPageToPostFromFan = FacebookUtils.getCommentsFromIdCount(pageId, commentsToPostFromFan);
+		
 
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -84,6 +98,10 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		currEntity.setProperty("authors", new Text(authors));
 		currEntity.setProperty("totParzLikes", totParzLikes);
 		currEntity.setProperty("totParzShares", totParzShares);
+		
+		currEntity.setProperty("totParzCommentsToPostFromFan", totParzCommentsToPostFromFan);
+		currEntity.setProperty("totParzCommnetsFromPageToPostFromPage", totParzCommnetsFromPageToPostFromPage);
+		currEntity.setProperty("totParzCommnetsFromPageToPostFromFan", totParzCommnetsFromPageToPostFromFan);
 
 		datastore.put(currEntity);
 

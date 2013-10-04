@@ -28,6 +28,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.client.util.DateTime;
@@ -54,114 +57,119 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 
-//		ArrayList<String> input = new ArrayList<String>();
-//		input.add("ignaziomarinotv");
-//		input.add("NicolaOttaviani");
-//		input.add("pisapiaXmilano");
-//		input.add("delbonoemilio");
-//		input.add("simoneuggetti");
-//		input.add("FassinoSindaco");
-//		input.add("ritarossasindaco");
-//		input.add("borgnasindaco");
-//		input.add("FabrizioBrignolo");
-//		input.add("AndreaBallareSindaco");
-//		input.add("videodemagistris");
-//		input.add("Mr21061983");
-//		input.add("faustopepe");
-//		input.add("piodelgaudiosindaco");
-//		input.add("cialentemassimo");
-//		input.add("merola2011");
-//		input.add("TheModenaperpighi");
-//		input.add("fabriziomatteucci");
-//		input.add("sindacobalzani");
-//		input.add("andreagnassi");
-//		input.add("TvPaoloPerrone");
-//		input.add("BZforSpagnolli");
-//		input.add("adducesocial");
-//		input.add("CosoliniSindaco");
-//		input.add("Romoli2012");
-//		input.add("claudiopedrotti");
-//		input.add("lceriscioli");
-//		input.add("nellabrambatti");
-//		input.add("GANAUSINDACO");
-//		input.add("MarioOcchiuto");
-//		input.add("michelecampisi");
-//		input.add("DamianoSindacoTP");
-//		input.add("marcodoriachannel");
-//		input.add("FedericiMassimo");
-//		input.add("Marcofilippeschi1");
-//		input.add("AlessandroTambellini");
-//		input.add("Bonifaziemilio");
-//		input.add("AchilleVariati");
-//		
-//		Iterator<String> iter = input.iterator();
-//		while (iter.hasNext()) {
-//			String curr = iter.next();
-//			out.println(curr + ";" + YouTubeUtils.getUserId(curr) + "<br>");
+		String url = req.getParameter("url");
+		Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
+		out.println(doc.html());
+		
+		
+////		ArrayList<String> input = new ArrayList<String>();
+////		input.add("ignaziomarinotv");
+////		input.add("NicolaOttaviani");
+////		input.add("pisapiaXmilano");
+////		input.add("delbonoemilio");
+////		input.add("simoneuggetti");
+////		input.add("FassinoSindaco");
+////		input.add("ritarossasindaco");
+////		input.add("borgnasindaco");
+////		input.add("FabrizioBrignolo");
+////		input.add("AndreaBallareSindaco");
+////		input.add("videodemagistris");
+////		input.add("Mr21061983");
+////		input.add("faustopepe");
+////		input.add("piodelgaudiosindaco");
+////		input.add("cialentemassimo");
+////		input.add("merola2011");
+////		input.add("TheModenaperpighi");
+////		input.add("fabriziomatteucci");
+////		input.add("sindacobalzani");
+////		input.add("andreagnassi");
+////		input.add("TvPaoloPerrone");
+////		input.add("BZforSpagnolli");
+////		input.add("adducesocial");
+////		input.add("CosoliniSindaco");
+////		input.add("Romoli2012");
+////		input.add("claudiopedrotti");
+////		input.add("lceriscioli");
+////		input.add("nellabrambatti");
+////		input.add("GANAUSINDACO");
+////		input.add("MarioOcchiuto");
+////		input.add("michelecampisi");
+////		input.add("DamianoSindacoTP");
+////		input.add("marcodoriachannel");
+////		input.add("FedericiMassimo");
+////		input.add("Marcofilippeschi1");
+////		input.add("AlessandroTambellini");
+////		input.add("Bonifaziemilio");
+////		input.add("AchilleVariati");
+////		
+////		Iterator<String> iter = input.iterator();
+////		while (iter.hasNext()) {
+////			String curr = iter.next();
+////			out.println(curr + ";" + YouTubeUtils.getUserId(curr) + "<br>");
+////		}
+// 		
+//		out.println("<br>");
+//		out.println("<br>");
+//		out.println("<br>");
+//		out.println("<br>");
+//		Date f = null;
+//		Date t = null;
+//		try {
+//
+////			f = DateUtils.parseDateAndTime((String) "01-09-2012 00:00:00");
+////			t = DateUtils.parseDateAndTime((String) "16-09-2013 00:00:00");
+//			f = DateUtils.parseDateAndTime(req.getParameter("from"));
+//			t = DateUtils.parseDateAndTime(req.getParameter("to"));
+//		} catch (ParseException e) {
+//			e.printStackTrace();
 //		}
- 		
-		out.println("<br>");
-		out.println("<br>");
-		out.println("<br>");
-		out.println("<br>");
-		Date f = null;
-		Date t = null;
-		try {
-
-//			f = DateUtils.parseDateAndTime((String) "01-09-2012 00:00:00");
-//			t = DateUtils.parseDateAndTime((String) "16-09-2013 00:00:00");
-			f = DateUtils.parseDateAndTime(req.getParameter("from"));
-			t = DateUtils.parseDateAndTime(req.getParameter("to"));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		out.println(YouTubeUtils.getUserId("matteorenzi"));
-		out.println("<br>");
-		
-//		Hashtable<String, String> baseInfo = YouTubeUtils.getBaseInfo(req.getParameter("id1"));
-//		out.println("subscribers " + baseInfo.get("subscribers") + "<br>");
-//		out.println("views " + baseInfo.get("views") + "<br>");
-//		out.println("joineddate " + baseInfo.get("joineddate") + "<br>");
-//		out.println("baseInfo " + baseInfo.toString());
 //		
+//		out.println(YouTubeUtils.getUserId("matteorenzi"));
 //		out.println("<br>");
 //		
-//		List<Activity> act = YouTubeUtils.getActivities(req.getParameter("id2"), f, t);
-//		out.println("videos " + act.size() + "<br>");
-//		Hashtable<String, BigInteger> res = YouTubeUtils.getAllUserInteraction(act);
-//		out.println("viewcount " + res.get("viewcount") + "<br>");
-//		out.println("likecount " + res.get("likecount") + "<br>");
-//		out.println("dislikecount " + res.get("dislikecount") + "<br>");
-//		out.println("favouritecount " + res.get("favouritecount") + "<br>");
-//		out.println("commentcount " + res.get("commentcount") + "<br>");
-//		out.println("res " + res.toString());
-		
-		
-		YouTube youtube = new YouTube.Builder(new UrlFetchTransport(), new JacksonFactory(), null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(Constants.YOUTUBE_API_KEY)).build();
-		YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails");
-		activityRequest.setChannelId(req.getParameter("id1"));
-		activityRequest.setFields("items(id,snippet,contentDetails),nextPageToken");
-		activityRequest.setMaxResults(10L);
-		activityRequest.setPublishedAfter(new DateTime(f));
-		activityRequest.setPublishedBefore(new DateTime(t));
-		ActivityListResponse activities = activityRequest.execute();
-		List<Activity> activityList = activities.getItems();
-		
-		while (activityList != null && activityList.size() > 0) {
-			for (Activity a : activityList) {
-				out.println(a.getId() + "<br>");
-			}
-			String nextToken = activities.getNextPageToken();
-			out.println("nextToken: " + nextToken + "<br>");
-			if (nextToken == null) {
-				break;
-			}
-//			activityRequest = getYT().activities().list("id,snippet,contentDetails").setChannelId(userId).setFields("items(id,snippet,contentDetails)").setPublishedAfter(fr).setPublishedBefore(t).setPageToken(activities.getNextPageToken());
-			activityRequest.setPageToken(nextToken);
-			activities = activityRequest.execute();
-			activityList = activities.getItems();
-		}
+////		Hashtable<String, String> baseInfo = YouTubeUtils.getBaseInfo(req.getParameter("id1"));
+////		out.println("subscribers " + baseInfo.get("subscribers") + "<br>");
+////		out.println("views " + baseInfo.get("views") + "<br>");
+////		out.println("joineddate " + baseInfo.get("joineddate") + "<br>");
+////		out.println("baseInfo " + baseInfo.toString());
+////		
+////		out.println("<br>");
+////		
+////		List<Activity> act = YouTubeUtils.getActivities(req.getParameter("id2"), f, t);
+////		out.println("videos " + act.size() + "<br>");
+////		Hashtable<String, BigInteger> res = YouTubeUtils.getAllUserInteraction(act);
+////		out.println("viewcount " + res.get("viewcount") + "<br>");
+////		out.println("likecount " + res.get("likecount") + "<br>");
+////		out.println("dislikecount " + res.get("dislikecount") + "<br>");
+////		out.println("favouritecount " + res.get("favouritecount") + "<br>");
+////		out.println("commentcount " + res.get("commentcount") + "<br>");
+////		out.println("res " + res.toString());
+//		
+//		
+//		YouTube youtube = new YouTube.Builder(new UrlFetchTransport(), new JacksonFactory(), null).setApplicationName("TEST").setGoogleClientRequestInitializer(new YouTubeRequestInitializer(Constants.YOUTUBE_API_KEY)).build();
+//		YouTube.Activities.List activityRequest = youtube.activities().list("id,snippet,contentDetails");
+//		activityRequest.setChannelId(req.getParameter("id1"));
+//		activityRequest.setFields("items(id,snippet,contentDetails),nextPageToken");
+//		activityRequest.setMaxResults(10L);
+//		activityRequest.setPublishedAfter(new DateTime(f));
+//		activityRequest.setPublishedBefore(new DateTime(t));
+//		ActivityListResponse activities = activityRequest.execute();
+//		List<Activity> activityList = activities.getItems();
+//		
+//		while (activityList != null && activityList.size() > 0) {
+//			for (Activity a : activityList) {
+//				out.println(a.getId() + "<br>");
+//			}
+//			String nextToken = activities.getNextPageToken();
+//			out.println("nextToken: " + nextToken + "<br>");
+//			if (nextToken == null) {
+//				break;
+//			}
+////			activityRequest = getYT().activities().list("id,snippet,contentDetails").setChannelId(userId).setFields("items(id,snippet,contentDetails)").setPublishedAfter(fr).setPublishedBefore(t).setPageToken(activities.getNextPageToken());
+//			activityRequest.setPageToken(nextToken);
+//			activities = activityRequest.execute();
+//			activityList = activities.getItems();
+//		}
 		
 		
 		

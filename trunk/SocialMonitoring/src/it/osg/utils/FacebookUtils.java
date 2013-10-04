@@ -320,6 +320,23 @@ public class FacebookUtils {
 
 		return ArrayUtils.removeDuplicate(result);
 	}
+	
+	public static double getCommentsFromIdCount (String id, ArrayList<Comment> comments) {
+
+		double result = 0;
+
+		//Per tutti i commenti accumulati prelevo gli autori
+		Iterator<Comment> iterComm = comments.iterator();
+		while (iterComm.hasNext()) {
+			Comment currComm = iterComm.next();
+			if (currComm.getFrom().getId().equalsIgnoreCase(id)) {
+				result++;
+			}
+
+		}
+
+		return result;
+	}
 
 	public static ArrayList<Hashtable<String, Object>> likeTalkAnalysis(String jsonString) {
 		ArrayList<Hashtable<String, Object>> result = new ArrayList<Hashtable<String, Object>>();
