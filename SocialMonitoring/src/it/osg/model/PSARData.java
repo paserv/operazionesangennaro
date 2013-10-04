@@ -17,4 +17,8 @@ public class PSARData {
 	public double dislikesCount;
 	public double favouriteCount;
 	
+	public double commentsToPostFromFan;
+	public double commnetsFromPageToPostFromPage;
+	public double commnetsFromPageToPostFromFan;
+	
 }
