@@ -98,23 +98,33 @@
 
 	<!-- MONITORING -->
 	<servlet>
-		<servlet-name>MonitoringFacebookServletQueue</servlet-name>
-		<servlet-class>it.osg.servlet.monitoring.facebook.sindaci.MonitoringFacebookServletQueue</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>MonitoringFacebookServletQueue</servlet-name>
-		<url-pattern>/monitorfacebookqueue</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
-		<servlet-class>it.osg.servlet.monitoring.facebook.sindaci.MonitoringFacebookServlet</servlet-class>
+		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringFacebookServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
 		<url-pattern>/monitorfacebook</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MonitoringSindacoFacebookServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringSindacoFacebookServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringSindacoFacebookServletQueue</servlet-name>
+		<url-pattern>/monitorsindacofacebookqueue</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MonitoringQuotidianoFacebookServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringQuotidianoFacebookServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringQuotidianoFacebookServletQueue</servlet-name>
+		<url-pattern>/monitorquotidianofacebookqueue</url-pattern>
 	</servlet-mapping>
 	<!-- FINE MONITORING -->
 
