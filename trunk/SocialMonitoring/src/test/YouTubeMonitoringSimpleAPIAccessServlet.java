@@ -1,14 +1,19 @@
 package test;
 
+import it.osg.utils.DateUtils;
+
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import sun.util.calendar.LocalGregorianCalendar.Date;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.http.HttpTransport;
@@ -47,7 +52,20 @@ public class YouTubeMonitoringSimpleAPIAccessServlet extends HttpServlet {
 	/** Global instance of YoutubeAnalytics object to make analytic API requests. */
 	private static YouTubeAnalytics analytics;
 
-
+	public static void main(String[] args) {
+		String data = "23-12-2013 00:00:00";
+		try {
+			java.util.Date da = DateUtils.parseDateAndTime(data);
+			System.out.println(data.toString());
+			String to2 = data.substring(0, 10) + " 23:59:59";
+			System.out.println(to2);
+			java.util.Date da2 = DateUtils.parseDateAndTime(to2);
+			System.out.println(da2.toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
@@ -84,13 +102,13 @@ public class YouTubeMonitoringSimpleAPIAccessServlet extends HttpServlet {
 						out.println("getVideoId: " + curr.getContentDetails().getUpload().getVideoId() + "<br>");
 					}
 				}
-				
+
 			}
-			
-//			YouTube.Videos.List videos = youtube.videos().list("id,snippet,contentDetails,fileDetails,player,processingDetails,recordingDetails,statistics,status,suggestions,topicDetails");
+
+			//			YouTube.Videos.List videos = youtube.videos().list("id,snippet,contentDetails,fileDetails,player,processingDetails,recordingDetails,statistics,status,suggestions,topicDetails");
 			YouTube.Videos.List videoRequest = youtube.videos().list("id,snippet,contentDetails,statistics,status,player");
 			videoRequest.setId("Zs8xzED8jMI");
-//			videoRequest.setId("VTEzNzk1MTA3NjAzNTE1NjI2MDI4");
+			//			videoRequest.setId("VTEzNzk1MTA3NjAzNTE1NjI2MDI4");
 			VideoListResponse videos = videoRequest.execute();
 			List<Video> videoList = videos.getItems();
 			Iterator<Video> iterVid = videoList.iterator();
@@ -103,10 +121,10 @@ public class YouTubeMonitoringSimpleAPIAccessServlet extends HttpServlet {
 					out.println("getFavoriteCount: " + curr.getStatistics().getFavoriteCount() + "<br>");
 					out.println("getCommentCount: " + curr.getStatistics().getCommentCount() + "<br>");
 				}
-				
+
 			}
 
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
