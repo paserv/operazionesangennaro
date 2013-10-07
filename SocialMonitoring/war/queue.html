@@ -37,6 +37,36 @@ Param Name 4:
 Param Value 4: 
 	<input type="text" id="paramvalue4" name="paramvalue4" />
 	<br>
+	Param Name 5: 
+	<input type="text" id="paramname5" name="paramname5" />
+	Param Value 5: 
+	<input type="text" id="paramvalue5" name="paramvalue5" />
+	<br>
+	Param Name 6: 
+	<input type="text" id="paramname6" name="paramname6" />
+	Param Value 6: 
+	<input type="text" id="paramvalue6" name="paramvalue6" />
+	<br>
+	Param Name 7: 
+	<input type="text" id="paramname7" name="paramname7" />
+	Param Value 7: 
+	<input type="text" id="paramvalue7" name="paramvalue7" />
+	<br>
+	Param Name 8: 
+	<input type="text" id="paramname8" name="paramname8" />
+	Param Value 8: 
+	<input type="text" id="paramvalue8" name="paramvalue8" />
+	<br>
+	Param Name 9: 
+	<input type="text" id="paramname9" name="paramname9" />
+	Param Value 9: 
+	<input type="text" id="paramvalue9" name="paramvalue9" />
+	<br>
+	Param Name 10: 
+	<input type="text" id="paramname10" name="paramname10" />
+	Param Value 10: 
+	<input type="text" id="paramvalue10" name="paramvalue10" />
+	<br>
 	<button id="button">Send to Queue</button>
 </div>
     
@@ -49,7 +79,13 @@ $(document).ready(function() {
         $.get("atq?servlet=" + $("#servlet").val() + "&param1=" + $("#paramname1").val() + "," + $("#paramvalue1").val()
         		 + "&param2=" + $("#paramname2").val() + "," + $("#paramvalue2").val()
         		  + "&param3=" + $("#paramname3").val() + "," + $("#paramvalue3").val()
-        		   + "&param4=" + $("#paramname4").val() + "," + $("#paramvalue4").val(), function(data) {
+        		   + "&param4=" + $("#paramname4").val() + "," + $("#paramvalue4").val()
+        		   + "&param5=" + $("#paramname5").val() + "," + $("#paramvalue5").val()
+        		   + "&param6=" + $("#paramname6").val() + "," + $("#paramvalue6").val()
+        		   + "&param7=" + $("#paramname7").val() + "," + $("#paramvalue7").val()
+        		   + "&param8=" + $("#paramname8").val() + "," + $("#paramvalue8").val()
+        		   + "&param9=" + $("#paramname9").val() + "," + $("#paramvalue9").val()
+        		   + "&param10=" + $("#paramname10").val() + "," + $("#paramvalue10").val(), function(data) {
             alert('data ' + data);
             $(".errorMssg").text("Data Loaded: " + data);
             alert('STATO ACCODAMENTO ' + data);

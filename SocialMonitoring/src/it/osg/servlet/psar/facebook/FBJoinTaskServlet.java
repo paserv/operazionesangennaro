@@ -105,7 +105,8 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 
 			//DA CERCARE
 			long totNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
-			totNuoviFan = getFanCount(currKey, to) - getFanCount(currKey, from);
+			String to2 = to.substring(0, 10) + " 23:59:59";
+			totNuoviFan = getFanCount(currKey, to2, FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING) - getFanCount(currKey, from, FilterOperator.GREATER_THAN_OR_EQUAL, SortDirection.ASCENDING);
 			//double mediaNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
 			
 			
@@ -191,16 +192,15 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 		return result;
 	}
 
-	private long getFanCount (String idPage, String date) {
+	private long getFanCount (String idPage, String date, FilterOperator fo, SortDirection sd) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		try {
-			Filter fromFilter = new FilterPredicate("date", FilterOperator.GREATER_THAN_OR_EQUAL, DateUtils.parseDateAndTime(date));
+			Filter fromFilter = new FilterPredicate("date", fo, DateUtils.parseDateAndTime(date));
 			Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, idPage);
 			Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
-			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.ASCENDING);
+			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", sd);
 			PreparedQuery pq = datastore.prepare(q);
-			long fanCount;
 			for (Entity ent : pq.asIterable()) {
 				if ( ent.getProperty("like_count") != null) {
 					return (Long) ent.getProperty("like_count");
