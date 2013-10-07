@@ -7,8 +7,14 @@
 		<schedule>every day 03:00</schedule>
 	</cron>
 	<cron>
-		<url>/monitorfacebookqueue</url>
-		<description>Monitor Pages contained in sindaco table every 6 hours
+		<url>/monitorsindacofacebookqueue</url>
+		<description>Monitor Pages contained in anagraficaSindaco table every 6 hours
+		</description>
+		<schedule>every 6 hours synchronized</schedule>
+	</cron>
+	<cron>
+		<url>/monitorquotidianofacebookqueue</url>
+		<description>Monitor Pages contained in anagraficaQuotidiano table every 6 hours
 		</description>
 		<schedule>every 6 hours synchronized</schedule>
 	</cron>
