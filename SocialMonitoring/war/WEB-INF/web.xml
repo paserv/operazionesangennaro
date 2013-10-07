@@ -99,7 +99,7 @@
 	<!-- MONITORING -->
 	<servlet>
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
-		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringFacebookServlet</servlet-class>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringFacebookServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
