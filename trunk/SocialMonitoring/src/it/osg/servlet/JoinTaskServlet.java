@@ -1,5 +1,6 @@
 package it.osg.servlet;
 
+import it.osg.utils.Constants;
 import it.osg.utils.MailUtils;
 import it.osg.utils.ShardedCounter;
 
@@ -32,7 +33,7 @@ public abstract class JoinTaskServlet extends HttpServlet {
 	protected abstract String getSubjectMail(String pageId);
 	protected abstract String getBodyMail(String from, String to, String timestamp, String pageId, long elapsedTime);
 	protected abstract String getAttachFileName(String pageId);
-	protected abstract String getAttachFile(String idTransaction, String from, String to);
+	protected abstract String getAttachFile(String idTransaction, String from, String to, String tabAnag);
 	protected abstract String getJoinTaskName();
 	public abstract String getQueueName();
 
@@ -47,12 +48,13 @@ public abstract class JoinTaskServlet extends HttpServlet {
 		String timestamp = req.getParameter("timestamp");
 		String pageId = req.getParameter("pageId");
 		String IDField = req.getParameter("IDField");
-
+		String tabAnagrafica = req.getParameter("tabAnagrafica");
+		
 		long elapsedTime = (System.currentTimeMillis() - Long.valueOf(timestamp))/1000;
 
 		if (isTransactionEnded(idTransaction, numTask)) {
 
-			MailUtils.sendMail(mail, getSubjectMail(pageId), getBodyMail(from, to, timestamp, pageId, elapsedTime), getAttachFileName(pageId), getAttachFile(idTransaction, from, to));
+			MailUtils.sendMail(mail, getSubjectMail(pageId), getBodyMail(from, to, timestamp, pageId, elapsedTime), getAttachFileName(pageId), getAttachFile(idTransaction, from, to, tabAnagrafica));
 //			ShardedCounter counter = new ShardedCounter();
 //			counter.delete(idTransaction);
 
@@ -66,7 +68,7 @@ public abstract class JoinTaskServlet extends HttpServlet {
 				}
 				//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
 				Queue queue = QueueFactory.getQueue(getQueueName());
-				queue.add(TaskOptions.Builder.withUrl("/" + getJoinTaskName()).param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId).param("IDField", IDField));	
+				queue.add(TaskOptions.Builder.withUrl("/" + getJoinTaskName()).param("numTask", numTask).param("idTransaction", idTransaction).param("from", from).param("to", to).param("mail", mail).param("timestamp", timestamp).param("pageId", pageId).param("IDField", IDField).param("tabAnagrafica", tabAnagrafica));	
 			} else {
 				//TODO SALVA IL SALVABILE ED INVIA LA MAIL
 			}
@@ -87,8 +89,8 @@ public abstract class JoinTaskServlet extends HttpServlet {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
-		Filter idFilter = new FilterPredicate("idTransaction", FilterOperator.EQUAL, idTransaction);
-		q = new Query("task").setFilter(idFilter);
+		Filter idFilter = new FilterPredicate(Constants.ID_TRANSACTION_FIELD, FilterOperator.EQUAL, idTransaction);
+		q = new Query(Constants.TASK_TABLE).setFilter(idFilter);
 		pq = datastore.prepare(q);
 		int executedTask = pq.countEntities();
 		if (Integer.valueOf(numTask) == executedTask) return true;
