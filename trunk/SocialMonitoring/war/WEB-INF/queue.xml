@@ -34,4 +34,15 @@
 		<bucket-size>5</bucket-size>
 		<max-concurrent-requests>2</max-concurrent-requests>
 	</queue>
+		<queue>
+		<name>psar</name>
+		<rate>1/s</rate>
+		<retry-parameters>
+			<min-backoff-seconds>10</min-backoff-seconds>
+			<max-backoff-seconds>200</max-backoff-seconds>
+			<max-doublings>2</max-doublings>
+		</retry-parameters>
+		<bucket-size>5</bucket-size>
+		<max-concurrent-requests>10</max-concurrent-requests>
+	</queue>
 </queue-entries>

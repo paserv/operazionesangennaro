@@ -33,7 +33,7 @@ public class FBSplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public String getQueueName() {
-		return "default";
+		return "psar";
 	}
 
 
