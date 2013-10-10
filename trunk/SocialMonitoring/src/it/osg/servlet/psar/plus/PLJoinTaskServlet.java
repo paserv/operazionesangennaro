@@ -6,8 +6,6 @@ import it.osg.utils.ArrayUtils;
 import it.osg.utils.Constants;
 import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
-import it.osg.utils.PlusUtils;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -73,10 +71,10 @@ public class PLJoinTaskServlet extends JoinTaskServlet {
 	}
 
 	@Override
-	protected String getAttachFile(String idTransaction, String from, String to) {
+	protected String getAttachFile(String idTransaction, String from, String to, String tabAnag) {
 
 
-		String dataCSV = "Nome Sindaco;Nome Pagina;ID Plus;Regione;Provincia;Sesso;Anno di Nascita;Partito;Totale Activities;Totale Comments;Unique Authors;Totale Plus;Totale Shares;Media Activities al giorno;Media Comments al giorno;Media Unique Authors per Activity;Media Plus per Activity;Media Shares per Activity;Media Comments per Author;Area ISTAT;Fascia Eta ISTAT\n";
+		String dataCSV = "Nome;ID Plus;Totale Activities;Totale Comments;Unique Authors;Totale Plus;Totale Shares\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -84,7 +82,7 @@ public class PLJoinTaskServlet extends JoinTaskServlet {
 			e1.printStackTrace();
 		}
 
-		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataPL("task", idTransaction);
+		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataPL(Constants.TASK_TABLE, idTransaction);
 
 		Hashtable<String, PSARData> joinedData = aggregatePsarData(psarData);
 
@@ -94,51 +92,34 @@ public class PLJoinTaskServlet extends JoinTaskServlet {
 			PSARData currPsar = joinedData.get(currKey);
 
 			//DATI RICAVATI
-			double mediaPostFromPage = currPsar.postFromPageCount/numGiorni;
-			double commentsPerPost = currPsar.commentsCount/currPsar.postFromPageCount;
+//			double mediaPostFromPage = currPsar.postFromPageCount/numGiorni;
+//			double commentsPerPost = currPsar.commentsCount/currPsar.postFromPageCount;
 			double uniqueAuthors = ArrayUtils.removeDuplicate(currPsar.authors).size();
-			double mediaLikePerPost = currPsar.likesCount/currPsar.postFromPageCount;
-			double sharesPerPost = currPsar.sharesCount/currPsar.postFromPageCount;
-			double commentsPerAuthor = currPsar.commentsCount/uniqueAuthors;
-			double uniqueAuthorsPerPost = uniqueAuthors/currPsar.postFromPageCount;
+//			double mediaLikePerPost = currPsar.likesCount/currPsar.postFromPageCount;
+//			double sharesPerPost = currPsar.sharesCount/currPsar.postFromPageCount;
+//			double commentsPerAuthor = currPsar.commentsCount/uniqueAuthors;
+//			double uniqueAuthorsPerPost = uniqueAuthors/currPsar.postFromPageCount;
 
 			//DA CERCARE
-			double totFollower = 0;
-			String pageName = "";
-			Hashtable<String, String> baseInfo = PlusUtils.getBaseInfo(currKey);
-			pageName = baseInfo.get("displayname");
+//			double totFollower = 0;
+//			String pageName = "";
+//			Hashtable<String, String> baseInfo = PlusUtils.getBaseInfo(currKey);
+//			pageName = baseInfo.get("displayname");
 			
 			//PRESENTI NEL DB
 			//Già presenti nel DB
-			String regione = "";
-			String areaISTAT = "";
-			String fasciaEtaISTAT = "";
-			String provincia = "";
-			String sesso = "";
-			String annoNascita = "";
-			String partito = "";
 			String sindacoName = "";
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Filter DBInfo = new FilterPredicate("IDPlus", FilterOperator.EQUAL, currKey);
-			Query q = new Query("anagraficaSindaco").setFilter(DBInfo);
+			Filter DBInfo = new FilterPredicate(Constants.PL_ID_FIELD, FilterOperator.EQUAL, currKey);
+			Query q = new Query(tabAnag).setFilter(DBInfo);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
-				annoNascita = (String) ent.getProperty("annoNascita");
-				areaISTAT = (String) ent.getProperty("areaISTAT");
-				fasciaEtaISTAT = (String) ent.getProperty("fasciaEtaISTAT");
 				sindacoName = (String) ent.getProperty("nome");
-				partito = (String) ent.getProperty("partito");
-				provincia = (String) ent.getProperty("provincia");
-				regione = (String) ent.getProperty("regione");
-				sesso = (String) ent.getProperty("sesso");
 			}
 
-			dataCSV = dataCSV + sindacoName + ";" + pageName + ";" + currKey + ";" +
-					regione + ";" + provincia + ";" + sesso + ";" + annoNascita + ";" + partito + ";" +
+			dataCSV = dataCSV + sindacoName + ";" + currKey + ";" +
 					currPsar.postFromPageCount + ";" + currPsar.commentsCount + ";" +
-					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + ";" + mediaPostFromPage + ";" +
-					+ commentsPerPost + ";" + uniqueAuthorsPerPost + ";" + mediaLikePerPost + ";" +
-					sharesPerPost + ";" + commentsPerAuthor + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
+					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + "\n";
 
 		}
 
