@@ -1,6 +1,7 @@
 package it.osg.servlet.psar.plus;
 
 import it.osg.servlet.SubTaskServlet;
+import it.osg.utils.Constants;
 import it.osg.utils.PlusUtils;
 
 import java.util.ArrayList;
@@ -56,8 +57,8 @@ public class PLSubTaskServlet extends SubTaskServlet  {
 
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("task");
-		currEntity.setProperty("idTransaction", idTransaction);
+		Entity currEntity = new Entity(Constants.TASK_TABLE);
+		currEntity.setProperty(Constants.ID_TRANSACTION_FIELD, idTransaction);
 		currEntity.setProperty("pageId", pageId);
 
 		currEntity.setProperty("totParzActFromPage", totParzActFromPage);
