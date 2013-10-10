@@ -17,5 +17,15 @@ public class Constants {
 	public static final String FACEBOOK_GRAPH_API_ROOT_URL = "https://graph.facebook.com/";
 	public static final String FACEBOOK_MONITOR_TABLE = "facebook_monitoring";
 	
+	//SPLIT-JOIN CONSTANTS
+	public static final String TASK_TABLE = "task";
+	public static final String ID_TRANSACTION_FIELD = "idTransaction";
+	
+	public static final String FB_NOME_FIELD = "nome";
+	public static final String FB_ID_FIELD = "IDFacebook";
+	public static final String YT_ID_FIELD = "IDYoutube";
+	public static final String PL_ID_FIELD = "IDPlus";
+	
+	
 	
 }

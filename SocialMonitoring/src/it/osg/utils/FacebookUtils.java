@@ -7,13 +7,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-
-import com.google.appengine.api.datastore.Text;
 
 import facebook4j.Comment;
 import facebook4j.Facebook;
@@ -25,18 +23,10 @@ import facebook4j.Paging;
 import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
-import facebook4j.Tag;
-import facebook4j.User;
 import facebook4j.auth.AccessToken;
-import facebook4j.json.DataObjectFactory;
 
 public class FacebookUtils {
 
-//	private static String appID= "156346967866710";
-//	private static String appKey= "e0f880cc248e811c98952d9a44a27ce4";
-//	private static String accessToken = "156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk";
-//
-//	private static String graphAPIUrl = "https://graph.facebook.com/";
 
 	private static Facebook facebook = null;
 	
@@ -90,7 +80,38 @@ public class FacebookUtils {
 
 	}
 
-	public static Hashtable<String, Object> getBaseInfo (String pageId) {
+//	public static Hashtable<String, Object> getBaseInfo (String pageId) {
+//
+//		Random rand = new Random();
+//		int seconds = rand.nextInt(4000) + 1;
+//		
+//		try {
+//			Thread.sleep(seconds);
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		}
+//		
+//		Facebook facebook = getFB();
+//		Hashtable<String, Object> result = new Hashtable<String, Object>();
+//		
+//		try {
+//			Page page = facebook.getPage(pageId);
+//			String likeCount = String.valueOf(page.getLikes());
+//			String talkingAboutCount = String.valueOf(page.getTalkingAboutCount());
+//			String pageName = String.valueOf(page.getName());
+//			//TODO retrieve anche degli altri campi
+//
+//			result.put("likes", likeCount);
+//			result.put("talking_about_count", talkingAboutCount);
+//			result.put("name", pageName);
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return result;
+//	}
+	
+	public static Hashtable<String, Object> getBaseInfoFromJson (String pageId) {
 
 		try {
 			Thread.sleep(2000);
