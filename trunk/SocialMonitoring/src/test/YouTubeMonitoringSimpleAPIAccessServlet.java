@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -53,17 +54,12 @@ public class YouTubeMonitoringSimpleAPIAccessServlet extends HttpServlet {
 	private static YouTubeAnalytics analytics;
 
 	public static void main(String[] args) {
-		String data = "23-12-2013 00:00:00";
-		try {
-			java.util.Date da = DateUtils.parseDateAndTime(data);
-			System.out.println(data.toString());
-			String to2 = data.substring(0, 10) + " 23:59:59";
-			System.out.println(to2);
-			java.util.Date da2 = DateUtils.parseDateAndTime(to2);
-			System.out.println(da2.toString());
-		} catch (ParseException e) {
-			e.printStackTrace();
+		Random rand = new Random();
+
+		for (int i = 0; i < 50; i++) {
+			System.out.println(rand.nextInt(2000) + 1);
 		}
+		
 		
 	}
 
