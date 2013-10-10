@@ -1,6 +1,7 @@
 package it.osg.servlet.psar.youtube;
 
 import it.osg.servlet.SubTaskServlet;
+import it.osg.utils.Constants;
 import it.osg.utils.YouTubeUtils;
 
 import java.math.BigInteger;
@@ -35,8 +36,8 @@ public class YOSubTaskServlet extends SubTaskServlet  {
 
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("task");
-		currEntity.setProperty("idTransaction", idTransaction);
+		Entity currEntity = new Entity(Constants.TASK_TABLE);
+		currEntity.setProperty(Constants.ID_TRANSACTION_FIELD, idTransaction);
 		currEntity.setProperty("pageId", pageId);
 		currEntity.setProperty("activitiescount", activitiescount);
 		currEntity.setProperty("viewcount", interactions.get("viewcount"));
