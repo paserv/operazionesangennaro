@@ -3,9 +3,12 @@ package it.osg.servlet.util;
 
 import facebook4j.Comment;
 import facebook4j.Facebook;
+import facebook4j.FacebookException;
+import facebook4j.FacebookFactory;
 import facebook4j.IdNameEntity;
 import facebook4j.Post;
 import facebook4j.Post.Property;
+import facebook4j.auth.AccessToken;
 import facebook4j.Tag;
 import it.osg.model.Graph;
 import it.osg.utils.Constants;
@@ -30,6 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
@@ -57,9 +62,43 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 
-		String url = req.getParameter("url");
-		Document doc = Jsoup.connect(url).userAgent("Mozilla").get();
-		out.println(doc.html());
+		
+		Date f = null;
+		Date t = null;
+		try {
+
+			f = DateUtils.parseDateAndTime((String) "01-09-2013 00:00:00");
+			t = DateUtils.parseDateAndTime((String) "30-09-2013 00:00:00");
+//			f = DateUtils.parseDateAndTime(req.getParameter("from"));
+//			t = DateUtils.parseDateAndTime(req.getParameter("to"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		ArrayList<Post> posts = FacebookUtils.getAllPosts("113335124914", f, t, null);
+		Iterator<Post> iter = posts.iterator();
+		while (iter.hasNext()) {
+			Post curr = iter.next();
+			out.println("Post ID: " + curr.getId());
+		}
+		
+//		Facebook fac = new FacebookFactory().getInstance();
+//		fac.setOAuthAppId(Constants.FACEBOOK_APP_ID, Constants.FACEBOOK_APP_KEY);
+//		//facebook.setOAuthPermissions(commaSeparetedPermissions);
+//		fac.setOAuthAccessToken(new AccessToken(Constants.FACEBOOK_ACCESS_TOKEN, null));
+//		out.println("HERE");
+//		
+//		try {
+//			Page renzi = fac.getPage("113335124914");
+//			out.println("Likes: " + renzi.getLikes() + "<br>");
+//			out.println("Talking About: " + renzi.getTalkingAboutCount() + "<br>");
+//			out.println("Created Time: " + renzi.getCreatedTime() + "<br>");
+//			out.println("Checkins: " + renzi.getCheckins() + "<br>");
+//			out.println("Were Here Count: " + renzi.getWereHereCount() + "<br>");
+//			out.println("Location: " + renzi.getLocation() + "<br>");
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//		}
 		
 		
 ////		ArrayList<String> input = new ArrayList<String>();
