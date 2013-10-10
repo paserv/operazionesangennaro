@@ -20,7 +20,6 @@
 	<classpathentry kind="lib" path="plus/protobuf-java-2.4.1.jar"/>
 	<classpathentry kind="lib" path="plus/transaction-api-1.1.jar"/>
 	<classpathentry kind="lib" path="plus/xpp3-1.1.4c.jar"/>
-	<classpathentry kind="lib" path="facebook/facebook4j-core-1.1.11.jar"/>
 	<classpathentry kind="lib" path="facebook/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="plus/google-http-client-jackson-1.16.0-rc.jar"/>
 	<classpathentry kind="lib" path="jersey/asm-3.1.jar"/>
@@ -39,5 +38,6 @@
 	<classpathentry kind="lib" path="youtube/google-api-services-youtube-v3-rev77-1.17.0-rc.jar" sourcepath="C:/Users/servill7/.m2/repository/com/google/apis/google-api-services-youtube/v3-rev77-1.17.0-rc/google-api-services-youtube-v3-rev77-1.17.0-rc-sources.jar"/>
 	<classpathentry kind="lib" path="youtube/google-api-services-youtubeAnalytics-v1-rev24-1.17.0-rc.jar"/>
 	<classpathentry kind="lib" path="jsoup/jsoup-1.7.2.jar"/>
+	<classpathentry kind="lib" path="facebook/facebook4j-core-1.1.11.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
