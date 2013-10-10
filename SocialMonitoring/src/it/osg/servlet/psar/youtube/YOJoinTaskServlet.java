@@ -72,10 +72,10 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 	}
 
 	@Override
-	protected String getAttachFile(String idTransaction, String from, String to) {
+	protected String getAttachFile(String idTransaction, String from, String to, String tabAnag) {
 
 		//TODO
-		String dataCSV = "Nome Sindaco;ID YouTube;Regione;Provincia;Sesso;Anno di Nascita;Partito;Totale Views;Totale Subscribers;Apertura Account;Activities;Views;Likes;DisLikes;Favourites;Comments;Area ISTAT;Fascia Eta ISTAT\n";
+		String dataCSV = "Nome;ID YouTube;Totale Views;Totale Subscribers;Apertura Account;Activities;Views;Likes;DisLikes;Favourites;Comments\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -83,7 +83,7 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 			e1.printStackTrace();
 		}
 
-		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataYT("task", idTransaction);
+		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataYT(Constants.TASK_TABLE, idTransaction);
 
 		Hashtable<String, PSARData> joinedData = aggregatePsarData(psarData);
 
@@ -110,34 +110,19 @@ public class YOJoinTaskServlet extends JoinTaskServlet {
 			
 			//PRESENTI NEL DB
 			//Già presenti nel DB
-			String regione = "";
-			String areaISTAT = "";
-			String fasciaEtaISTAT = "";
-			String provincia = "";
-			String sesso = "";
-			String annoNascita = "";
-			String partito = "";
-			String sindacoName = "";
+			String name = "";
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Filter DBInfo = new FilterPredicate("IDYoutube", FilterOperator.EQUAL, currKey);
-			Query q = new Query("anagraficaSindaco").setFilter(DBInfo);
+			Filter DBInfo = new FilterPredicate(Constants.YT_ID_FIELD, FilterOperator.EQUAL, currKey);
+			Query q = new Query(tabAnag).setFilter(DBInfo);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
-				annoNascita = (String) ent.getProperty("annoNascita");
-				areaISTAT = (String) ent.getProperty("areaISTAT");
-				fasciaEtaISTAT = (String) ent.getProperty("fasciaEtaISTAT");
-				sindacoName = (String) ent.getProperty("nome");
-				partito = (String) ent.getProperty("partito");
-				provincia = (String) ent.getProperty("provincia");
-				regione = (String) ent.getProperty("regione");
-				sesso = (String) ent.getProperty("sesso");
+				name = (String) ent.getProperty("nome");
 			}
 
-			dataCSV = dataCSV + sindacoName + ";" + currKey + ";" +
-					regione + ";" + provincia + ";" + sesso + ";" + annoNascita + ";" + partito + ";" +
+			dataCSV = dataCSV + name + ";" + currKey + ";" +
 					views + ";" + subscribers + ";" + joineddate + ";" +
 					currPsar.postFromPageCount + ";" + currPsar.viewCount + ";" + currPsar.likesCount + ";" + currPsar.dislikesCount + ";" +
-					+ currPsar.favouriteCount + ";" + currPsar.commentsCount + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
+					+ currPsar.favouriteCount + ";" + currPsar.commentsCount + "\n";
 
 		}
 
