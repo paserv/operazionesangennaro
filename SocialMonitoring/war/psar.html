@@ -12,9 +12,13 @@
 <body onLoad="getIds()">
 <!-- <form method="post" action="FBpsarsplittask"> -->
 <div class="header">
+DataSource: 
+	<select id="datasource" name="datasource" onchange="getIds()">
+		<option value="anagraficaSindaco">Sindaci</option>
+		<option value="anagraficaQuotidiano">Quotidiani</option>
+    </select>
 IdPagina: 
 	<select id="pageId" name="pageId">
-		<option value="anagraficaSindaco">Tutti</option>
     </select>
 Social Network:
 	<select id="socialNet" name="socialNet" onchange="getIds()">
@@ -69,7 +73,7 @@ $(document).ready(function() {
         	servlet = "YOpsarsplittask";
         }
         
-        var dataString = "pageId=" + pageId + "&from=" + from + "&to=" + to + "&mail=" + mail + "&IDField=" + idField;
+        var dataString = "pageId=" + pageId + "&from=" + from + "&to=" + to + "&mail=" + mail + "&IDField=" + idField + "&tabAnagrafica=" + $('#datasource').val();
         $.ajax({
         type: "POST",
         url: servlet,
@@ -87,8 +91,30 @@ $(document).ready(function() {
 
 //Populate Select Box
 function getIds () {
+	
+	$('#pageId').empty();
+	
 	var socialNet = $('#socialNet').val();
 	var idField;
+	
+	var datasource = $('#datasource').val();
+	var rootURL;
+	
+	if (datasource == "anagraficaSindaco") {
+		rootURL = "http://08-monitorfacebookpages.appspot.com/rest/table/resource/anagraficaSindaco/";
+		$('#pageId').append($("<option/>", {
+	        value: "anagraficaSindaco",
+	        text: "Tutti"
+	    }));
+	}
+	if (datasource == "anagraficaQuotidiano") {
+		rootURL = "http://08-monitorfacebookpages.appspot.com/rest/table/resource/anagraficaQuotidiano/";
+		$('#pageId').append($("<option/>", {
+	        value: "anagraficaQuotidiano",
+	        text: "Tutti"
+	    }));
+	}
+	
 	if (socialNet == "Facebook") {
 		idField = "IDFacebook";
 	}
@@ -100,7 +126,7 @@ function getIds () {
     }
 	$.ajax({
 		type: 'GET',
-		url: "http://08-monitorfacebookpages.appspot.com/rest/table/resource/anagraficaSindaco/" + idField,
+		url: rootURL + idField,
 		dataType: "json",
 		success: function(data) {
 				console.log(data);
