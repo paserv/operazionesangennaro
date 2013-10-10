@@ -42,6 +42,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 		String from = req.getParameter("from");
 		String to = req.getParameter("to");	
 		String mail = req.getParameter("mail");
+		String tabAnagrafica = req.getParameter("tabAnagrafica");
 		try  {
 			if (pageId == null || from == null || to == null || mail == null) throw new Exception("Fields cannot be empty.");
 			if (mail.length() == 0) throw new Exception("To field cannot be empty.");
@@ -93,7 +94,7 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 			}
 
 			//TASK CHE MONITORA GLI ALTRI TASK (JOINTASKSERVLET)
-			queue.add(TaskOptions.Builder.withUrl("/" + getJointask()).param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("IDField", IDField).param("mail", mail).param("timestamp", timestamp));	
+			queue.add(TaskOptions.Builder.withUrl("/" + getJointask()).param("idTransaction", idTransaction).param("numTask", String.valueOf(numTask)).param("from", from).param("to", to).param("pageId", pageId).param("IDField", IDField).param("mail", mail).param("timestamp", timestamp).param("tabAnagrafica", tabAnagrafica));	
 
 		} catch (Exception ex) {
 			strCallResult = "Fail: " + ex.getMessage();
