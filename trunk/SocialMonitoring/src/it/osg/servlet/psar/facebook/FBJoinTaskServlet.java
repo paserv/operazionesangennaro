@@ -8,6 +8,7 @@ import it.osg.utils.DatastoreUtils;
 import it.osg.utils.DateUtils;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -73,10 +74,10 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 	}
 
 	@Override
-	protected String getAttachFile(String idTransaction, String from, String to) {
+	protected String getAttachFile(String idTransaction, String from, String to, String tabAnag) {
 
 
-		String dataCSV = "Nome Sindaco;Totale Post from Account;Totale Post from Fan;Totale Comments ai Post;Totale Comments ai Post From Fan;Unique Authors dei Comments ai Post;Totale Likes ai Post from Account;Totale Shares dei Post from Account;Commenti del Sindaco ai Post scritti da lui;Commenti del Sindaco ai Post scritti dai Fan sulla sua bacheca;Delta Fan\n";
+		String dataCSV = "Nome;ID Facebook;Totale Post from Account;Totale Post from Fan;Totale Comments ai Post;Totale Comments ai Post From Fan;Unique Authors dei Comments ai Post;Totale Likes ai Post from Account;Totale Shares dei Post from Account;Commenti della pagina ai propri Post;Commenti della pagina ai Post scritti dai Fan sulla bacheca;Delta Fan\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -84,7 +85,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			e1.printStackTrace();
 		}
 
-		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataFB("task", idTransaction);
+		ArrayList<PSARData> psarData = DatastoreUtils.getPsarDataFB(Constants.TASK_TABLE, idTransaction);
 
 		Hashtable<String, PSARData> joinedData = aggregatePsarData(psarData);
 
@@ -106,7 +107,17 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			//DA CERCARE
 			long totNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
 			String to2 = to.substring(0, 10) + " 23:59:59";
-			totNuoviFan = getFanCount(currKey, to2, FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING) - getFanCount(currKey, from, FilterOperator.GREATER_THAN_OR_EQUAL, SortDirection.ASCENDING);
+			Hashtable<String, Object> toHash = getFanCount(currKey, to2, FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING);
+			Hashtable<String, Object> fromHash = getFanCount(currKey, from, FilterOperator.GREATER_THAN_OR_EQUAL, SortDirection.ASCENDING); 
+			totNuoviFan = (Long) toHash.get("like_count") - (Long) fromHash.get("like_count");
+//			long deltaFanMedio = 0;
+//			Date toFanDate = (Date) toHash.get("date");
+//			Date fromFanDate = (Date) fromHash.get("date");
+//			if (toFanDate != null & fromFanDate != null) {
+//				long numGio = DateUtils.giorniTraDueDate((Date) toHash.get("date"), (Date) fromHash.get("date"));
+//				deltaFanMedio = totNuoviFan/numGio;
+//			}
+			//totNuoviFan = getFanCount(currKey, to2, FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING) - getFanCount(currKey, from, FilterOperator.GREATER_THAN_OR_EQUAL, SortDirection.ASCENDING);
 			//double mediaNuoviFan = 0; /* ci vuole un cron job attivo che monitora il dato */
 			
 			
@@ -134,14 +145,14 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 //			String partito = "";
 			String sindacoName = "";
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Filter DBInfo = new FilterPredicate("IDFacebook", FilterOperator.EQUAL, currKey);
-			Query q = new Query("anagraficaSindaco").setFilter(DBInfo);
+			Filter DBInfo = new FilterPredicate(Constants.FB_ID_FIELD, FilterOperator.EQUAL, currKey);
+			Query q = new Query(tabAnag).setFilter(DBInfo);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
 //				annoNascita = (String) ent.getProperty("annoNascita");
 //				areaISTAT = (String) ent.getProperty("areaISTAT");
 //				fasciaEtaISTAT = (String) ent.getProperty("fasciaEtaISTAT");
-				sindacoName = (String) ent.getProperty("nome");
+				sindacoName = (String) ent.getProperty(Constants.FB_NOME_FIELD);
 //				partito = (String) ent.getProperty("partito");
 //				provincia = (String) ent.getProperty("provincia");
 //				regione = (String) ent.getProperty("regione");
@@ -155,7 +166,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 //					mediaPostFromFan + ";" + commentsPerPost + ";" + uniqueAuthorsPerPost + ";" + mediaLikePerPost + ";" +
 //					sharesPerPost + ";" + commentsPerAuthor + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
 
-			dataCSV = dataCSV + sindacoName + ";" +
+			dataCSV = dataCSV + sindacoName + ";" + currKey + ";" +
 					currPsar.postFromPageCount + ";" + currPsar.postFromFanCount + ";" + currPsar.commentsCount + ";" + currPsar.commentsToPostFromFan + ";" + 
 					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + ";" + 
 					currPsar.commnetsFromPageToPostFromPage + ";" + currPsar.commnetsFromPageToPostFromFan + ";" + totNuoviFan + "\n";
@@ -192,7 +203,16 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 		return result;
 	}
 
-	private long getFanCount (String idPage, String date, FilterOperator fo, SortDirection sd) {
+	private Hashtable<String, Object> getFanCount (String idPage, String date, FilterOperator fo, SortDirection sd) {
+		
+		Hashtable<String, Object> result = new Hashtable<String, Object>();
+		result.put("like_count", 0L);
+		try {
+			result.put("date", DateUtils.parseDate("01-01-1970 00:00:00"));
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		try {
@@ -203,13 +223,15 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
 				if ( ent.getProperty("like_count") != null) {
-					return (Long) ent.getProperty("like_count");
+					result.put("like_count", (Long) ent.getProperty("like_count"));
+					result.put("date", (Date) ent.getProperty("date"));
+					return result;
 				}
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return 0L;
+		return result;
 	}
 
 

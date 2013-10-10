@@ -4,6 +4,7 @@ import facebook4j.Comment;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.servlet.SubTaskServlet;
+import it.osg.utils.Constants;
 import it.osg.utils.FacebookUtils;
 
 import java.util.ArrayList;
@@ -88,8 +89,8 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 
 		//SAVE OUTPUT TO DATASTORE
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity currEntity = new Entity("task");
-		currEntity.setProperty("idTransaction", idTransaction);
+		Entity currEntity = new Entity(Constants.TASK_TABLE);
+		currEntity.setProperty(Constants.ID_TRANSACTION_FIELD, idTransaction);
 		currEntity.setProperty("pageId", pageId);
 
 		currEntity.setProperty("totParzPostFromPage", totParzPostFromPage);
