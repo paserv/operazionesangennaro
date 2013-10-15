@@ -78,7 +78,8 @@ public abstract class SplitTaskServlet extends HttpServlet  {
 				String from1 = from.substring(0, 10) + " 00:00:00";
 				Date f1 = DateUtils.parseDateAndTime(from1);
 				while (true) {
-					String to1 = DateUtils.formatDateAndTime(DateUtils.addDayToDate(DateUtils.parseDateAndTime(from1), getStep()));
+//					String to1 = DateUtils.formatDateAndTime(DateUtils.addDayToDate(DateUtils.parseDateAndTime(from1), getStep()));
+					String to1 = DateUtils.formatDateAndTime(DateUtils.addHoursToDate(DateUtils.parseDateAndTime(from1), getStep()));
 					Date t1 = DateUtils.parseDateAndTime(to1);
 					if (DateUtils.compareDate(t, t1) >= 0) {
 						queue.add(TaskOptions.Builder.withUrl("/" + getSubtask()).param("idTransaction", idTransaction).param("from", from1).param("to", to1).param("pageId", currPageId));

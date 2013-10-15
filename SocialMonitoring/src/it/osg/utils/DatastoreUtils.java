@@ -20,6 +20,10 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.representation.Form;
 
 public class DatastoreUtils {
 
@@ -54,9 +58,10 @@ public class DatastoreUtils {
 				result.add(currKey);
 			}
 		}
+
+		
 		
 		return result;
-
 	}
 
 	public static void saveEntity (Entity ent) {
@@ -274,6 +279,10 @@ public class DatastoreUtils {
 			return returnValue;
 		}
 		return null;
+	}
+	
+	public static String getSetting(String settingName) {
+		return (String) getValue(Constants.SETTINGS_TABLE, "property", settingName, "value");
 	}
 	
 	public static void addRow(String table, String propertyName, Object propertyValue) {

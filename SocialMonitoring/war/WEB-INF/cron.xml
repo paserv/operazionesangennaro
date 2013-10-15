@@ -1,21 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cronentries>
-	<cron>
-		<url>/deletetabletoqueue</url>
-		<description>Delete Log in table task every 24 hours
-		</description>
-		<schedule>every day 03:00</schedule>
-	</cron>
-	<cron>
-		<url>/monitorsindacofacebookqueue</url>
-		<description>Monitor Pages contained in anagraficaSindaco table every 6 hours
-		</description>
-		<schedule>every 6 hours synchronized</schedule>
-	</cron>
-	<cron>
-		<url>/monitorquotidianofacebookqueue</url>
-		<description>Monitor Pages contained in anagraficaQuotidiano table every 6 hours
-		</description>
-		<schedule>every 6 hours synchronized</schedule>
-	</cron>
-</cronentries>
+<cronentries/>

@@ -1,7 +1,6 @@
 package it.osg.servlet.psar.facebook;
 
 import it.osg.servlet.SplitTaskServlet;
-import it.osg.utils.Constants;
 import it.osg.utils.DatastoreUtils;
 
 public class FBSplitTaskServlet extends SplitTaskServlet {
@@ -14,7 +13,7 @@ public class FBSplitTaskServlet extends SplitTaskServlet {
 
 	@Override
 	public int getStep() {
-		String res = (String) DatastoreUtils.getValue(Constants.SETTINGS_TABLE, "property", "splitstep", "value");
+		String res = DatastoreUtils.getSetting("splitstep");
 		return Integer.parseInt((res));
 	}
 
