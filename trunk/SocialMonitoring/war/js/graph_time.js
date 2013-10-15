@@ -30,7 +30,7 @@ $('#btnSearch').click(function() {
 	numSelected = 0;
 	counter = 0;
 	jsonObj= [];
-	$('#transmission :selected').each(function(i, selected) {
+	$('#pageID :selected').each(function(i, selected) {
 		numSelected++;
 	});
 
@@ -41,7 +41,7 @@ $('#btnSearch').click(function() {
 });
 
 //Trigger search when pressing 'Return' on search key input field
-$('#transmission').keypress(function(e){
+$('#pageID').keypress(function(e){
 	if(e.which == 13) {
 		//Se è già presente un grafico eliminalo
 		if ($('#container').highcharts() != null) {
@@ -59,7 +59,7 @@ $('#transmission').keypress(function(e){
 		numSelected = 0;
 		counter = 0;
 		jsonObj= [];
-		$('#transmission :selected').each(function(i, selected) {
+		$('#pageID :selected').each(function(i, selected) {
 			numSelected++;
 		});
 
@@ -72,16 +72,17 @@ $('#transmission').keypress(function(e){
 
 
 //Populate Select Box
-function getMonitoredEntities () {
+function getMonitoredEntities() {
+	$('#pageID').empty();
 	$.ajax({
 		type: 'GET',
-		url: "http://07-monitorfacebookpages.appspot.com/rest/table/resource/anagraficaSindaco/IDFacebook",
+		url: "http://03-monitorfacebookpages.appspot.com/rest/table/resource/" + $('#datasource').val() + "/IDFacebook",
 		dataType: "json",
 		success: function(data) {
 				console.log(data);
 				$.each(data, function() {	
 					$.each(this, function(key, value) {
-						$('#transmission').append($("<option/>", {
+						$('#pageID').append($("<option/>", {
 					        value: this.identificativo,
 					        text: this.nome
 					    }));
@@ -93,7 +94,7 @@ function getMonitoredEntities () {
 
 function getServices(rootURL) {
 	//Per ogni trasmissione selezionata invoco il servizio che restituisce i dati da graficare
-	$('#transmission :selected').each(function(i, selected) {
+	$('#pageID :selected').each(function(i, selected) {
 		$.ajax({
 			type: 'GET',
 			url: rootURL + "time/" + $('#monitoredEntity').val() + "/" + $(selected).val() + "/" + $('#from').val() + "/" + $('#to').val(),

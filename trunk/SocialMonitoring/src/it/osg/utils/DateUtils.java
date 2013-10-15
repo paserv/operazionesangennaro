@@ -130,6 +130,14 @@ public class DateUtils {
 
 		return cal.getTime();
 	}
+	
+	public static Date addHoursToDate(Date date, int numHours) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.HOUR_OF_DAY, numHours);
+
+		return cal.getTime();
+	}
 
 	public static Date addMonthToDate(Date data, int t) {
 		if (data == null) {

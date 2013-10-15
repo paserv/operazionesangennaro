@@ -70,7 +70,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	public String getQueueName() {
-		return "default";
+		return "psar";
 	}
 
 	@Override

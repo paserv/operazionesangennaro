@@ -30,6 +30,7 @@ import java.util.List;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,6 +54,9 @@ import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 @SuppressWarnings("serial")
 public class TestServlet extends HttpServlet {
@@ -62,25 +66,37 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
 
-		
-		Date f = null;
-		Date t = null;
-		try {
-
-			f = DateUtils.parseDateAndTime((String) "01-09-2013 00:00:00");
-			t = DateUtils.parseDateAndTime((String) "30-09-2013 00:00:00");
-//			f = DateUtils.parseDateAndTime(req.getParameter("from"));
-//			t = DateUtils.parseDateAndTime(req.getParameter("to"));
-		} catch (ParseException e) {
-			e.printStackTrace();
+//		Document doc = Jsoup.connect("http://08-monitorfacebookpages.appspot.com/rest/table/resource/" + "anagraficaSindaco" + "/" + "IDFacebook").userAgent("Mozilla").get();
+//		out.println(doc.html());
+		Client client = Client.create();
+		WebResource webResource = client.resource("http://03-monitorfacebookpages.appspot.com/rest/table/resource/" + "anagraficaSindaco" + "/" + "IDFacebook");
+		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		if (response.getStatus() != 201) {
+			out.println(response.getStatus());
+			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
 		}
+		String output = response.getEntity(String.class);
+		out.println(output);
 		
-		ArrayList<Post> posts = FacebookUtils.getAllPosts("113335124914", f, t, null);
-		Iterator<Post> iter = posts.iterator();
-		while (iter.hasNext()) {
-			Post curr = iter.next();
-			out.println("Post ID: " + curr.getId());
-		}
+		
+//		Date f = null;
+//		Date t = null;
+//		try {
+//
+//			f = DateUtils.parseDateAndTime((String) "01-09-2013 00:00:00");
+//			t = DateUtils.parseDateAndTime((String) "30-09-2013 00:00:00");
+////			f = DateUtils.parseDateAndTime(req.getParameter("from"));
+////			t = DateUtils.parseDateAndTime(req.getParameter("to"));
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		ArrayList<Post> posts = FacebookUtils.getAllPosts("113335124914", f, t, null);
+//		Iterator<Post> iter = posts.iterator();
+//		while (iter.hasNext()) {
+//			Post curr = iter.next();
+//			out.println("Post ID: " + curr.getId());
+//		}
 		
 //		Facebook fac = new FacebookFactory().getInstance();
 //		fac.setOAuthAppId(Constants.FACEBOOK_APP_ID, Constants.FACEBOOK_APP_KEY);

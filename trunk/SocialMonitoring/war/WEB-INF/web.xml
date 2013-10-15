@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- PSAR -->
 	<!-- FACEBOOK -->
@@ -62,7 +66,7 @@
 		<servlet-name>PlusPsarJoinTaskServlet</servlet-name>
 		<url-pattern>/PLpsarjointask</url-pattern>
 	</servlet-mapping>
-	
+
 	<!-- YOUTUBE -->
 	<servlet>
 		<servlet-name>YoutubePsarSplitTaskServlet</servlet-name>
@@ -84,7 +88,7 @@
 		<url-pattern>/YOpsarsubtask</url-pattern>
 	</servlet-mapping>
 
-	
+
 	<servlet>
 		<servlet-name>YoutubePsarJoinTaskServlet</servlet-name>
 		<servlet-class>it.osg.servlet.psar.youtube.YOJoinTaskServlet</servlet-class>
@@ -106,7 +110,7 @@
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
 		<url-pattern>/monitorfacebook</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MonitoringSindacoFacebookServletQueue</servlet-name>
 		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringSindacoFacebookServletQueue</servlet-class>
@@ -116,7 +120,7 @@
 		<servlet-name>MonitoringSindacoFacebookServletQueue</servlet-name>
 		<url-pattern>/monitorsindacofacebookqueue</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>MonitoringQuotidianoFacebookServletQueue</servlet-name>
 		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringQuotidianoFacebookServletQueue</servlet-class>
@@ -172,7 +176,7 @@
 		<servlet-name>HttpGET</servlet-name>
 		<url-pattern>/httpget</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>Test Servlet</servlet-name>
 		<servlet-class>it.osg.servlet.util.TestServlet</servlet-class>
@@ -217,6 +221,12 @@
 			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
 			<param-value>it.osg.service.security.ResponseCorsFilter</param-value>
 		</init-param>
+		<!-- 
+		<init-param>
+			<param-name>com.sun.jersey.config.feature.DisableWADL</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		 -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
@@ -239,7 +249,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value/>
+			<param-value />
 		</init-param>
 	</servlet>
 	<servlet-mapping>

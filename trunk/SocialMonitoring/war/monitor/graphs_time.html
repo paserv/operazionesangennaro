@@ -11,8 +11,13 @@
 <input type="checkbox" id="debug" style="margin-left:10px;"/> debug
 
 <div class="header">
+	DataSource: 
+	<select id="datasource" name="datasource" onchange="getMonitoredEntities()">
+		<option value="anagraficaSindaco">Sindaci</option>
+		<option value="anagraficaQuotidiano">Quotidiani</option>
+    </select>
 	Transmission: 
-	<select multiple id="transmission">
+	<select multiple id="pageID">
     </select>
 	From: 
 	<input type="text" id="from" />
