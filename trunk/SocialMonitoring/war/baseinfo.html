@@ -10,7 +10,6 @@
 </head>
 
 <body onLoad="getIds()">
-<!-- <form method="post" action="FBpsarsplittask"> -->
 <div class="header">
 DataSource: 
 	<select id="datasource" name="datasource" onchange="getIds()">
@@ -22,9 +21,7 @@ IdPagina:
     </select>
 Social Network:
 	<select id="socialNet" name="socialNet" onchange="getIds()">
-		<option value="IDPlus">Plus</option>
 		<option value="IDFacebook">Facebook</option>
-		<option value="IDYoutube">Youtube</option>
 	</select>
 From: 
 	<input type="text" id="from" name="from" />
@@ -60,7 +57,7 @@ $(document).ready(function() {
 
         var servlet;
         if (socialNet == "IDFacebook") {
-        	servlet = "FBpsarsplittask";
+        	servlet = "FBbaseinfosplittask";
         }
         if (socialNet == "IDPlus") {
         	servlet = "PLpsarsplittask";
