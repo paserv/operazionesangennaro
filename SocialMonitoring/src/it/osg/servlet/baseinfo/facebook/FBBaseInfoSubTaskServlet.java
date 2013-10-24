@@ -35,7 +35,7 @@ public class FBBaseInfoSubTaskServlet extends SubTaskServlet  {
 	protected void runSubTask(String idTranscation, String pageId, Date from, Date to) {
 		String endDate = "";
 		try {
-			ResponseList<Post> posts = FacebookUtils.getFB().getFeed(pageId, new Reading().since(from).until(to).fields("created_time"));
+			ResponseList<Post> posts = FacebookUtils.getFB().getFeed(pageId, new Reading().since(from).until(to));
 			Iterator<Post> iterPost = posts.iterator();
 			while (iterPost.hasNext()) {
 				Post currPost = iterPost.next();
