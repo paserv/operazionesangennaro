@@ -48,7 +48,8 @@ public class FBBaseInfoJoinTaskServlet extends JoinTaskServlet {
 
 	@Override
 	protected String getAttachFile(String idTransaction, String from, String to, String tabAnag) {
-		String result = "ID;BaseInfoDate;TotalFan;TalkingAbout;LastPost\n";
+		String result = "ID;BaseInfoDateStart;TotalFanStart;TalkingAboutStart;BaseInfoDateEnd;TotalFanEnd;TalkingAboutEnd;LastPost\n";
+//		String result = "ID;BaseInfoDate;TotalFan;TalkingAbout;LastPost\n";
 		DatastoreService DS = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		PreparedQuery pq;
@@ -56,7 +57,8 @@ public class FBBaseInfoJoinTaskServlet extends JoinTaskServlet {
 		q = new Query(Constants.TASK_TABLE).setFilter(idFilter);
 		pq = DS.prepare(q);
 		for (Entity ent : pq.asIterable()) {
-			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("baseInfoDate") + ";" + ent.getProperty("fanCount") + ";" + ent.getProperty("talkingAboutCount") + ";" + ent.getProperty("endDate") + "\n";
+			result = result + DatastoreUtils.getProperty(ent, "pageId") + ";" + DatastoreUtils.getProperty(ent, "baseInfoDateStart") + ";"  + DatastoreUtils.getProperty(ent, "fanCountStart") + ";" + DatastoreUtils.getProperty(ent, "talkingAboutCountStart") + ";" + DatastoreUtils.getProperty(ent, "baseInfoDate") + ";" + DatastoreUtils.getProperty(ent, "fanCount") + ";" + DatastoreUtils.getProperty(ent, "talkingAboutCount") + ";" + DatastoreUtils.getProperty(ent, "endDate") + "\n";
+//			result = result + ent.getProperty("pageId") + ";" + ent.getProperty("baseInfoDate") + ";" + ent.getProperty("fanCount") + ";" + ent.getProperty("talkingAboutCount") + ";" + ent.getProperty("endDate") + "\n";
 		}
 		
 		return result;

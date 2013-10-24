@@ -1,15 +1,13 @@
 package it.osg.servlet.baseinfo.facebook;
 
-import java.text.ParseException;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Iterator;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -38,61 +36,75 @@ public class FBBaseInfoSubTaskServlet extends SubTaskServlet  {
 		String endDate = "";
 		try {
 			ResponseList<Post> posts = FacebookUtils.getFB().getFeed(pageId, new Reading().since(from).until(to).fields("created_time"));
-			if (posts != null && posts.size() != 0) {
-				Post currPost = posts.get(0);
-				endDate = DateUtils.formatDate(currPost.getCreatedTime());
+			Iterator<Post> iterPost = posts.iterator();
+			while (iterPost.hasNext()) {
+				Post currPost = iterPost.next();
+				if (currPost != null && currPost.getFrom() != null && currPost.getFrom().getId() != null && currPost.getFrom().getId().equalsIgnoreCase(pageId)) {
+					endDate = DateUtils.formatDate(currPost.getCreatedTime());
+					break;
+				}
 			}
 		} catch (FacebookException e) {
 			e.printStackTrace();
 		}
 
-		Hashtable<String, Object> toHash = getFanCount(pageId, DateUtils.formatDate(to), FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING);
-		long fanCount = (Long) toHash.get("like_count");
-		long talkingAboutCount = (Long) toHash.get("talking_about_count");
-		String baseInfoDate = (String) toHash.get("date");
+		
+		long fanCount = 0L;
+		long talkingAboutCount = 0L;
+		String baseInfoDate = "";
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		Filter fromFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, to);
+		Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, pageId);
+		Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
+		q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.DESCENDING);
+		PreparedQuery pq = datastore.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			if ( ent.getProperty("like_count") != null) {
+				fanCount = (Long) ent.getProperty("like_count");
+				talkingAboutCount = (Long) ent.getProperty("talking_about_count");
+				baseInfoDate = DateUtils.formatDate(((Date) ent.getProperty("date")));
+				break;
+			}
+		}
+		
+		
+		long fanCountStart = 0L;
+		long talkingAboutCountStart = 0L;
+		String baseInfoDateStart = "";
+		fromFilter = new FilterPredicate("date", FilterOperator.GREATER_THAN_OR_EQUAL, from);
+		idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, pageId);
+		compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
+		q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.ASCENDING);
+		pq = datastore.prepare(q);
+		for (Entity ent : pq.asIterable()) {
+			if ( ent.getProperty("like_count") != null) {
+				fanCountStart = (Long) ent.getProperty("like_count");
+				talkingAboutCountStart = (Long) ent.getProperty("talking_about_count");
+				baseInfoDateStart = DateUtils.formatDate(((Date) ent.getProperty("date")));
+				break;
+			}
+		}
 
 		//SAVE OUTPUT TO DATASTORE
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity currEntity = new Entity(Constants.TASK_TABLE);
 		currEntity.setProperty(Constants.ID_TRANSACTION_FIELD, idTranscation);
 		currEntity.setProperty("pageId", pageId);
 
 		currEntity.setProperty("endDate", endDate);
+		
 		currEntity.setProperty("fanCount", fanCount);
 		currEntity.setProperty("talkingAboutCount", talkingAboutCount);
 		currEntity.setProperty("baseInfoDate", baseInfoDate);
+		
+		currEntity.setProperty("fanCountStart", fanCountStart);
+		currEntity.setProperty("talkingAboutCountStart", talkingAboutCountStart);
+		currEntity.setProperty("baseInfoDateStart", baseInfoDateStart);
 
 		datastore.put(currEntity);
 
 	}
 
 
-	private Hashtable<String, Object> getFanCount (String idPage, String date, FilterOperator fo, SortDirection sd) {
-
-		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		result.put("like_count", 100L);
-		result.put("talking_about_count", 100L);
-		result.put("date", "ciao");
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q;
-		try {
-			Filter fromFilter = new FilterPredicate("date", fo, DateUtils.parseDateAndTime(date));
-			Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, idPage);
-			Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
-			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", sd);
-			PreparedQuery pq = datastore.prepare(q);
-			for (Entity ent : pq.asIterable()) {
-				if ( ent.getProperty("like_count") != null) {
-					result.put("like_count", (Long) ent.getProperty("like_count"));
-					result.put("talking_about_count", (Long) ent.getProperty("talking_about_count"));
-					result.put("date", DateUtils.formatDate(((Date) ent.getProperty("date"))));
-					return result;
-				}
-			}
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
 
 }
