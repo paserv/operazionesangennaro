@@ -35,13 +35,12 @@ public class FBBaseInfoSubTaskServlet extends SubTaskServlet  {
 
 	@Override
 	protected void runSubTask(String idTranscation, String pageId, Date from, Date to) {
-		Date endDate = null;
-		long talkingAboutCount = 0L;
+		String endDate = "";
 		try {
 			ResponseList<Post> posts = FacebookUtils.getFB().getFeed(pageId, new Reading().since(from).until(to).fields("created_time"));
 			if (posts != null && posts.size() != 0) {
 				Post currPost = posts.get(0);
-				endDate = currPost.getCreatedTime();
+				endDate = DateUtils.formatDate(currPost.getCreatedTime());
 			}
 		} catch (FacebookException e) {
 			e.printStackTrace();
@@ -49,9 +48,7 @@ public class FBBaseInfoSubTaskServlet extends SubTaskServlet  {
 
 		Hashtable<String, Object> toHash = getFanCount(pageId, DateUtils.formatDate(to), FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING);
 		long fanCount = (Long) toHash.get("like_count");
-		if (toHash.get("talking_about_count") != null) {
-			talkingAboutCount = (Long) toHash.get("talking_about_count");
-		}
+		long talkingAboutCount = (Long) toHash.get("talking_about_count");
 		String baseInfoDate = (String) toHash.get("date");
 
 		//SAVE OUTPUT TO DATASTORE
@@ -73,13 +70,9 @@ public class FBBaseInfoSubTaskServlet extends SubTaskServlet  {
 	private Hashtable<String, Object> getFanCount (String idPage, String date, FilterOperator fo, SortDirection sd) {
 
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
-		result.put("like_count", 0L);
-		try {
-			result.put("date", DateUtils.parseDate("01-01-1970 00:00:00"));
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-
+		result.put("like_count", 100L);
+		result.put("talking_about_count", 100L);
+		result.put("date", "ciao");
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query q;
 		try {
