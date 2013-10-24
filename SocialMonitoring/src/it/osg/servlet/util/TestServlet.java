@@ -65,19 +65,26 @@ public class TestServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-
-//		Document doc = Jsoup.connect("http://08-monitorfacebookpages.appspot.com/rest/table/resource/" + "anagraficaSindaco" + "/" + "IDFacebook").userAgent("Mozilla").get();
-//		out.println(doc.html());
-		Client client = Client.create();
-		WebResource webResource = client.resource("http://03-monitorfacebookpages.appspot.com/rest/table/resource/" + "anagraficaSindaco" + "/" + "IDFacebook");
-		ClientResponse response = webResource.type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-		if (response.getStatus() != 201) {
-			out.println(response.getStatus());
-			throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+		out.println("CIAO");
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query q;
+		try {
+			Filter fromFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, DateUtils.parseDateAndTime("30-10-2013 00:00:00"));
+			Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, "390316297742803");
+			Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
+			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.DESCENDING);
+			PreparedQuery pq = datastore.prepare(q);
+			for (Entity ent : pq.asIterable()) {
+				if ( ent.getProperty("like_count") != null) {
+					out.println("like_count: " + (Long) ent.getProperty("like_count"));
+					out.println("talking_about_count: " + ent.getProperty("talking_about_count"));
+					out.println("date: " + ent.getProperty("date"));
+				}
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		String output = response.getEntity(String.class);
-		out.println(output);
-		
+	
 		
 //		Date f = null;
 //		Date t = null;
