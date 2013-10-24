@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
 	<!-- PSAR -->
 	<!-- FACEBOOK -->
@@ -133,6 +129,40 @@
 	<!-- FINE MONITORING -->
 
 
+	<!-- BASE INFO -->
+	<!-- FACEBOOK -->
+	<servlet>
+		<servlet-name>FBBaseInfoSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.facebook.FBBaseInfoSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FBBaseInfoSplitTaskServlet</servlet-name>
+		<url-pattern>/FBbaseinfosplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FBBaseInfoSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.facebook.FBBaseInfoSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FBBaseInfoSubTaskServlet</servlet-name>
+		<url-pattern>/FBbaseinfosubtask</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>FBBaseInfoJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.facebook.FBBaseInfoJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FBBaseInfoJoinTaskServlet</servlet-name>
+		<url-pattern>/FBbaseinfojointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE BASE INFO -->
+
 	<!-- CRON JOB DI PULIZIA -->
 	<servlet>
 		<servlet-name>DeleteTableServlet</servlet-name>
@@ -249,7 +279,7 @@
 		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
 		<init-param>
 			<param-name>services</param-name>
-			<param-value />
+			<param-value/>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
