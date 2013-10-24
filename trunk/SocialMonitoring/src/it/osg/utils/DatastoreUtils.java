@@ -317,6 +317,16 @@ public class DatastoreUtils {
 			}
 		}		
 	}
+	
+	public static Object getProperty(Entity ent, String prop) {
+		if(ent.getProperty(prop) == null) {
+			return "null";
+		}
+		if(ent.getProperty(prop).equals("")) {
+			return "null";
+		}
+		return ent.getProperty(prop);
+	}
 
 
 
