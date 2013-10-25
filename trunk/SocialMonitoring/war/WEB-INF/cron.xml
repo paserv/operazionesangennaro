@@ -8,13 +8,19 @@
 	</cron>
 	<cron>
 		<url>/monitorsindacofacebookqueue</url>
-		<description>Monitor Pages contained in anagraficaSindaco table every 6 hours
+		<description>Monitor Facebook Pages contained in anagraficaSindaco table every 6 hours
 		</description>
 		<schedule>every 6 hours synchronized</schedule>
 	</cron>
 	<cron>
 		<url>/monitorquotidianofacebookqueue</url>
-		<description>Monitor Pages contained in anagraficaQuotidiano table every 6 hours
+		<description>Monitor Facebook Pages contained in anagraficaQuotidiano table every 6 hours
+		</description>
+		<schedule>every 6 hours synchronized</schedule>
+	</cron>
+	<cron>
+		<url>/monitorsindacoyoutubequeue</url>
+		<description>Monitor Youtube Pages contained in anagraficaSindaco table every 6 hours
 		</description>
 		<schedule>every 6 hours synchronized</schedule>
 	</cron>
