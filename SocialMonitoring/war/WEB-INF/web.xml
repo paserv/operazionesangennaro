@@ -97,6 +97,7 @@
 	<!-- FINE PSAR -->
 
 	<!-- MONITORING -->
+	<!-- FACEBOOK -->
 	<servlet>
 		<servlet-name>MonitoringFacebookServlet</servlet-name>
 		<servlet-class>it.osg.servlet.monitoring.MonitoringFacebookServlet</servlet-class>
@@ -125,6 +126,27 @@
 	<servlet-mapping>
 		<servlet-name>MonitoringQuotidianoFacebookServletQueue</servlet-name>
 		<url-pattern>/monitorquotidianofacebookqueue</url-pattern>
+	</servlet-mapping>
+	
+	<!-- YOUTUBE -->
+	<servlet>
+		<servlet-name>MonitoringYouTubeServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringYouTubeServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringYouTubeServlet</servlet-name>
+		<url-pattern>/monitoryoutube</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>MonitoringSindacoYouTubeServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.youtube.MonitoringSindacoYouTubeServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringSindacoYouTubeServletQueue</servlet-name>
+		<url-pattern>/monitorsindacoyoutubequeue</url-pattern>
 	</servlet-mapping>
 	<!-- FINE MONITORING -->
 
