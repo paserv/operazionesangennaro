@@ -159,7 +159,7 @@ public class FacebookUtils {
 			while (true) {
 				if (pagingPost != null) {
 					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
-					if (nextPosts != null) {
+					if (nextPosts != null && nextPosts.size() > 0) {
 						Post firstPost = nextPosts.get(0);
 						if (firstPost.getCreatedTime().after(t) || firstPost.getCreatedTime().before(f)) {
 							break;
