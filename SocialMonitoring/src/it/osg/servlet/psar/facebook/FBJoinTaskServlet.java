@@ -77,7 +77,17 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 	protected String getAttachFile(String idTransaction, String from, String to, String tabAnag) {
 
 
-		String dataCSV = "Nome;ID Facebook;Totale Post from Account;Totale Post from Fan;Totale Comments ai Post;Totale Comments ai Post From Fan;Unique Authors dei Comments ai Post;Totale Likes ai Post from Account;Totale Shares dei Post from Account;Commenti della pagina ai propri Post;Commenti della pagina ai Post scritti dai Fan sulla bacheca;Delta Fan\n";
+//		String dataCSV = "Nome;ID Facebook;Totale Post from Account;Totale Post from Fan;Totale Comments ai Post;Totale Comments ai Post From Fan;Unique Authors dei Comments ai Post;Totale Likes ai Post from Account;Totale Shares dei Post from Account;Commenti della pagina ai propri Post;Commenti della pagina ai Post scritti dai Fan sulla bacheca;Delta Fan\n";
+		String dataCSV = "Nome;"+
+				"ID Facebook;" +
+				"P^{x}[i,j] + S^{x}[i,j] (Posts + Shares);" +
+				"Post^{z\\neq x} (Posts from Fan);" + 
+				"C^{x}_{Post^{x}}[i,j] (Comments);" + 
+				"L_{P^{x}}[i,j] (Likes);" + 
+				"S_{P^{x}}[i,j]  (Shares);" + 
+				"C^{x}_{Post^{x}}[i,j] (Comments of Page to own Posts);" + 
+				"C_{Post^{z\\neq x}}^{x}[i,j] (Comments of Page to other Posts);" + 
+				"Delta Fan\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -166,10 +176,17 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 //					mediaPostFromFan + ";" + commentsPerPost + ";" + uniqueAuthorsPerPost + ";" + mediaLikePerPost + ";" +
 //					sharesPerPost + ";" + commentsPerAuthor + ";" + areaISTAT + ";" + fasciaEtaISTAT + ";" +"\n";
 
-			dataCSV = dataCSV + sindacoName + ";" + currKey + ";" +
-					currPsar.postFromPageCount + ";" + currPsar.postFromFanCount + ";" + currPsar.commentsCount + ";" + currPsar.commentsToPostFromFan + ";" + 
-					uniqueAuthors + ";" + currPsar.likesCount + ";" + currPsar.sharesCount + ";" + 
-					currPsar.commnetsFromPageToPostFromPage + ";" + currPsar.commnetsFromPageToPostFromFan + ";" + totNuoviFan + "\n";
+			dataCSV = dataCSV + 
+					sindacoName + ";" + 
+					currKey + ";" +
+					currPsar.postFromPageCount + ";" + 
+					currPsar.postFromFanCount + ";" + 
+					currPsar.commentsCount + ";" + 
+					currPsar.likesCount + ";" + 
+					currPsar.sharesCount + ";" + 
+					currPsar.commnetsFromPageToPostFromPage + ";" + 
+					currPsar.commnetsFromPageToPostFromFan + ";" + 
+					totNuoviFan + "\n";
 			
 		}
 
@@ -189,7 +206,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 				alreadyPresentData.postFromFanCount = alreadyPresentData.postFromFanCount + curr.postFromFanCount;
 				alreadyPresentData.postFromPageCount = alreadyPresentData.postFromPageCount + curr.postFromPageCount;
 				alreadyPresentData.sharesCount = alreadyPresentData.sharesCount + curr.sharesCount;
-				alreadyPresentData.authors.addAll(curr.authors);
+//				alreadyPresentData.authors.addAll(curr.authors);
 				
 				alreadyPresentData.commentsToPostFromFan = alreadyPresentData.commentsToPostFromFan + curr.commentsToPostFromFan;
 				alreadyPresentData.commnetsFromPageToPostFromFan = alreadyPresentData.commnetsFromPageToPostFromFan + curr.commnetsFromPageToPostFromFan;

@@ -57,11 +57,14 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 			}
 		}
 
+		
+		//P^{x}[i,j] + S^{x}[i,j] Post e Share from page 
 		totParzPostFromPage = postFromPage.size();
 		totParzPostFromFan = postFromFan.size();
 
-		//Get all Comments
+		//Comments to Post from page
 		ArrayList<Comment> comments = FacebookUtils.getComments(postFromPage);
+		//C^{x}_{Post^{x}}[i,j] 
 		totParzComments = comments.size();
 		
 		//Get all Comments from FAN
@@ -69,21 +72,23 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		totParzCommentsToPostFromFan = commentsToPostFromFan.size();
 
 		//Get all Unique Authors of Comments
-		ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments);
-		Iterator<String> iter = uniqueAuth.iterator();
-		while (iter.hasNext()) {
-			authors = authors + iter.next() + ",";
-		}
+//		ArrayList<String> uniqueAuth = FacebookUtils.getUniqueAuthors(comments);
+//		Iterator<String> iter = uniqueAuth.iterator();
+//		while (iter.hasNext()) {
+//			authors = authors + iter.next() + ",";
+//		}
 
 		//Get all Likes to Posts
 		ArrayList<Like> likes = FacebookUtils.getLikes(postFromPage);
+		//L_{P^{x}}[i,j] 
 		totParzLikes = likes.size();
 
-		//Get all Shares to Posts
+		//S_{P^{x}}[i,j] Get all Shares to Posts
 		totParzShares = FacebookUtils.getShares(postFromPage);
 
-		//GET COMMENTS FROM PAGEID
+		//C^{x}_{Post^{x}}[i,j]		
 		totParzCommnetsFromPageToPostFromPage = FacebookUtils.getCommentsFromIdCount(pageId, comments);
+		//C_{Post^{z\neq x}}^{x}[i,j]
 		totParzCommnetsFromPageToPostFromFan = FacebookUtils.getCommentsFromIdCount(pageId, commentsToPostFromFan);
 		
 
@@ -96,7 +101,7 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		currEntity.setProperty("totParzPostFromPage", totParzPostFromPage);
 		currEntity.setProperty("totParzPostFromFan", totParzPostFromFan);
 		currEntity.setProperty("totParzComments", totParzComments);
-		currEntity.setProperty("authors", new Text(authors));
+//		currEntity.setProperty("authors", new Text(authors));
 		currEntity.setProperty("totParzLikes", totParzLikes);
 		currEntity.setProperty("totParzShares", totParzShares);
 		
