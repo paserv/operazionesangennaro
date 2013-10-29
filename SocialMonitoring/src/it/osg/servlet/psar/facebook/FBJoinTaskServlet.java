@@ -87,7 +87,8 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 				"S_{P^{x}}[i,j]  (Shares);" + 
 				"C^{x}_{Post^{x}}[i,j] (Comments of Page to own Posts);" + 
 				"C_{Post^{z\\neq x}}^{x}[i,j] (Comments of Page to other Posts);" + 
-				"Delta Fan\n";
+				"Start Fan;" + 
+				"End Fan\n";
 		double numGiorni = 0;
 		try {
 			numGiorni = DateUtils.giorniTraDueDate(DateUtils.parseDateAndTime(from), DateUtils.parseDateAndTime(to));
@@ -119,7 +120,9 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			String to2 = to.substring(0, 10) + " 23:59:59";
 			Hashtable<String, Object> toHash = getFanCount(currKey, to2, FilterOperator.LESS_THAN_OR_EQUAL, SortDirection.DESCENDING);
 			Hashtable<String, Object> fromHash = getFanCount(currKey, from, FilterOperator.GREATER_THAN_OR_EQUAL, SortDirection.ASCENDING); 
-			totNuoviFan = (Long) toHash.get("like_count") - (Long) fromHash.get("like_count");
+			long startingFan = (Long) fromHash.get("like_count");
+			long endingFan = (Long) toHash.get("like_count");
+			totNuoviFan = endingFan - startingFan;
 //			long deltaFanMedio = 0;
 //			Date toFanDate = (Date) toHash.get("date");
 //			Date fromFanDate = (Date) fromHash.get("date");
@@ -186,7 +189,8 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 					currPsar.sharesCount + ";" + 
 					currPsar.commnetsFromPageToPostFromPage + ";" + 
 					currPsar.commnetsFromPageToPostFromFan + ";" + 
-					totNuoviFan + "\n";
+					startingFan + ";" +
+					endingFan + "\n";
 			
 		}
 

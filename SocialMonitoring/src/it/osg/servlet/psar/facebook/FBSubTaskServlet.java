@@ -58,7 +58,7 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		}
 
 		
-		//P^{x}[i,j] + S^{x}[i,j] Post e Share from page 
+		//P^{x}[i,j] + S^{x}[i,j] Link, Status, Photo, Video from page 
 		totParzPostFromPage = postFromPage.size();
 		totParzPostFromFan = postFromFan.size();
 
