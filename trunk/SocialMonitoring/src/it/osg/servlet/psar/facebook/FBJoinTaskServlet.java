@@ -243,7 +243,7 @@ public class FBJoinTaskServlet extends JoinTaskServlet {
 			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", sd);
 			PreparedQuery pq = datastore.prepare(q);
 			for (Entity ent : pq.asIterable()) {
-				if ( ent.getProperty("like_count") != null) {
+				if ( ent.getProperty("like_count") != null && !((Long) ent.getProperty("like_count")).equals(0L)) {
 					result.put("like_count", (Long) ent.getProperty("like_count"));
 					result.put("date", (Date) ent.getProperty("date"));
 					return result;
