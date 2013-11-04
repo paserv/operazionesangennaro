@@ -184,6 +184,18 @@
 		<url-pattern>/FBbaseinfojointask</url-pattern>
 	</servlet-mapping>
 	<!-- FINE BASE INFO -->
+	
+	<!-- DELTA FAN -->
+	<servlet>
+		<servlet-name>DeltaFanServlet</servlet-name>
+		<servlet-class>it.osg.servlet.util.DeltaFanServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeltaFanServlet</servlet-name>
+		<url-pattern>/deltafan</url-pattern>
+	</servlet-mapping>
+	<!-- FINE DELTA FAN -->
 
 	<!-- CRON JOB DI PULIZIA -->
 	<servlet>
