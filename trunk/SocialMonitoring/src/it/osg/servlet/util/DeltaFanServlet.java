@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,7 +27,12 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
-public class DeltaFanServlet {
+public class DeltaFanServlet extends HttpServlet {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 
@@ -38,6 +44,7 @@ public class DeltaFanServlet {
 		String from = req.getParameter("from");
 		String to = req.getParameter("to");	
 		String to2 = to.substring(0, 10) + " 23:59:59";
+		out.println("ID;StartFan;EndFan<br>");
 
 		ArrayList<String> pages = new ArrayList<String>();
 
