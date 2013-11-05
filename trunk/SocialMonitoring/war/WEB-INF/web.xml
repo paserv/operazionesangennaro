@@ -128,6 +128,16 @@
 		<url-pattern>/monitorquotidianofacebookqueue</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>MonitoringModaFacebookServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringModaFacebookServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringModaFacebookServletQueue</servlet-name>
+		<url-pattern>/monitormodafacebookqueue</url-pattern>
+	</servlet-mapping>
+	
 	<!-- YOUTUBE -->
 	<servlet>
 		<servlet-name>MonitoringYouTubeServlet</servlet-name>

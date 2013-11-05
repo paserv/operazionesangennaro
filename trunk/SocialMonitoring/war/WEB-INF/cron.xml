@@ -24,4 +24,10 @@
 		</description>
 		<schedule>every 6 hours synchronized</schedule>
 	</cron>
+	<cron>
+		<url>/monitormodafacebookqueue</url>
+		<description>Monitor Facebook Pages contained in anagraficaModa table every 6 hours
+		</description>
+		<schedule>every 6 hours synchronized</schedule>
+	</cron>
 </cronentries>

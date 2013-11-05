@@ -76,7 +76,7 @@ function getMonitoredEntities() {
 	$('#pageID').empty();
 	$.ajax({
 		type: 'GET',
-		url: "http://03-monitorfacebookpages.appspot.com/rest/table/resource/" + $('#datasource').val() + "/IDFacebook",
+		url: "http://02-monitorfacebookpages.appspot.com/rest/table/resource/" + $('#datasource').val() + "/IDFacebook",
 		dataType: "json",
 		success: function(data) {
 				console.log(data);

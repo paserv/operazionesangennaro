@@ -16,6 +16,7 @@ DataSource:
 	<select id="datasource" name="datasource" onchange="getIds()">
 		<option value="anagraficaSindaco">Sindaci</option>
 		<option value="anagraficaQuotidiano">Quotidiani</option>
+		<option value="anagraficaModa">Moda</option>
     </select>
 IdPagina: 
 	<select id="pageId" name="pageId">
@@ -90,7 +91,7 @@ function getIds () {
 	
 	var socialNet = $('#socialNet').val();
 	var datasource = $('#datasource').val();
-	var rootURL = "http://03-monitorfacebookpages.appspot.com/rest/table/resource/";
+	var rootURL = "http://02-monitorfacebookpages.appspot.com/rest/table/resource/";
 	
 	$('#pageId').empty();
 	
