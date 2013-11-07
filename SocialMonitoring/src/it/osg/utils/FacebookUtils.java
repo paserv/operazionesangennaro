@@ -138,6 +138,19 @@ public class FacebookUtils {
 	}
 
 
+	public static ArrayList<Post> getAllOwnPosts (String pageId, Date f, Date t, String[] campi) {
+		ArrayList<Post> result = new ArrayList<Post>();
+		ArrayList<Post> posts = getAllPosts(pageId, f, t, campi);
+		Iterator<Post> iter = posts.iterator();
+		while (iter.hasNext()) {
+			Post currPost = iter.next();
+			if (currPost.getFrom().getId().toString().equalsIgnoreCase(pageId)){
+				result.add(currPost);
+			}
+		}
+		return result;
+	}
+	
 	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) {
 
 		ArrayList<Post> result = new ArrayList<Post>();
