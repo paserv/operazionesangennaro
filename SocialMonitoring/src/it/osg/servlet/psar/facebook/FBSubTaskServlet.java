@@ -50,7 +50,7 @@ public class FBSubTaskServlet extends SubTaskServlet  {
 		Iterator<Post> iterPost = posts.iterator();
 		while (iterPost.hasNext()) {
 			Post currPost = iterPost.next();
-			if (currPost.getFrom().getId().equals(pageId)) {
+			if (currPost.getFrom().getId().equals(pageId) && currPost.getMessage() != null) {
 				postFromPage.add(currPost);
 			} else {
 				postFromFan.add(currPost);
