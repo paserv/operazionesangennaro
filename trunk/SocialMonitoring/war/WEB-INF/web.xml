@@ -275,10 +275,20 @@
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<servlet-class>it.osg.servlet.util.RetrieveDataServlet</servlet-class>
 	</servlet>
-
+	
 	<servlet-mapping>
 		<servlet-name>RetrieveDataServlet</servlet-name>
 		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>PostToDatastoreServlet</servlet-name>
+		<servlet-class>it.osg.servlet.util.PostToDatastore</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>PostToDatastoreServlet</servlet-name>
+		<url-pattern>/posttodatastore</url-pattern>
 	</servlet-mapping>
 	<!-- FINE VARIE -->
 
