@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Text;
 
 @SuppressWarnings("serial")
 public class RetrieveDataServlet extends HttpServlet {
@@ -48,7 +49,12 @@ public class RetrieveDataServlet extends HttpServlet {
 				Iterator<String> iter = set.iterator();
 				while(iter.hasNext()) {
 					String currKey = iter.next();
-					out.println(result.get(currKey).toString() + ",");
+					Object currProp = result.get(currKey);
+					if (currProp instanceof Text) {
+						out.println(((Text) currProp).getValue()  + ",");
+					} else {
+						out.println(result.get(currKey).toString() + ",");
+					}	
 				}
 				out.println("<br>");
 				
