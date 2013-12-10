@@ -19,7 +19,7 @@ public class PipelineEngine {
 
 	public static void main(String[] args) {
 
-		PipelineEngine eng = new PipelineEngine("conf/pipeline/facebookPipeline.txt");
+		PipelineEngine eng = new PipelineEngine("conf/pipeline/tagPipeline.txt");
 		eng.run();
 		
 	}
