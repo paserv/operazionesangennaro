@@ -49,7 +49,7 @@ public class RemoveWordList extends Filter {
 
 
 				File dictionary = new File("resources/" + currValue);
-				Scanner sc = new Scanner(dictionary, "UTF-8");
+				Scanner sc = new Scanner(dictionary);
 
 				while (sc.hasNext()) {
 					String currTerm = sc.nextLine();

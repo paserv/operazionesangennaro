@@ -18,13 +18,14 @@ public class SimpleCSVWriter extends Writer {
 	public void write(ArrayList<String> input) {
 		
 		try {
-			FileOutputStream out = new FileOutputStream("output/" + config.get("path") + "_" + System.currentTimeMillis());
+			FileOutputStream out = new FileOutputStream(config.get("path") + "output_" + System.currentTimeMillis() + ".txt");
 			Iterator<String> iter = input.iterator();
 			byte[] aCapo = "\n____________________\n".getBytes();
+			byte[] space = (" ").getBytes();
 			while (iter.hasNext()){
 				String curr = iter.next();
 				out.write(curr.getBytes());
-				out.write(aCapo);
+				out.write(space);
 			}
 			out.close();
 		} catch (FileNotFoundException e1) {
