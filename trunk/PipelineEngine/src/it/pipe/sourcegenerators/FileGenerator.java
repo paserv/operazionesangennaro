@@ -19,6 +19,7 @@ public class FileGenerator extends SourceGenerator {
 		ArrayList<String> result = new ArrayList<String>();
 		try {
 			Scanner fs = new Scanner(new File(config.get("sourcefile")));
+			fs.useDelimiter("\n");
 			while (fs.hasNext()) {
 				result.add(fs.next());
 			}

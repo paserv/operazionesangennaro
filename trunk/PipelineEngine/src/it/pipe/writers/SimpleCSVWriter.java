@@ -20,12 +20,15 @@ public class SimpleCSVWriter extends Writer {
 		try {
 			FileOutputStream out = new FileOutputStream(config.get("path") + "output_" + System.currentTimeMillis() + ".txt");
 			Iterator<String> iter = input.iterator();
-			byte[] aCapo = "\n____________________\n".getBytes();
-			byte[] space = (" ").getBytes();
+			byte[] sep = (" ").getBytes();
+			String separator = config.get("separator");
+			if (separator.equals("#LF")) {
+				sep = ("\n").getBytes();
+			}
 			while (iter.hasNext()){
 				String curr = iter.next();
 				out.write(curr.getBytes());
-				out.write(space);
+				out.write(sep);
 			}
 			out.close();
 		} catch (FileNotFoundException e1) {
