@@ -43,7 +43,7 @@ public class PostStream {
 //		sindaci.put("Roberto Cosolini","250216921658628");
 //		sindaci.put("Romano Carancini","278376212226141");
 //		sindaci.put("Luca Ceriscioli","118672271588789");
-//		sindaci.put("Massimo Zedda","70036951368");
+		sindaci.put("Massimo Zedda","70036951368");
 //		sindaci.put("Gianfranco Ganau","31770497795");
 //		sindaci.put("Wladimiro Boccali","129919073737485");
 //		sindaci.put("Leopoldo Di Girolamo","49423676393");
@@ -73,19 +73,19 @@ public class PostStream {
 //		sindaci.put("Paolo Lucchi","544192248936152");
 		
 		
-		sindaci.put("Simone Uggetti","120577671459080");
-		sindaci.put("Piero Franco Rodolfo Fassino","56221866936");
-		sindaci.put("Federico Borgna","364947573545455");
-		sindaci.put("Fausto Pepe","175061545874587");
-		sindaci.put("Furio Honsell","534334929944459");
-		sindaci.put("Luigi Spagnolli","120435464635776");
-		sindaci.put("Claudio Pedrotti","164305146951493");	
-		sindaci.put("Guido Tendas","354956144525858");
-		sindaci.put("Vito Damiano","207112332753505");
-		sindaci.put("Bruno Valentini","457562410985448");
-		sindaci.put("Giorgio Orsoni","598261373517812");
-		sindaci.put("Ivo Rossi","1503811910");
-		sindaci.put("Guido Castelli","52932694036");
+//		sindaci.put("Simone Uggetti","120577671459080");
+//		sindaci.put("Piero Franco Rodolfo Fassino","56221866936");
+//		sindaci.put("Federico Borgna","364947573545455");
+//		sindaci.put("Fausto Pepe","175061545874587");
+//		sindaci.put("Furio Honsell","534334929944459");
+//		sindaci.put("Luigi Spagnolli","120435464635776");
+//		sindaci.put("Claudio Pedrotti","164305146951493");	
+//		sindaci.put("Guido Tendas","354956144525858");
+//		sindaci.put("Vito Damiano","207112332753505");
+//		sindaci.put("Bruno Valentini","457562410985448");
+//		sindaci.put("Giorgio Orsoni","598261373517812");
+//		sindaci.put("Ivo Rossi","1503811910");
+//		sindaci.put("Guido Castelli","52932694036");
 
 		Date from = null;
 		Date to = null;
