@@ -138,6 +138,16 @@
 		<url-pattern>/monitormodafacebookqueue</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>MonitoringSanremoFacebookServletQueue</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.facebook.MonitoringSanremoFacebookServletQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringSanremoFacebookServletQueue</servlet-name>
+		<url-pattern>/monitorsanremofacebookqueue</url-pattern>
+	</servlet-mapping>
+	
 	<!-- YOUTUBE -->
 	<servlet>
 		<servlet-name>MonitoringYouTubeServlet</servlet-name>
