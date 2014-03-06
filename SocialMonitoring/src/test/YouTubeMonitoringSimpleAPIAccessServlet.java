@@ -1,11 +1,7 @@
 package test;
 
-import it.osg.utils.DateUtils;
-
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -13,8 +9,6 @@ import java.util.Random;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import sun.util.calendar.LocalGregorianCalendar.Date;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
 import com.google.api.client.http.HttpTransport;
@@ -24,13 +18,9 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.Activity;
 import com.google.api.services.youtube.model.ActivityListResponse;
-import com.google.api.services.youtube.model.Channel;
-import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
 import com.google.api.services.youtubeAnalytics.YouTubeAnalytics;
-import com.google.api.services.youtubeAnalytics.YouTubeAnalyticsRequestInitializer;
-import com.google.api.services.youtubeAnalytics.model.ResultTable;
 
 public class YouTubeMonitoringSimpleAPIAccessServlet extends HttpServlet {
 
