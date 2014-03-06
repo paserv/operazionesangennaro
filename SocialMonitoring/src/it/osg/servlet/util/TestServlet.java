@@ -65,25 +65,56 @@ public class TestServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)	throws IOException {
 		resp.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		out.println("CIAO");
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query q;
+		
+		Date from = null;
+		Date to = null;
 		try {
-			Filter fromFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, DateUtils.parseDateAndTime("30-10-2013 00:00:00"));
-			Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, "390316297742803");
-			Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
-			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.DESCENDING);
-			PreparedQuery pq = datastore.prepare(q);
-			for (Entity ent : pq.asIterable()) {
-				if ( ent.getProperty("like_count") != null) {
-					out.println("like_count: " + (Long) ent.getProperty("like_count"));
-					out.println("talking_about_count: " + ent.getProperty("talking_about_count"));
-					out.println("date: " + ent.getProperty("date"));
-				}
-			}
+			from = DateUtils.parseDateAndTime("01-10-2013 00:00:00");
+			to = DateUtils.parseDateAndTime("31-10-2013 23:59:59");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		ArrayList<Post> posts = FacebookUtils.getAllPosts("422625477753021", from, to, null);
+		
+		Iterator<Post> postIter = posts.iterator();
+		while (postIter.hasNext()) {
+			Post currPost = postIter.next();
+			if (currPost.getMessage() != null) {
+				String currMessage = currPost.getMessage().replaceAll ("[ \\p{Punct}]", " ");
+				out.println(currMessage + "<br>");
+				ArrayList<Comment> comments = FacebookUtils.getAllComments(currPost);
+				Iterator<Comment> commIter = comments.iterator();
+				while (commIter.hasNext()) {
+					Comment currComment = commIter.next();
+					if (currComment.getMessage() != null) {
+						String currCommMessage = currComment.getMessage().replaceAll ("[ \\p{Punct}]", " ");
+						out.println(currCommMessage + "<br>");						
+					}
+				}
+			}
+		}
+		
+		
+//		out.println("CIAO");
+//		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+//		Query q;
+//		try {
+//			Filter fromFilter = new FilterPredicate("date", FilterOperator.LESS_THAN_OR_EQUAL, DateUtils.parseDateAndTime("30-10-2013 00:00:00"));
+//			Filter idPageFilter = new FilterPredicate("idFacebook", FilterOperator.EQUAL, "390316297742803");
+//			Filter compositeFilter = CompositeFilterOperator.and(idPageFilter, fromFilter);
+//			q = new Query(Constants.FACEBOOK_MONITOR_TABLE).setFilter(compositeFilter).addSort("date", SortDirection.DESCENDING);
+//			PreparedQuery pq = datastore.prepare(q);
+//			for (Entity ent : pq.asIterable()) {
+//				if ( ent.getProperty("like_count") != null) {
+//					out.println("like_count: " + (Long) ent.getProperty("like_count"));
+//					out.println("talking_about_count: " + ent.getProperty("talking_about_count"));
+//					out.println("date: " + ent.getProperty("date"));
+//				}
+//			}
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 	
 		
 //		Date f = null;
