@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!-- Servlets -->
+
+
+	<!-- MONITORING -->
+	<servlet>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<url-pattern>/facebook/monitoring</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MonitorServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitorServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitorServlet</servlet-name>
+		<url-pattern>/facebook/monitor</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MonitoringTrasmissioniServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringTrasmissioniServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringTrasmissioniServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/trasmissioni</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MonitoringSindaciServlet</servlet-name>
+		<servlet-class>it.osg.servlet.monitoring.MonitoringSindaciServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MonitoringSindaciServlet</servlet-name>
+		<url-pattern>/facebook/monitoring/sindaci</url-pattern>
+	</servlet-mapping>
+	<!-- FINE MONITORING -->
+
+
+
+	<!-- CONF -->
+	<servlet>
+		<servlet-name>Conf Time Likes Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.conf.ConfTimeLikesServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Conf Time Likes Servlet</servlet-name>
+		<url-pattern>/conf/conftimelikes</url-pattern>
+	</servlet-mapping>
+	<!-- FINE CONF -->
+
+
+
+	<!-- PSAR -->
+	<servlet>
+		<servlet-name>SplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.SplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SplitTaskServlet</servlet-name>
+		<url-pattern>/splittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.SubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SubTaskServlet</servlet-name>
+		<url-pattern>/subtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>JoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.psar.JoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>JoinTaskServlet</servlet-name>
+		<url-pattern>/jointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE PSAR -->
+
+	
+	<!-- IMM2 -->
+	<servlet>
+		<servlet-name>Imm2SplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2SplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2SplitTaskServlet</servlet-name>
+		<url-pattern>/imm2splittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Imm2SubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2SubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2SubTaskServlet</servlet-name>
+		<url-pattern>/imm2subtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Imm2JoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.imm2.Imm2JoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Imm2JoinTaskServlet</servlet-name>
+		<url-pattern>/imm2jointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE IMM2 -->
+
+
+	<!-- BASEINFO -->
+	<servlet>
+		<servlet-name>BaseInfoSplitTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoSplitTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoSplitTaskServlet</servlet-name>
+		<url-pattern>/baseinfosplittask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BaseInfoSubTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoSubTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoSubTaskServlet</servlet-name>
+		<url-pattern>/baseinfosubtask</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>BaseInfoJoinTaskServlet</servlet-name>
+		<servlet-class>it.osg.servlet.baseinfo.BaseInfoJoinTaskServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>BaseInfoJoinTaskServlet</servlet-name>
+		<url-pattern>/baseinfojointask</url-pattern>
+	</servlet-mapping>
+	<!-- FINE BASEINFO -->
+
+
+	<!-- CRON JOB DI PULIZIA -->
+	<servlet>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteTaskLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteTaskLogServlet</servlet-name>
+		<url-pattern>/deletetasklog</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteNodeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteNodeLogServlet</servlet-name>
+		<url-pattern>/deletenodelog</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteEdgeLogServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteEdgeLogServlet</servlet-name>
+		<url-pattern>/deleteedgelog</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<servlet-class>it.osg.servlet.DeleteBaseInfoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>DeleteBaseInfoServlet</servlet-name>
+		<url-pattern>/deletebaseinfo</url-pattern>
+	</servlet-mapping>
+	<!-- FINE CRON JOB DI PULIZIA -->
+
+
+
+	<!-- VARIE -->
+	<servlet>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<servlet-class>it.osg.servlet.RetrieveDataServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RetrieveDataServlet</servlet-name>
+		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Bulk Upload</servlet-name>
+		<servlet-class>it.osg.servlet.BulkUploaderServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Bulk Upload</servlet-name>
+		<url-pattern>/bulk/bulkupload</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Test Servlet</servlet-name>
+		<servlet-class>it.osg.servlet.TestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Test Servlet</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Add To Queue</servlet-name>
+		<servlet-class>it.osg.servlet.AddToQueue</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Add To Queue</servlet-name>
+		<url-pattern>/atq</url-pattern>
+	</servlet-mapping>
+
+	<!-- FINE VARIE -->
+
+
+
+	<!-- JERSEY -->
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>it.osg.service.rest.impl</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerResponseFilters</param-name>
+			<param-value>it.osg.security.ResponseCorsFilter</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!-- <servlet-mapping> <servlet-name>Jersey Web Application</servlet-name> 
+		<url-pattern>/resources/*</url-pattern> </servlet-mapping> -->
+
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<!-- FINE JERSEY -->
+
+
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value/>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+</web-app>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Monitor Facebook Pages</title>
+</head>
+
+<body>
+    <a href="_ah/admin">Local Admin</a>
+    <br>
+    <a href="https://appengine.google.com/dashboard?&app_id=s~03-monitorfacebooksindaci">AppEngine Admin</a>
+	<br>
+	<a href="facebook/monitoring">Test Monitor</a>
+	<br>
+	<a href="test">Test Servlet</a>
+	<br>
+    <a href="facebook/monitoring/ballaro">Test Monitor Ballaro</a>
+    <br>
+    <a href="facebook/monitoring/data">Retrieve Data</a>
+    <br>
+	<a href="bulk/bulkuploader.jsp">Bulk Upload</a>
+	<br>
+	<a href="rest/resource/ballaro">Test REST</a>
+	<br>
+    <a href="rest/resource/time/likes/ballaro/15-05-2013 10:30:00/15-05-2013 11:30:00">Test Time-Ballaro</a>
+	<br>
+	 <a href="rest/resource/time/commentcount/Ballaro.Rai/15-05-2013 10:30:00/15-05-2013 11:30:00">Test Commentcount-Ballaro</a>
+	<br>
+	<a href="monitor/test.html">Test REST-Ajax</a>
+	<br>
+	<a href="psar">PSAR</a>
+	
+	<form method="post" action="data">
+	
+    Tabella
+    <input type="text" id="tabella" name="tabella" />
+    
+    Operazione
+    <select id="operazione" name="operazione" >
+  		<option value="select">Select</option>
+  		<option value="delete">Delete</option>
+  		<option value="test">Test</option>
+ 	</select>
+    
+    <button id="getData">Get Data</button>
+	</form>
+	<br>
+	<br>
+	<form method="post" action="imm2">
+    Page ID
+    <input type="text" id="pageId" name="pageId" />
+    From
+    <input type="text" id="from" name="from" />
+    To
+    <input type="text" id="to" name="to" />    
+    <button id="getGraph">Get Graph</button>
+	</form>
+	
+	<br>
+	<br>
+	<br>
+	<br>
+	<a href="delete">Delete DS</a>
+
+    
+	
+</body>
+</html>

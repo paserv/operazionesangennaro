@@ -1,0 +1,113 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://01-monitorfacebookpages.appspot.com/_ah/api",
+  "name" : "mail",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://01-monitorfacebookpages.appspot.com/_ah/spi",
+    "deadline" : 10.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "methods" : {
+    "mail.send.authed" : {
+      "path" : "send/authed",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "772236607396.apps.googleusercontent.com" ],
+      "clientIds" : [ "772236607396.apps.googleusercontent.com", "replace this with your Android client ID", "replace this with your iOS client ID", "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "osg.service.endpoints.MailService.authedSendMail",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "mail.send" : {
+      "path" : "sendMail/{destinatario}/{oggetto}/{text}/{mittente}",
+      "httpMethod" : "post",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "772236607396.apps.googleusercontent.com" ],
+      "clientIds" : [ "772236607396.apps.googleusercontent.com", "replace this with your Android client ID", "replace this with your iOS client ID", "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "osg.service.endpoints.MailService.sendMail",
+      "request" : {
+        "parameters" : {
+          "destinatario" : {
+            "type" : "string",
+            "required" : true
+          },
+          "oggetto" : {
+            "type" : "string",
+            "required" : true
+          },
+          "text" : {
+            "type" : "string",
+            "required" : true
+          },
+          "mittente" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Mail" : {
+        "id" : "Mail",
+        "type" : "object",
+        "properties" : {
+          "destinatario" : {
+            "type" : "string"
+          },
+          "oggetto" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "mittente" : {
+            "type" : "string"
+          },
+          "mailMittente" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "osg.service.endpoints.MailService.authedSendMail" : {
+        "response" : {
+          "$ref" : "Mail"
+        }
+      },
+      "osg.service.endpoints.MailService.sendMail" : {
+        "response" : {
+          "$ref" : "Mail"
+        }
+      }
+    }
+  }
+}
