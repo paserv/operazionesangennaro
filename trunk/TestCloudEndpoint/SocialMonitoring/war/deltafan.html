@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" href="css/styles_time.css" />
+<link rel="stylesheet" href="css/jquery-ui-timepicker-addon.css" />
+<title>PSAR</title>
+</head>
+
+<body>
+	<div class="header">
+		DataSource: <select id="tabAnagrafica" name="tabAnagrafica">
+			<option value="anagraficaSindaco">Sindaci</option>
+			<option value="anagraficaQuotidiano">Quotidiani</option>
+			<option value="anagraficaModa">Moda</option>
+		</select> Social Network: <select id="IDField" name="IDField">
+			<option value="IDPlus">Plus</option>
+			<option value="IDFacebook">Facebook</option>
+			<option value="IDYoutube">Youtube</option>
+		</select> From: <input type="text" id="from" name="from" /> To: <input
+			type="text" id="to" name="to" />
+		<button id="getData">Get Data</button>
+	</div>
+
+	<br>
+	<div style="border:1px solid black;">
+		<div id="results"></div>
+	</div>
+
+	<script type="text/javascript" src="js/jquery-2.0.0.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.10.3.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
+
+	<script type="text/javascript">
+		$(function() {
+			$('#from').datetimepicker({
+				dateFormat : "dd-mm-yy",
+				timeFormat : "HH:mm:ss"
+			});
+			$('#to').datetimepicker({
+				dateFormat : "dd-mm-yy",
+				timeFormat : "HH:mm:ss"
+			});
+		});
+
+		$(document).ready(
+				function() {
+
+					$('#getData')
+							.click(
+									function() {
+
+										var tabAnagrafica = $('#tabAnagrafica')
+												.val();
+										var socialNet = $('#IDField').val();
+										var from = $('#from').val();
+										var to = $('#to').val();
+
+										var dataString = "tabAnagrafica="
+												+ tabAnagrafica + "&from="
+												+ from + "&to=" + to
+												+ "&IDField=" + socialNet;
+										$.ajax({
+											type : "POST",
+											url : "deltafan",
+											data : dataString,
+											success : function(data) {
+												$('#results').show();
+												$('#results').html(data);
+											}
+										});
+									});
+
+				});
+	</script>
+</body>
+</html>

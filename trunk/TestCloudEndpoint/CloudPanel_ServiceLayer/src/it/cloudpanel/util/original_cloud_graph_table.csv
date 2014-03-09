@@ -1,0 +1,119 @@
+id;domandaDeploy;domandaDelivery;costs;timeToValueDeploy;regulatoryCompliance;control;governance;availability;customizability;timeToValueDelivery;migrationIntegration;contestoEconomico;contestoOrganizzativo;contestoTecnologico;contestoGiuridico;domanda;risposta;publicCloud;communityOnPremise;communityOffPremise;hybridCloud;privateOnPremise;privateOffPremise;noCloudFit;iaaS;paaS;saaS;bpaaS
+1;true;false;true;true;false;false;false;false;false;false;false;false;false;true;false;C'Š la necessit… di scalare rapidamente le risorse IT per far fronte a picchi di lavoro?;si;0;0;0;1;0;0;0;;;;
+2;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;C'Š la necessit… di scalare rapidamente le risorse IT per far fronte a picchi di lavoro?;no;0;0;0;0;0;0;0;;;;
+3;true;false;true;true;false;false;false;false;false;false;false;false;true;false;false;L'esigenza cloud sar… presente solo per un tempo limitato ?;si;1;0;0;0;0;0;0;;;;
+4;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;L'esigenza cloud sar… presente solo per un tempo limitato ?;no;0;0;0;0;1;1;0;;;;
+5;true;false;true;false;false;true;true;false;false;false;false;true;false;true;false;Dispongo di una server farm on-premises ?;si;0;1;0;1;1;0;0;;;;
+6;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo di una server farm on-premises ?;no;1;0;1;0;0;1;0;;;;
+7;true;false;true;false;false;true;true;false;false;false;false;true;false;true;false;Dispongo di un'infrastruttura cloud privata ?;si;0;1;0;1;1;0;0;;;;
+8;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo di un'infrastruttura cloud privata ?;no;1;0;1;0;0;1;0;;;;
+9;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;Dispongo di un team per manutenzione/aggiornamento software ?;si;0;1;0;1;1;0;0;;;;
+10;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo di un team per manutenzione/aggiornamento software ?;no;1;0;1;1;0;1;0;;;;
+11;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;Dispongo di un team per la manutenzione/aggiornamento della server farm ?;si;0;1;0;1;1;0;0;;;;
+12;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo di un team per la manutenzione/aggiornamento della server farm ?;no;1;0;1;1;0;1;0;;;;
+13;true;true;true;true;false;false;false;false;false;true;false;true;true;false;false;Ho necessit… di ottenere un servizio nell'immediato ?;si;1;0;0;0;0;0;0;0;0;1;1
+14;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Ho necessit… di ottenere un servizio nell'immediato ?;no;0;0;0;0;0;0;1;0;0;0;0
+15;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;Posso disporre di un team atto a gestire la contraction con i cloud provider ?;si;1;0;1;1;0;1;0;;;;
+16;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Posso disporre di un team atto a gestire la contraction con i cloud provider ?;no;0;0;0;0;0;0;1;;;;
+17;true;false;false;false;false;true;false;false;false;false;false;false;true;true;false;Il servizio coinvolge funzionalit… e/o dati mission critical ?;si;0;0;0;0;1;0;1;;;;
+18;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Il servizio coinvolge funzionalit… e/o dati mission critical ?;no;1;1;1;1;1;1;0;;;;
+19;true;false;false;false;true;true;false;false;false;false;false;false;false;false;true;Ho necessit… di dimostrare dove sono localizzati i dati della mia applicazione?;si;0;1;0;0;1;0;1;;;;
+20;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Ho necessit… di dimostrare dove sono localizzati i dati della mia applicazione?;no;1;1;1;1;1;1;0;;;;
+21;true;false;true;false;false;false;false;false;false;false;false;true;false;false;false;"Ho la necessit… di minimizzare la ""power consuption""";si;1;0;1;0;0;1;0;;;;
+22;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;"Ho la necessit… di minimizzare la ""power consuption""";no;0;0;0;0;0;0;0;;;;
+23;true;false;false;false;false;true;false;false;false;false;false;false;true;false;true;Desidero avere il controllo esclusivo sui dati ?;si;0;1;0;0;1;0;1;;;;
+24;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Desidero avere il controllo esclusivo sui dati ?;no;0;0;0;0;0;0;0;;;;
+25;true;true;false;false;true;true;true;false;false;false;true;false;true;false;true;La mia applicazione pu• essere distribuita tra ambiente on-premises ed off-premises?;si;0;0;0;1;0;0;0;0;1;0;0
+26;true;true;false;false;false;false;false;false;false;false;false;false;false;false;false;La mia applicazione pu• essere distribuita tra ambiente on-premises ed off-premises?;no;0;0;0;0;0;0;0;0;0;0;0
+27;true;false;false;false;true;true;false;false;false;false;false;false;false;false;true;I dati che verranno trattati sono di natura confidenziale?;si;0;1;0;0;1;0;1;;;;
+28;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;I dati che verranno trattati sono di natura confidenziale?;no;0;0;0;0;0;0;0;;;;
+29;true;false;false;true;false;false;true;false;false;false;false;false;true;false;false;Dispongo internamente di expertise per valutare con precisione le prestazioni e l'idoneit… dei vendor ?;si;1;0;0;1;0;0;0;;;;
+30;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo internamente di expertise per valutare con precisione le prestazioni e l'idoneit… dei vendor ?;no;0;0;0;0;0;0;1;;;;
+31;true;false;false;false;true;false;true;false;false;false;false;false;true;false;true;Dispongo di una funzione aziendale atta a gestire le implicazioni legali legate all'utilizzo di soluzioni Cloud ?;si;1;0;0;0;0;0;0;;;;
+32;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Dispongo di una funzione aziendale atta a gestire le implicazioni legali legate all'utilizzo di soluzioni Cloud ?;no;0;0;0;0;0;0;1;;;;
+33;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;Internamente all'azienda sono disponibili skills legati all'ambiente Cloud?;si;1;1;1;1;1;1;0;;;;
+34;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Internamente all'azienda sono disponibili skills legati all'ambiente Cloud?;no;1;0;0;0;0;0;1;;;;
+35;true;true;false;false;false;false;true;false;false;false;true;false;false;true;false;Internamente all'azienda sono disponibili skills legati all'integrazione tra applicazioni?;si;1;1;1;1;0;0;0;0;1;1;0
+36;true;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Internamente all'azienda sono disponibili skills legati all'integrazione tra applicazioni?;no;0;0;1;0;0;0;0;0;1;0;0
+37;true;false;false;false;false;true;false;false;false;false;false;true;true;true;false;Desidero stabilire quali siano i meccanismi di monitoring ed utilizzo delle risorse legate al servizio ?;si;0;1;0;0;1;0;1;;;;
+38;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Desidero stabilire quali siano i meccanismi di monitoring ed utilizzo delle risorse legate al servizio ?;no;0;0;0;0;0;0;0;;;;
+39;true;false;false;false;false;false;false;true;false;false;false;false;true;false;false;Ho necessit… che i servizi siano utilizzabili esternamente al perimetro aziendale?;si;1;1;1;1;0;0;0;;;;
+40;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Ho necessit… che i servizi siano utilizzabili esternamente al perimetro aziendale?;no;0;0;0;0;0;0;0;;;;
+41;true;false;false;false;true;false;true;false;false;false;false;false;false;true;true;Internamente all'azienda sono disponibili skills legati alla sicurezza in ambiente Cloud?;si;1;1;1;1;1;1;0;;;;
+42;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Internamente all'azienda sono disponibili skills legati alla sicurezza in ambiente Cloud?;no;0;0;0;0;0;0;1;;;;
+43;false;true;false;false;false;false;true;false;false;false;true;false;false;true;false;Devo migrare funzionalit… gi… esistenti?;si;;;;;;;;1;1;1;0
+44;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Devo migrare funzionalit… gi… esistenti?;no;;;;;;;;0;0;0;0
+45;true;false;true;false;false;false;false;false;false;false;false;true;true;true;false;Desidero mantenere costantemente allineate le risorse IT e le esigenze di business ?;si;1;0;0;1;0;0;0;;;;
+46;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Desidero mantenere costantemente allineate le risorse IT e le esigenze di business ?;no;0;0;0;0;0;0;0;;;;
+47;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;Il reparto IT della mia azienda ha gi… esperienza nel gestire risorse outsourced?;si;1;0;1;1;0;1;0;;;;
+48;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Il reparto IT della mia azienda ha gi… esperienza nel gestire risorse outsourced?;no;0;0;0;0;0;0;1;;;;
+49;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;La mia azienda Š in grado di rivalutare continuamente il mercato Cloud e le proprie offerte, in base al continuo miglioramento dei servizi e delle tecnologie sottostanti ?;si;1;0;0;1;0;0;0;;;;
+50;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;La mia azienda Š in grado di rivalutare continuamente il mercato Cloud e le proprie offerte, in base al continuo miglioramento dei servizi e delle tecnologie sottostanti ?;no;0;0;0;0;0;0;1;;;;
+51;true;false;true;true;false;false;false;false;false;false;false;true;true;true;false;Ho la necessit… di realizzare un ambiente di test e sviluppo?;si;0;0;0;1;0;0;0;;;;
+52;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Ho la necessit… di realizzare un ambiente di test e sviluppo?;no;0;0;0;0;0;0;0;;;;
+53;true;false;true;false;false;false;false;false;false;false;false;true;true;false;false;Desidero ridurre strategicamente a medio/lungo termine il TCO ?;si;1;0;0;1;0;0;0;;;;
+54;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Desidero ridurre strategicamente a medio/lungo termine il TCO ?;no;0;0;0;0;0;0;0;;;;
+55;false;true;false;false;false;false;false;false;true;false;true;false;false;true;false;Un cambiamento del processo di business richiede un cambiamento all'applicativo che lo supporta?;si;;;;;;;;1;1;0;0
+56;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Un cambiamento del processo di business richiede un cambiamento all'applicativo che lo supporta?;no;;;;;;;;0;0;1;1
+57;true;true;true;true;false;false;false;false;false;true;false;true;false;true;false;Desidero avere accesso e sperimentare, in modo veloce, funzionalit… nuove?;si;1;0;0;0;0;0;0;0;0;1;1
+58;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Desidero avere accesso e sperimentare, in modo veloce, funzionalit… nuove?;no;0;0;0;0;1;1;1;0;0;0;0
+59;true;false;true;false;false;false;true;false;false;false;false;true;true;false;false;Il piano strategico aziendale prevede la possibilit… di divenire Cloud Provider?;si;0;1;0;1;1;0;0;;;;
+60;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Il piano strategico aziendale prevede la possibilit… di divenire Cloud Provider?;no;1;0;1;1;0;1;0;;;;
+61;false;true;false;false;false;false;false;false;false;true;false;false;false;true;false;Si vuole sperimentare l'adeguatezza di nuovi prodotti e servizi a supporto dei processi ?;si;;;;;;;;0;0;1;1
+62;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si vuole sperimentare l'adeguatezza di nuovi prodotti e servizi a supporto dei processi ?;no;;;;;;;;0;0;0;0
+63;true;false;true;false;false;true;false;false;false;false;false;false;true;false;false;Il servizio Cloud richiesto deve supportare l'interazione con pi— organizzazioni che hanno relazioni ed interessi comuni ? ;si;0;1;1;0;0;0;0;;;;
+64;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Il servizio Cloud richiesto deve supportare l'interazione con pi— organizzazioni che hanno relazioni ed interessi comuni ? ;no;0;0;0;0;0;0;0;;;;
+65;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;"Le organizzazioni coinvolte hanno la possibilit… di collaborare su una piattaforma condivisa in un ""Business Service Environment""?";si;0;1;1;0;0;0;0;;;;
+66;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;"Le organizzazioni coinvolte hanno la possibilit… di collaborare su una piattaforma condivisa in un ""Business Service Environment""?";no;0;0;0;0;0;0;0;;;;
+67;true;false;false;false;true;true;false;false;false;false;false;false;true;false;true;"Le informazioni e gli asset creati nel corso di una collaborazione possono essere condivisi (o la loro ""Intellectual Property"" appartiene all'azienda) ?";si;0;1;1;0;0;0;0;;;;
+68;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;"Le informazioni e gli asset creati nel corso di una collaborazione possono essere condivisi (o la loro ""Intellectual Property"" appartiene all'azienda) ?";no;0;1;0;0;1;0;0;;;;
+69;true;false;false;false;true;false;false;false;false;false;false;false;false;false;true;La legislazione vigente consente lo storage e l'accesso ai dati coinvolti nel servizio Cloud in un'infrastruttura pubblica?;si;1;0;0;0;0;0;0;;;;
+70;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;La legislazione vigente consente lo storage e l'accesso ai dati coinvolti nel servizio Cloud in un'infrastruttura pubblica?;no;0;0;0;1;1;0;1;;;;
+71;true;false;false;false;true;true;false;false;false;false;false;false;false;true;true;"I dati su cui il servizio si basa possono essere isolati effettivamente in modo da ottenere  uno storage ed un accesso ""sicuro""?";si;0;0;0;1;0;0;0;;;;
+72;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;"I dati su cui il servizio si basa possono essere isolati effettivamente in modo da ottenere  uno storage ed un accesso ""sicuro""?";no;0;0;0;0;1;0;1;;;;
+73;true;true;true;true;false;false;false;false;false;true;false;false;false;false;false;Si intende rinnovare e modernizzare servizi ed applicativi software alla fine del loro ciclo di vita ?;si;1;0;0;0;0;0;0;0;0;1;1
+74;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Si intende rinnovare e modernizzare servizi ed applicativi software alla fine del loro ciclo di vita ?;no;0;0;0;1;1;1;0;0;0;0;0
+75;true;false;false;true;false;false;true;false;false;false;false;false;true;false;false;Si dispone di skill necessari a condurre una Cloud Transition?;si;1;1;1;1;1;1;0;;;;
+76;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Si dispone di skill necessari a condurre una Cloud Transition?;no;1;0;0;0;0;0;1;;;;
+77;true;false;false;false;false;true;true;false;false;false;false;false;true;true;false;Sono presenti skills interni per sviluppare e gestire la sicurezza del servizio?;si;0;0;0;0;0;0;0;;;;
+78;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Sono presenti skills interni per sviluppare e gestire la sicurezza del servizio?;no;1;0;0;0;0;0;0;;;;
+79;true;true;true;true;false;false;false;false;false;true;false;true;false;true;false;Si intende fornire alla propria forza lavoro di strumenti di produttivit… in maniera rapida?;si;1;0;0;0;0;0;0;0;0;1;1
+80;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Si intende fornire alla propria forza lavoro di strumenti di produttivit… in maniera rapida?;no;0;0;0;0;0;0;0;0;0;0;0
+81;true;false;false;true;false;true;false;false;false;false;false;false;true;false;false;Si desidera consentire l'accesso a nuove risorse mediante un modello self-provisioning?;si;1;0;0;0;0;0;0;;;;
+82;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Si desidera consentire l'accesso a nuove risorse mediante un modello self-provisioning?;no;0;0;0;0;0;0;0;;;;
+83;true;false;true;true;false;false;false;false;false;false;false;true;false;false;false;Si intende effettuare investimenti in hardware?;si;0;0;0;0;0;0;0;;;;
+84;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Si intende effettuare investimenti in hardware?;no;1;0;1;0;1;0;1;;;;
+85;true;false;false;true;false;false;true;false;false;false;false;false;true;false;false;Posso disporre di un team atto a gestire l'acquisizione di prodotti software e delle relative licenze?;si;0;0;0;0;0;0;0;;;;
+86;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Posso disporre di un team atto a gestire l'acquisizione di prodotti software e delle relative licenze?;no;1;0;0;0;0;0;0;;;;
+87;true;false;false;false;false;false;true;false;false;false;false;false;true;false;false;C'Š una cultura aziendale atta a recepire il paradigma del Cloud Computing? ;si;1;1;1;1;1;1;0;;;;
+88;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;C'Š una cultura aziendale atta a recepire il paradigma del Cloud Computing? ;no;0;0;0;0;0;0;1;;;;
+89;true;false;false;false;false;false;false;true;false;false;false;false;true;false;false;Il timore della scomparsa dal mercato del Cloud Provider Š sentito?;si;0;1;0;0;1;0;1;;;;
+90;true;false;false;false;false;false;false;false;false;false;false;false;false;false;false;Il timore della scomparsa dal mercato del Cloud Provider Š sentito?;no;1;0;0;1;0;0;0;;;;
+91;true;false;true;true;false;false;true;false;false;false;false;false;true;false;false;Ci sono competenze architetturali per allestire un'infrastruttura Cloud privata?;si;0;1;0;0;1;0;0;;;;
+92;true;false;true;false;false;false;false;false;false;false;false;false;false;false;false;Ci sono competenze architetturali per allestire un'infrastruttura Cloud privata?;no;1;0;0;0;0;0;0;;;;
+93;false;true;false;false;false;false;false;false;true;false;false;false;true;true;false;Prevedo la possibilit… di apportare modifiche custom all'applicativo software?;si;;;;;;;;1;1;0;0
+94;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Prevedo la possibilit… di apportare modifiche custom all'applicativo software?;no;;;;;;;;0;0;0;0
+95;true;true;false;true;false;false;false;false;false;true;false;false;true;false;false;Desidero disporre di soluzioni software che implementano processi standard?;si;1;0;0;0;0;0;0;0;0;1;1
+96;true;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Desidero disporre di soluzioni software che implementano processi standard?;no;0;0;0;0;0;0;0;0;0;0;0
+97;true;true;true;false;false;false;false;false;false;true;false;true;true;false;false;Desidero ottenere una soluzione software impiegando al minimo le risorse del dipartimento IT ?;si;1;0;1;0;0;1;0;0;0;1;1
+98;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Desidero ottenere una soluzione software impiegando al minimo le risorse del dipartimento IT ?;no;0;1;0;0;1;0;1;0;0;0;0
+99;true;true;true;true;false;false;false;false;false;true;false;true;true;false;false;Devo migrare funzionalit… esistenti che siano tipicamente disponibili in Cloud senza la necessit… di customizzazioni?;si;1;0;0;0;0;0;0;0;0;1;1
+100;true;true;true;false;false;false;false;false;false;false;false;false;false;false;false;Devo migrare funzionalit… esistenti che siano tipicamente disponibili in Cloud senza la necessit… di customizzazioni?;no;0;0;0;0;0;0;0;0;0;0;0
+101;false;true;false;false;false;false;false;false;false;false;true;true;false;true;false;Devo migrare un applicativo esistente on-premises, sviluppato su una piattaforma software che trova una soluzione equivalente nel Cloud?;si;;;;;;;;0;1;0;0
+102;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Devo migrare un applicativo esistente on-premises, sviluppato su una piattaforma software che trova una soluzione equivalente nel Cloud?;no;;;;;;;;0;0;0;0
+103;false;true;false;false;false;false;false;false;false;false;true;false;true;true;false;Desidero evitare che agli utenti vengano proposte interfacce diverse da quelle a cui sono solitamente abituati?;si;;;;;;;;1;1;0;0
+104;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Desidero evitare che agli utenti vengano proposte interfacce diverse da quelle a cui sono solitamente abituati?;no;;;;;;;;0;0;0;0
+105;false;true;false;false;false;false;false;false;false;false;true;false;false;true;false;Si rende necessaria un'integrazione a livello presentation?;si;;;;;;;;0;0;1;1
+106;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si rende necessaria un'integrazione a livello presentation?;no;;;;;;;;0;0;0;0
+107;false;true;false;false;false;false;false;false;false;false;true;false;false;true;false;Si rende necessaria un'integrazione a livello servizi?;si;;;;;;;;0;1;0;0
+108;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si rende necessaria un'integrazione a livello servizi?;no;;;;;;;;0;0;0;0
+109;false;true;false;false;false;false;false;false;false;true;false;false;true;false;false;Ci sono competenze interne per lo sviluppo di soluzioni software?;si;;;;;;;;0;1;0;0
+110;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Ci sono competenze interne per lo sviluppo di soluzioni software?;no;;;;;;;;0;0;0;0
+111;false;true;false;false;false;false;false;false;false;true;false;false;true;false;false;Si intende coinvolgere il reparto ICT per gestire una infrastruttura fisica di elaborazione?;si;;;;;;;;1;0;0;0
+112;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si intende coinvolgere il reparto ICT per gestire una infrastruttura fisica di elaborazione?;no;;;;;;;;0;0;1;1
+113;false;true;false;false;false;false;false;false;false;true;false;false;true;false;false;Si intendere coinvolgere il reparto ICT per gestire una piattaforma applicativa sulla quale sviluppare e eseguire le proprie applicazioni?;si;;;;;;;;0;1;0;0
+114;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si intendere coinvolgere il reparto ICT per gestire una piattaforma applicativa sulla quale sviluppare e eseguire le proprie applicazioni?;no;;;;;;;;0;0;1;1
+115;false;true;false;false;false;false;false;false;false;true;false;false;true;false;false;Si intendere coinvolgere il reparto ICT per gestire la sola l?applicazione?;si;;;;;;;;0;0;1;1
+116;false;true;false;false;false;false;false;false;false;false;false;false;false;false;false;Si intendere coinvolgere il reparto ICT per gestire la sola l?applicazione?;no;;;;;;;;0;0;0;1
+117;true;true;false;false;true;true;false;false;true;false;true;false;true;true;false;La mia applicazione ha la necessit… di essere distribuita tra ambiente on-premises ed off-premises?;si;0;0;0;1;0;0;0;0;1;0;0
+118;true;true;false;false;false;false;false;false;false;false;false;false;false;false;false;La mia applicazione ha la necessit… di essere distribuita tra ambiente on-premises ed off-premises?;no;1;1;1;0;1;1;0;0;0;0;0
