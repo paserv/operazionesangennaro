@@ -1,7 +1,0 @@
-module,conf
-it.pipe.sourcegenerators.FileGenerator,cleaningPipe/01FileGenerator.txt
-it.pipe.filters.FilterWordFromSentence,cleaningPipe/03FilterWordFromSentence.txt
-it.pipe.transformers.NoWhiteSpace,cleaningPipe/02Dummy.txt
-it.pipe.transformers.Stemmer,cleaningPipe/02Dummy.txt
-it.pipe.writers.SimpleCSVWriter,cleaningPipe/05SimpleCSVWriter.txt
-
