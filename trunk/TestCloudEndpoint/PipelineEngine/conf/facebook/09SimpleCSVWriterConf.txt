@@ -1,3 +1,0 @@
-Param,Value
-path,myoutput
-separator,#LF

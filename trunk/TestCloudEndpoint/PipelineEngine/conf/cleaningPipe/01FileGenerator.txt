@@ -1,2 +1,0 @@
-Param,Value
-sourcefile,C:/input.txt
