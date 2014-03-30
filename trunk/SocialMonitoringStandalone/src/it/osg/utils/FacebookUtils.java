@@ -317,8 +317,8 @@ public class FacebookUtils {
 
 	}
 
-	public static double getShares (ArrayList<Post> posts) {
-		double result = 0;
+	public static long getShares (ArrayList<Post> posts) {
+		long result = 0;
 		Iterator<Post> iterPost = posts.iterator();
 		while (iterPost.hasNext()) {
 			Post curPost = iterPost.next();
@@ -355,9 +355,9 @@ public class FacebookUtils {
 		return ArrayUtils.removeDuplicate(result);
 	}
 	
-	public static double getCommentsFromIdCount (String id, ArrayList<Comment> comments) {
+	public static long getCommentsFromIdCount (String id, ArrayList<Comment> comments) {
 
-		double result = 0;
+		long result = 0;
 
 		//Per tutti i commenti accumulati prelevo gli autori
 		Iterator<Comment> iterComm = comments.iterator();

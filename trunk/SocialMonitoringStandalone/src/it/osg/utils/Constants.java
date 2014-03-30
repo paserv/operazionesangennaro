@@ -27,6 +27,9 @@ public class Constants {
 	public static final String YT_ID_FIELD = "IDYoutube";
 	public static final String PL_ID_FIELD = "IDPlus";
 	
+	public static final String GMAIL_USER = "paserv@gmail.com";
+	public static final String GMAIL_PSW = "gmaPaolos80";
+	
 	
 	
 }
