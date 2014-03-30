@@ -1,0 +1,178 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://01-monitorfacebookpages.appspot.com/_ah/api",
+  "name" : "datastore",
+  "version" : "v1",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://01-monitorfacebookpages.appspot.com/_ah/spi",
+    "deadline" : 10.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "methods" : {
+    "datastore.saveProperty" : {
+      "path" : "saveProperty/{id}/{session}/{propname}/{propvalue}",
+      "httpMethod" : "post",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "772236607396.apps.googleusercontent.com" ],
+      "clientIds" : [ "772236607396.apps.googleusercontent.com", "replace this with your Android client ID", "replace this with your iOS client ID", "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "osg.service.endpoints.DatastoreServices.saveProperty",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          },
+          "session" : {
+            "type" : "string",
+            "required" : true
+          },
+          "propname" : {
+            "type" : "string",
+            "required" : true
+          },
+          "propvalue" : {
+            "type" : "int64",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "datastore.registerEntity" : {
+      "path" : "registerEntity/{id}/{name}/{session}",
+      "httpMethod" : "post",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "772236607396.apps.googleusercontent.com" ],
+      "clientIds" : [ "772236607396.apps.googleusercontent.com", "replace this with your Android client ID", "replace this with your iOS client ID", "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "osg.service.endpoints.DatastoreServices.registerEntity",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          },
+          "name" : {
+            "type" : "string",
+            "required" : true
+          },
+          "session" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "datastore.getEntities" : {
+      "path" : "psarentitycollection/{session}",
+      "httpMethod" : "get",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ "772236607396.apps.googleusercontent.com" ],
+      "clientIds" : [ "772236607396.apps.googleusercontent.com", "replace this with your Android client ID", "replace this with your iOS client ID", "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "osg.service.endpoints.DatastoreServices.getEntity",
+      "request" : {
+        "parameters" : {
+          "session" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "PSAREntity" : {
+        "id" : "PSAREntity",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "numCommToFanPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numCommToOwnPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numLikeToOwnPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numOtherPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numOwnPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numShareToOwnPost" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "numOwnComm" : {
+            "type" : "string",
+            "format" : "int64"
+          }
+        }
+      },
+      "PSAREntityCollection" : {
+        "id" : "PSAREntityCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "PSAREntity"
+            }
+          }
+        }
+      }
+    },
+    "methods" : {
+      "osg.service.endpoints.DatastoreServices.saveProperty" : {
+      },
+      "osg.service.endpoints.DatastoreServices.registerEntity" : {
+      },
+      "osg.service.endpoints.DatastoreServices.getEntity" : {
+        "response" : {
+          "$ref" : "PSAREntityCollection"
+        }
+      }
+    }
+  }
+}
