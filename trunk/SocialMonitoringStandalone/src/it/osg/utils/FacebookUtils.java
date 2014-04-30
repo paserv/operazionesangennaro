@@ -7,8 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Random;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -329,6 +327,19 @@ public class FacebookUtils {
 		return result;
 
 	}
+	
+	public static int getSharesInteger (ArrayList<Post> posts) {
+		int result = 0;
+		Iterator<Post> iterPost = posts.iterator();
+		while (iterPost.hasNext()) {
+			Post curPost = iterPost.next();
+			if (curPost.getSharesCount() != null) {
+				result = result + curPost.getSharesCount();
+			}
+		}
+		return result;
+
+	}
 
 	public static double getCommentLike (ArrayList<Comment> comments) {
 		double result = 0;
@@ -371,6 +382,26 @@ public class FacebookUtils {
 
 		return result;
 	}
+	
+	
+		
+	public static int getCommentsFromIdCountInteger (String id, ArrayList<Comment> comments) {
+
+		int result = 0;
+
+		//Per tutti i commenti accumulati prelevo gli autori
+		Iterator<Comment> iterComm = comments.iterator();
+		while (iterComm.hasNext()) {
+			Comment currComm = iterComm.next();
+			if (currComm.getFrom().getId().equalsIgnoreCase(id)) {
+				result++;
+			}
+
+		}
+
+		return result;
+	}
+	
 
 	public static ArrayList<Hashtable<String, Object>> likeTalkAnalysis(String jsonString) {
 		ArrayList<Hashtable<String, Object>> result = new ArrayList<Hashtable<String, Object>>();
