@@ -25,17 +25,19 @@ public class FacebookPSARMultiThreadData {
 	public static char inputCharDelimiter = ';';
 
 	public static String outputPath = "resources/facebookModa";
-	public static String from = "09-11-2013 00:00:00";
-	public static String to = "01-12-2013 23:59:59";
+	public static String from = "01-01-2014 00:00:00";
+	public static String to = "02-01-2014 23:59:59";
 
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 
 	public static int NTHREADS = 100;
-	public static int STEP = 2;
+	public static int STEP = 4;
 
 	public static void main(String[] args) {
 
+		long start = System.currentTimeMillis();
+		
 		CsvWriter outWriter = openOutputFile(outputPath + "_out_" + System.currentTimeMillis() + ".csv");
 		ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
 
@@ -121,6 +123,9 @@ public class FacebookPSARMultiThreadData {
 		}
 
 		outWriter.close();
+		
+		long end = System.currentTimeMillis();
+		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
 
 	}
 

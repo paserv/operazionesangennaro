@@ -37,8 +37,7 @@ public class FacebookPSARMultiThreadPost {
 	public static String nomeField = "nome";
 
 	public static int NTHREADS = 100;
-	//public static int STEP = 4;
-
+	
 	public static void main(String[] args) {
 
 		long start = System.currentTimeMillis();
@@ -76,28 +75,7 @@ public class FacebookPSARMultiThreadPost {
 				Post currPost = iter.next();
 				Runnable worker = new AtomicPostJob(currID, currPost.getId(), idPSAR);
 				executor.execute(worker);
-			}
-
-
-			//			//SPLITTO N GIORNI ALLA VOLTA ED INSERISCO UN THREAD NEL POOL
-			//			String from1 = from.substring(0, 10) + " 00:00:00";
-			//			try {
-			//				Date f1 = DateUtils.parseDateAndTime(from1);
-			//
-			//				while (true) {
-			//					String to1 = DateUtils.formatDateAndTime(DateUtils.addHoursToDate(DateUtils.parseDateAndTime(from1), STEP));
-			//					Date t1 = DateUtils.parseDateAndTime(to1);
-			//					if (DateUtils.compareDate(t, t1) >= 0) {
-			//						Runnable worker = new AtomicJob(currID, from1, to1, idPSAR);
-			//						executor.execute(worker);
-			//						f1 = t1;
-			//						from1 = DateUtils.formatDateAndTime(f1);
-			//					} else {
-			//						Runnable worker = new AtomicJob(currID, from1, toDay, idPSAR);
-			//						executor.execute(worker);
-			//						break;
-			//					}
-			//				}	
+			}	
 
 		}
 
