@@ -154,6 +154,7 @@ public class FacebookPSAR {
 				System.out.println("postFromPage: " + postFromPage);
 				System.out.println("postFromFan: " + postFromFan);
 				System.out.println("comments: " + comments);
+				System.out.println("likes: " + likes);
 				System.out.println("shares: " + shares);
 				System.out.println("commentsToPostFromFan: " + commentsToPostFromFan);
 				System.out.println("commnetsFromPageToPostFromPage: " + commnetsFromPageToPostFromPage);
