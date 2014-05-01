@@ -30,8 +30,13 @@ public class AtomicPostJob implements Runnable {
 			data.getPostFromPage().incrementAndGet();
 			ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
 			data.addComments(commentsList.size());
-			ArrayList<Like> likesList = FacebookUtils.getAllLikes(completePost);
-			data.addLikes(likesList.size());
+			try {
+				ArrayList<Like> likesList = FacebookUtils.getAllLikes(completePost);
+				data.addLikes(likesList.size());
+			} catch (Exception e) {
+				System.out.println("ERROR");
+			}
+						
 			data.addShares(FacebookUtils.getSharesInteger(completePost));
 			data.addCommnetsFromPageToPostFromPage(FacebookUtils.getCommentsFromIdCountInteger(userID, commentsList));
 		} else {
