@@ -25,23 +25,37 @@ import facebook4j.auth.AccessToken;
 
 public class FacebookUtils {
 
+	private static ArrayList<Facebook> facebookPool = null;
+	private static int nextFBCredential = 0;
 
-	private static Facebook facebook = null;
-	
 	public static Facebook getFB() {
-		if (facebook != null) {
-			return facebook;
+		if (facebookPool != null) {
+			if ((nextFBCredential + 1) == Constants.FACEBOOK_CREDENTIAL_VECTOR.size()) {
+				nextFBCredential = 0;
+			} else {
+				nextFBCredential++;
+			}
+			return facebookPool.get(nextFBCredential);
 		}
-		Facebook fac = new FacebookFactory().getInstance();
-		fac.setOAuthAppId(Constants.FACEBOOK_APP_ID, Constants.FACEBOOK_APP_KEY);
-		//facebook.setOAuthPermissions(commaSeparetedPermissions);
-		fac.setOAuthAccessToken(new AccessToken(Constants.FACEBOOK_ACCESS_TOKEN, null));
-		facebook = fac;
-		return facebook;
+
+		facebookPool = new ArrayList<Facebook>();
+		for (int i = 0; i < Constants.FACEBOOK_CREDENTIAL_VECTOR.size(); i++) {
+			Facebook fac = new FacebookFactory().getInstance();
+			fac.setOAuthAppId(Constants.FACEBOOK_CREDENTIAL_VECTOR.get(i).getAppId(), Constants.FACEBOOK_CREDENTIAL_VECTOR.get(i).getAppKey());
+			//facebook.setOAuthPermissions(commaSeparetedPermissions);
+			fac.setOAuthAccessToken(new AccessToken(Constants.FACEBOOK_CREDENTIAL_VECTOR.get(i).getAppAccessToken(), null));
+			facebookPool.add(fac);
+		}
+
+		return facebookPool.get(nextFBCredential);
+	}
+
+	public static void main(String[] args) {
+		Post ps = getPost("179618821150_10152142823961151");
+		System.out.println("jj");
 	}
 
 
-	
 	public static Date getActivityInterval (String pageId){
 
 		Facebook facebook = getFB();
@@ -78,37 +92,37 @@ public class FacebookUtils {
 
 	}
 
-//	public static Hashtable<String, Object> getBaseInfo (String pageId) {
-//
-//		Random rand = new Random();
-//		int seconds = rand.nextInt(4000) + 1;
-//		
-//		try {
-//			Thread.sleep(seconds);
-//		} catch (InterruptedException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-//		Facebook facebook = getFB();
-//		Hashtable<String, Object> result = new Hashtable<String, Object>();
-//		
-//		try {
-//			Page page = facebook.getPage(pageId);
-//			String likeCount = String.valueOf(page.getLikes());
-//			String talkingAboutCount = String.valueOf(page.getTalkingAboutCount());
-//			String pageName = String.valueOf(page.getName());
-//			//TODO retrieve anche degli altri campi
-//
-//			result.put("likes", likeCount);
-//			result.put("talking_about_count", talkingAboutCount);
-//			result.put("name", pageName);
-//		} catch (FacebookException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return result;
-//	}
-	
+	//	public static Hashtable<String, Object> getBaseInfo (String pageId) {
+	//
+	//		Random rand = new Random();
+	//		int seconds = rand.nextInt(4000) + 1;
+	//		
+	//		try {
+	//			Thread.sleep(seconds);
+	//		} catch (InterruptedException e1) {
+	//			e1.printStackTrace();
+	//		}
+	//		
+	//		Facebook facebook = getFB();
+	//		Hashtable<String, Object> result = new Hashtable<String, Object>();
+	//		
+	//		try {
+	//			Page page = facebook.getPage(pageId);
+	//			String likeCount = String.valueOf(page.getLikes());
+	//			String talkingAboutCount = String.valueOf(page.getTalkingAboutCount());
+	//			String pageName = String.valueOf(page.getName());
+	//			//TODO retrieve anche degli altri campi
+	//
+	//			result.put("likes", likeCount);
+	//			result.put("talking_about_count", talkingAboutCount);
+	//			result.put("name", pageName);
+	//		} catch (FacebookException e) {
+	//			e.printStackTrace();
+	//		}
+	//		
+	//		return result;
+	//	}
+
 	public static Hashtable<String, Object> getBaseInfoFromJson (String pageId) {
 
 		try {
@@ -118,8 +132,8 @@ public class FacebookUtils {
 		}
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		String jsonString = JSONObjectUtil.retrieveJson(Constants.FACEBOOK_GRAPH_API_ROOT_URL + pageId);
-//		DatastoreUtils.addRow("test", "json", new Text(jsonString));
-		
+		//		DatastoreUtils.addRow("test", "json", new Text(jsonString));
+
 		Object objJson = JSONValue.parse(jsonString);
 		JSONObject json =(JSONObject) objJson;
 
@@ -148,7 +162,18 @@ public class FacebookUtils {
 		}
 		return result;
 	}
-	
+
+	public static Post getPost (String postId) {
+		Facebook facebook = getFB();
+		Post result = null;
+		try {
+			result = facebook.getPost(postId);
+		} catch (FacebookException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) {
 
 		ArrayList<Post> result = new ArrayList<Post>();
@@ -303,6 +328,7 @@ public class FacebookUtils {
 
 	}
 
+
 	public static ArrayList<Like> getLikes (ArrayList<Post> posts) {
 		ArrayList<Like> result = new ArrayList<Like>();
 		Iterator<Post> iterPost = posts.iterator();
@@ -327,7 +353,7 @@ public class FacebookUtils {
 		return result;
 
 	}
-	
+
 	public static int getSharesInteger (ArrayList<Post> posts) {
 		int result = 0;
 		Iterator<Post> iterPost = posts.iterator();
@@ -338,6 +364,12 @@ public class FacebookUtils {
 			}
 		}
 		return result;
+
+	}
+
+	public static int getSharesInteger (Post post) {
+		if (post.getSharesCount() != null) return post.getSharesCount();
+		return 0;
 
 	}
 
@@ -365,7 +397,7 @@ public class FacebookUtils {
 
 		return ArrayUtils.removeDuplicate(result);
 	}
-	
+
 	public static long getCommentsFromIdCount (String id, ArrayList<Comment> comments) {
 
 		long result = 0;
@@ -382,9 +414,9 @@ public class FacebookUtils {
 
 		return result;
 	}
-	
-	
-		
+
+
+
 	public static int getCommentsFromIdCountInteger (String id, ArrayList<Comment> comments) {
 
 		int result = 0;
@@ -401,7 +433,7 @@ public class FacebookUtils {
 
 		return result;
 	}
-	
+
 
 	public static ArrayList<Hashtable<String, Object>> likeTalkAnalysis(String jsonString) {
 		ArrayList<Hashtable<String, Object>> result = new ArrayList<Hashtable<String, Object>>();

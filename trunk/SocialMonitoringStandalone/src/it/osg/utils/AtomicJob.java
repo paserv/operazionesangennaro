@@ -41,6 +41,8 @@ public class AtomicJob implements Runnable {
 		ArrayList<Post> posts = new ArrayList<Post>();
 		posts =	FacebookUtils.getAllPosts(id, f, t, null);
 
+		System.out.println("Post Number: " + posts.size());
+		
 		ArrayList<Post> postFromPageList = new ArrayList<Post>();
 		ArrayList<Post> postFromFanList = new ArrayList<Post>();
 
