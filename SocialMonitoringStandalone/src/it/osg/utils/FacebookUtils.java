@@ -28,7 +28,7 @@ public class FacebookUtils {
 	private static ArrayList<Facebook> facebookPool = null;
 	private static int nextFBCredential = 0;
 
-	public static Facebook getFB() {
+	public static synchronized Facebook getFB() {
 		if (facebookPool != null) {
 			if ((nextFBCredential + 1) == Constants.FACEBOOK_CREDENTIAL_VECTOR.size()) {
 				nextFBCredential = 0;
@@ -46,7 +46,6 @@ public class FacebookUtils {
 			fac.setOAuthAccessToken(new AccessToken(Constants.FACEBOOK_CREDENTIAL_VECTOR.get(i).getAppAccessToken(), null));
 			facebookPool.add(fac);
 		}
-
 		return facebookPool.get(nextFBCredential);
 	}
 
