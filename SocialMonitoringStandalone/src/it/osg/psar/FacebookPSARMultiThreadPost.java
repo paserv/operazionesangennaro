@@ -44,7 +44,7 @@ public class FacebookPSARMultiThreadPost {
 
 		CsvWriter outWriter = openOutputFile(outputPath + "_out_" + System.currentTimeMillis() + ".csv");
 		ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
-
+		
 		Hashtable<String, String> ids = getInputAccounts(inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
@@ -80,6 +80,22 @@ public class FacebookPSARMultiThreadPost {
 		}
 
 		executor.shutdown();
+		
+		
+		
+//		int running = 0;
+//		do {
+//		      running = 0;
+//		      for (Thread thread : threads) {
+//		        if (thread.isAlive()) {
+//		          running++;
+//		        }
+//		      }
+//		      System.out.println("We have " + running + " running threads. ");
+//		    } while (running > 0);
+		
+		
+		
 
 		try {
 			if (!executor.awaitTermination(60000, TimeUnit.SECONDS)) {
