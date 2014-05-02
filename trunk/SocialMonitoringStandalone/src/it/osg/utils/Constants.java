@@ -1,5 +1,7 @@
 package it.osg.utils;
 
+import it.osg.data.FacebookCredential;
+
 import java.util.ArrayList;
 
 public class Constants {
