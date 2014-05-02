@@ -13,39 +13,79 @@ public class AtomicPostJob implements Runnable {
 	private String userID;
 	private String postID;
 	private PSAR data;
-	
+
 	public AtomicPostJob (String userID, String postID, PSAR data) {
 		this.userID = userID;
 		this.postID = postID;
 		this.data = data;
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 		System.out.println("Running Post ID: " + postID);
 		Post completePost = FacebookUtils.getPost(postID);
 		
-		if (completePost.getFrom().getId().equals(userID) && completePost.getMessage() != null) {
-			data.getPostFromPage().incrementAndGet();
-			ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
-			data.addComments(commentsList.size());
-			try {
+		int commentNum = 0;
+		int likesNum = 0;
+		int sharesNum = 0;
+		int commentsPageToPagePost = 0;
+		
+		int commentToFanPost = 0;
+		int commentPageToFanPost = 0;
+		
+		boolean isPagePost = false;
+		
+		try {
+			if (completePost.getFrom().getId().equals(userID) && completePost.getMessage() != null) {
+				isPagePost = true;
+				data.getPostFromPage().incrementAndGet();
+				
+				ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
+				commentNum = commentsList.size();
+				data.addComments(commentNum);
+				
 				ArrayList<Like> likesList = FacebookUtils.getAllLikes(completePost);
-				data.addLikes(likesList.size());
-			} catch (Exception e) {
-				System.out.println("ERROR");
+				likesNum = likesList.size();
+				data.addLikes(likesNum);
+				
+				sharesNum = FacebookUtils.getSharesInteger(completePost);
+				data.addShares(sharesNum);
+				
+				commentsPageToPagePost = FacebookUtils.getCommentsFromIdCountInteger(userID, commentsList);
+				data.addCommnetsFromPageToPostFromPage(commentsPageToPagePost);
+				
+			} else {
+				data.getPostFromFan().incrementAndGet();
+				
+				ArrayList<Comment> commentsToPostFromFanList = FacebookUtils.getAllComments(completePost);
+				commentToFanPost = commentsToPostFromFanList.size();
+				data.addCommentsToPostFromFan(commentToFanPost);
+				
+				commentPageToFanPost = FacebookUtils.getCommentsFromIdCountInteger(userID, commentsToPostFromFanList);
+				data.addCommnetsFromPageToPostFromFan(commentPageToFanPost);
+				
 			}
-						
-			data.addShares(FacebookUtils.getSharesInteger(completePost));
-			data.addCommnetsFromPageToPostFromPage(FacebookUtils.getCommentsFromIdCountInteger(userID, commentsList));
-		} else {
-			data.getPostFromFan().incrementAndGet();
-			ArrayList<Comment> commentsToPostFromFanList = FacebookUtils.getAllComments(completePost);
-			data.addCommentsToPostFromFan(commentsToPostFromFanList.size());
-			data.addCommnetsFromPageToPostFromFan(FacebookUtils.getCommentsFromIdCountInteger(userID, commentsToPostFromFanList));
+		} catch (Exception e) {
+			System.out.println("ERRORE");
+			if (isPagePost) {
+				data.getPostFromPage().decrementAndGet();
+				data.subComments(commentNum);
+				data.subComments(likesNum);
+				data.subComments(sharesNum);
+				data.subCommnetsFromPageToPostFromPage(commentsPageToPagePost);
+			} else {
+				data.getPostFromFan().decrementAndGet();
+				data.subCommnetsFromPageToPostFromFan(commentToFanPost);
+				data.subCommnetsFromPageToPostFromFan(commentPageToFanPost);
+			}
+			Runnable retry = new AtomicPostJob(userID, postID, data);
+			Thread thread = new Thread(retry);
+			thread.start();
 		}
 		
+		
+
 	}
 
 }
