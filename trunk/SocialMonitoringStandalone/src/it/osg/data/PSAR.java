@@ -32,25 +32,61 @@ public class PSAR {
 	public void addComments (int value) {
 		this.comments.addAndGet(value);
 	}
+	
+	public void subComments (int value) {
+		for (int i = 0; i < value; i++) {
+			this.comments.decrementAndGet();
+		}
+	}
 
 	public void addLikes (int value) {
-		this.shares.addAndGet(value);
+		this.likes.addAndGet(value);
+	}
+	
+	public void subLikes (int value) {
+		for (int i = 0; i < value; i++) {
+			this.likes.decrementAndGet();
+		}
 	}
 	
 	public void addShares (int value) {
-		this.likes.addAndGet(value);
+		this.shares.addAndGet(value);
+	}
+	
+	public void subShares (int value) {
+		for (int i = 0; i < value; i++) {
+			this.shares.decrementAndGet();
+		}
 	}
 	
 	public void addCommentsToPostFromFan (int value) {
 		this.commentsToPostFromFan.addAndGet(value);
 	}
 	
+	public void subCommentsToPostFromFan (int value) {
+		for (int i = 0; i < value; i++) {
+			this.commentsToPostFromFan.decrementAndGet();
+		}
+	}
+	
 	public void addCommnetsFromPageToPostFromPage (int value) {
 		this.commnetsFromPageToPostFromPage.addAndGet(value);
 	}
 	
+	public void subCommnetsFromPageToPostFromPage (int value) {
+		for (int i = 0; i < value; i++) {
+			this.commnetsFromPageToPostFromPage.decrementAndGet();
+		}
+	}
+	
 	public void addCommnetsFromPageToPostFromFan (int value) {
 		this.commnetsFromPageToPostFromFan.addAndGet(value);
+	}
+	
+	public void subCommnetsFromPageToPostFromFan (int value) {
+		for (int i = 0; i < value; i++) {
+			this.commnetsFromPageToPostFromFan.decrementAndGet();
+		}
 	}
 
 	public String getId() {
