@@ -73,30 +73,14 @@ public class FacebookPSARMultiThreadPost {
 			Iterator<Post> iter = posts.iterator();
 			while (iter.hasNext()) {
 				Post currPost = iter.next();
-				Runnable worker = new AtomicPostJob(currID, currPost.getId(), idPSAR);
+				Runnable worker = new AtomicPostJob(currID, currPost.getId(), idPSAR, executor);
 				executor.execute(worker);
 			}	
 
 		}
 
-		executor.shutdown();
+//		executor.shutdown();
 		
-		
-		
-//		int running = 0;
-//		do {
-//		      running = 0;
-//		      for (Thread thread : threads) {
-//		        if (thread.isAlive()) {
-//		          running++;
-//		        }
-//		      }
-//		      System.out.println("We have " + running + " running threads. ");
-//		    } while (running > 0);
-		
-		
-		
-
 		try {
 			if (!executor.awaitTermination(60000, TimeUnit.SECONDS)) {
 				executor.shutdownNow();

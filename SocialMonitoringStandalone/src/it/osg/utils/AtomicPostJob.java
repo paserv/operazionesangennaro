@@ -7,17 +7,20 @@ import it.osg.data.PSAR;
 import it.osg.utils.FacebookUtils;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 
 public class AtomicPostJob implements Runnable {
 
 	private String userID;
 	private String postID;
 	private PSAR data;
+	private ExecutorService executor;
 
-	public AtomicPostJob (String userID, String postID, PSAR data) {
+	public AtomicPostJob (String userID, String postID, PSAR data, ExecutorService executor) {
 		this.userID = userID;
 		this.postID = postID;
 		this.data = data;
+		this.executor = executor;
 	}
 
 	@Override
@@ -79,9 +82,8 @@ public class AtomicPostJob implements Runnable {
 				data.subCommnetsFromPageToPostFromFan(commentToFanPost);
 				data.subCommnetsFromPageToPostFromFan(commentPageToFanPost);
 			}
-			Runnable retry = new AtomicPostJob(userID, postID, data);
-			Thread thread = new Thread(retry);
-			thread.start();
+			Runnable retry = new AtomicPostJob(userID, postID, data, executor);
+			executor.execute(retry);
 		}
 		
 		
