@@ -26,7 +26,7 @@ import com.csvreader.CsvWriter;
 
 public class FacebookPSARMultiThreadPost {
 
-	public static String inputFile = "resources/facebookModa.csv";
+	public static String inputFile = "resources/facebookIDS.csv";
 	public static char inputCharDelimiter = ';';
 
 	public static String outputPath = "resources/facebookModa";
