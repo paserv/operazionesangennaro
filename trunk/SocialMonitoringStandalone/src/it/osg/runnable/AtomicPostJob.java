@@ -1,4 +1,4 @@
-package it.osg.utils;
+package it.osg.runnable;
 
 import facebook4j.Comment;
 import facebook4j.Like;

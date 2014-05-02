@@ -1,8 +1,9 @@
 package it.osg.psar;
 
 import it.osg.data.PSAR;
-import it.osg.utils.AtomicJob;
+import it.osg.runnable.AtomicJob;
 import it.osg.utils.DateUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

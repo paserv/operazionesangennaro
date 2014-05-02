@@ -2,7 +2,7 @@ package it.osg.psar;
 
 import facebook4j.Post;
 import it.osg.data.PSAR;
-import it.osg.utils.AtomicPostJob;
+import it.osg.runnable.AtomicPostJob;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 
@@ -43,7 +43,7 @@ public class FacebookPSARMultiThreadPost {
 		long start = System.currentTimeMillis();
 
 		CsvWriter outWriter = openOutputFile(outputPath + "_out_" + System.currentTimeMillis() + ".csv");
-		ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
+		ExecutorService executor = Executors.newFixedThreadPool(Integer.parseInt(args[0]));
 		
 		Hashtable<String, String> ids = getInputAccounts(inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
