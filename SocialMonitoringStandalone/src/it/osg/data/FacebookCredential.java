@@ -1,4 +1,4 @@
-package it.osg.utils;
+package it.osg.data;
 
 public class FacebookCredential {
 
