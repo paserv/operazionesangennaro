@@ -2,7 +2,9 @@ package it.osg.psar;
 
 import facebook4j.Post;
 import it.osg.data.PSAR;
-import it.osg.runnable.AtomicPostJob;
+import it.osg.queue.Queue;
+import it.osg.queue.QueueThreadImpl;
+import it.osg.queue.QueueThreadImpl2;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 
@@ -16,15 +18,11 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
 
-public class FacebookPSARMultiThreadPost {
+public class FacebookPSARQueueThreadPost {
 
 	public static String inputFile = "resources/facebookIDS.csv";
 	public static char inputCharDelimiter = ';';
@@ -36,20 +34,40 @@ public class FacebookPSARMultiThreadPost {
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 
-	public static int NTHREADS = 10;
-	
-	public static void main(String[] args) {
+	public static int QUEUELENGHT = 50; //lunghezza coda
+	public static long THREAD_SLEEP_INTERVAL = 5000L; //tempo massimo che deve aspettare ogni thread se non trova posto nella coda prima di ritentare l'inserimento nella coda
+	public static long QUEUE_SLEEP_INTERVAL = 5000L; //tempo dopo il quale la coda esegue il check per capire se il timeout è stato superato
+	public static long QUEUE_TIMEOUT = 1000L; //timeout della coda
 
-		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-		System.getProperties().put("http.proxyPort", "8080");
-		System.getProperties().put("http.proxyUser", "rete\\servill7");
-		System.getProperties().put("http.proxyPassword", "Paolos10");
-		
+	public static void main(String[] args) {
+		Queue queue = new Queue(QUEUELENGHT, THREAD_SLEEP_INTERVAL, QUEUE_SLEEP_INTERVAL);
+
+		PSAR myPSAR = new PSAR("userID", "userName");
+		for (int i = 0; i < 100; i++) {
+			QueueThreadImpl2 worker = new QueueThreadImpl2("userID", String.valueOf(i), myPSAR);
+			worker.setName("name_" + i);
+			worker.addToQueue(queue);
+		}
+
+		queue.execute();
 		long start = System.currentTimeMillis();
+		queue.awaitQueueTermination(QUEUE_TIMEOUT);
+		long end = System.currentTimeMillis();
+		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
+	
+
+		System.out.println("Num Likes: " + myPSAR.getLikes());
+
+	}
+
+	public static void main2(String[] args) {
+
+		long start = System.currentTimeMillis();
+
 		CsvWriter outWriter = openOutputFile(outputPath + "_out_" + System.currentTimeMillis() + ".csv");
-//		ExecutorService executor = Executors.newFixedThreadPool(Integer.parseInt(args[0]));
-		ExecutorService executor = Executors.newFixedThreadPool(NTHREADS);
-		
+
+		Queue queue = new Queue(10, 5000L, 5000L);
+
 		Hashtable<String, String> ids = getInputAccounts(inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
@@ -74,26 +92,20 @@ public class FacebookPSARMultiThreadPost {
 			ArrayList<Post> posts = new ArrayList<Post>();
 			posts =	FacebookUtils.getAllPosts(currID, f, t, new String[]{"id"});
 
-			//SPLITTO 1 POST ALLA VOLTA ED INSERISCO UN THREAD NEL POOL
+			//SPLITTO 1 POST ALLA VOLTA ED INSERISCO UNA QUEUE DI THREAD
 			Iterator<Post> iter = posts.iterator();
 			while (iter.hasNext()) {
 				Post currPost = iter.next();
-				Runnable worker = new AtomicPostJob(currID, currPost.getId(), idPSAR, executor);
-				executor.execute(worker);
+				QueueThreadImpl worker = new QueueThreadImpl(currID, currPost.getId(), idPSAR);
+				worker.setName(currPost.getId());
+				worker.addToQueue(queue);
 			}	
 
 		}
 
-		executor.shutdown();
-		
-		try {
-			if (!executor.awaitTermination(60000, TimeUnit.SECONDS)) {
-				executor.shutdownNow();
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
+		queue.execute();
+		queue.awaitQueueTermination(60L);
+
 		Enumeration<PSAR> elements = result.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
