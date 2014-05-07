@@ -24,18 +24,18 @@ public class Constants {
 	
 	public static final ArrayList<FacebookCredential> FACEBOOK_CREDENTIAL_VECTOR = new ArrayList<FacebookCredential>() {{
 	    add(new FacebookCredential("617198281693625", "0b65c6a0a938cc243ea24c265ecb146a", "617198281693625|-llbM1TH9bc_Tqh34y4T5QkrMQw"));
-	    add(new FacebookCredential("408864829212468", "9b49fe3becebe49d8231a434cddf0fce", "408864829212468|VpDxn8dC6gtXObO-EWW6L9MhC9E"));
-	    add(new FacebookCredential("1400215396916735", "edafb15e7ba1316468b7bd3cd0d6cf9d", "1400215396916735|KEcz2RQbseEgNd8Ua95IwhA0_5k"));
-	    add(new FacebookCredential("1421469004782445", "f9c99df2629fd0f21311b47b2b712d50", "1421469004782445|sg2EfkxqKKdEQ0Kcrg_iZPXHOY4"));
-	    add(new FacebookCredential("240458259478715", "1aa0129366051ec72a3f2305ef04242a", "240458259478715|oHfuVnhvyrHZbrjUNoSXmnzFKxQ"));
-	    add(new FacebookCredential("748013841898186", "5f282e5368510a16d8236227ee90332d", "748013841898186|RdnPoPKIGXMpkyZoq0Uh7W9cxns"));
-	    add(new FacebookCredential("232456650296360", "80a0878604d13ffb20be94bd040ddda8", "232456650296360|PIfg_lJwVO-wL9jVGd1XEgyCpZg"));
-	    add(new FacebookCredential("1500479963506432", "23a9e48cb24e0995c4e6f7d2c4683552", "1500479963506432|srKrXHqsbTLDCIse8g2yJIU7uRk"));
-	    add(new FacebookCredential("788476747830030", "8871c32fc0cc006c669781f322594856", "788476747830030|1MY0mhDIDHrvuONSj_WBTsw1ToI"));
-	    add(new FacebookCredential("652755961465458", "ff98893afc6a5d14117a73de5c891dc1", "652755961465458|i386ysB4F5R5SY1m9p22Y2NJ7j4"));
-	    add(new FacebookCredential("494659220634709", "e70d0ec79858195bb6c491a0d860e46b", "494659220634709|hSCA5v0b3vGpg14XwqjTC9Eo_bA"));
-	    add(new FacebookCredential("236482829881966", "92756a476976440568287e68627a21a0", "236482829881966|M5FC4TygzEF8e9nm2dqo_4Yxa3w"));
-	    add(new FacebookCredential("156346967866710", "e0f880cc248e811c98952d9a44a27ce4", "156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk"));
+//	    add(new FacebookCredential("408864829212468", "9b49fe3becebe49d8231a434cddf0fce", "408864829212468|VpDxn8dC6gtXObO-EWW6L9MhC9E"));
+//	    add(new FacebookCredential("1400215396916735", "edafb15e7ba1316468b7bd3cd0d6cf9d", "1400215396916735|KEcz2RQbseEgNd8Ua95IwhA0_5k"));
+//	    add(new FacebookCredential("1421469004782445", "f9c99df2629fd0f21311b47b2b712d50", "1421469004782445|sg2EfkxqKKdEQ0Kcrg_iZPXHOY4"));
+//	    add(new FacebookCredential("240458259478715", "1aa0129366051ec72a3f2305ef04242a", "240458259478715|oHfuVnhvyrHZbrjUNoSXmnzFKxQ"));
+//	    add(new FacebookCredential("748013841898186", "5f282e5368510a16d8236227ee90332d", "748013841898186|RdnPoPKIGXMpkyZoq0Uh7W9cxns"));
+//	    add(new FacebookCredential("232456650296360", "80a0878604d13ffb20be94bd040ddda8", "232456650296360|PIfg_lJwVO-wL9jVGd1XEgyCpZg"));
+//	    add(new FacebookCredential("1500479963506432", "23a9e48cb24e0995c4e6f7d2c4683552", "1500479963506432|srKrXHqsbTLDCIse8g2yJIU7uRk"));
+//	    add(new FacebookCredential("788476747830030", "8871c32fc0cc006c669781f322594856", "788476747830030|1MY0mhDIDHrvuONSj_WBTsw1ToI"));
+//	    add(new FacebookCredential("652755961465458", "ff98893afc6a5d14117a73de5c891dc1", "652755961465458|i386ysB4F5R5SY1m9p22Y2NJ7j4"));
+//	    add(new FacebookCredential("494659220634709", "e70d0ec79858195bb6c491a0d860e46b", "494659220634709|hSCA5v0b3vGpg14XwqjTC9Eo_bA"));
+//	    add(new FacebookCredential("236482829881966", "92756a476976440568287e68627a21a0", "236482829881966|M5FC4TygzEF8e9nm2dqo_4Yxa3w"));
+//	    add(new FacebookCredential("156346967866710", "e0f880cc248e811c98952d9a44a27ce4", "156346967866710%7CgnswdSXw_ObP0RaWj5qqgK_HtCk"));
 	}};
 	
 	//SPLIT-JOIN CONSTANTS

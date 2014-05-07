@@ -35,6 +35,7 @@ public class FacebookUtils {
 			} else {
 				nextFBCredential++;
 			}
+			System.out.println(System.currentTimeMillis() + ";" + nextFBCredential);
 			return facebookPool.get(nextFBCredential);
 		}
 
