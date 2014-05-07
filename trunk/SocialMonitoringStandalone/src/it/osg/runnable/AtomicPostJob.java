@@ -26,7 +26,7 @@ public class AtomicPostJob implements Runnable {
 	@Override
 	public void run() {
 
-		System.out.println("Running Post ID: " + postID);
+//		System.out.println("Running Post ID: " + postID);
 		Post completePost = FacebookUtils.getPost(postID);
 		
 		int commentNum = 0;
@@ -70,24 +70,23 @@ public class AtomicPostJob implements Runnable {
 				
 			}
 		} catch (Exception e) {
+//			System.out.println("ERRORE");
+//			if (isPagePost) {
+//				data.getPostFromPage().decrementAndGet();
+//				data.subComments(commentNum);
+//				data.subComments(likesNum);
+//				data.subComments(sharesNum);
+//				data.subCommnetsFromPageToPostFromPage(commentsPageToPagePost);
+//			} else {
+//				data.getPostFromFan().decrementAndGet();
+//				data.subCommnetsFromPageToPostFromFan(commentToFanPost);
+//				data.subCommnetsFromPageToPostFromFan(commentPageToFanPost);
+//			}
+//			Runnable retry = new AtomicPostJob(userID, postID, data, executor);
+//			executor.execute(retry);
 			System.out.println("ERRORE");
-			if (isPagePost) {
-				data.getPostFromPage().decrementAndGet();
-				data.subComments(commentNum);
-				data.subComments(likesNum);
-				data.subComments(sharesNum);
-				data.subCommnetsFromPageToPostFromPage(commentsPageToPagePost);
-			} else {
-				data.getPostFromFan().decrementAndGet();
-				data.subCommnetsFromPageToPostFromFan(commentToFanPost);
-				data.subCommnetsFromPageToPostFromFan(commentPageToFanPost);
-			}
-			Runnable retry = new AtomicPostJob(userID, postID, data, executor);
-			executor.execute(retry);
 		}
 		
-		
-
 	}
 
 }
