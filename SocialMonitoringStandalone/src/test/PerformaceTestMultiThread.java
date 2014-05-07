@@ -12,23 +12,32 @@ public class PerformaceTestMultiThread {
 
 	public static void main(String[] args) {
 		
+		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		System.getProperties().put("http.proxyPort", "8080");
+		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		System.getProperties().put("http.proxyPassword", "Paolos10");
+		
 		CsvWriter outWriter = openOutputFile("resources/resultMT_" + System.currentTimeMillis() +".csv");
 		
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 20; i++) {
 			int numThreads = i*10;
 			String numThreadsString = String.valueOf(numThreads);
 			long start = System.currentTimeMillis();
 			FacebookPSARMultiThreadPost.main(new String[]{numThreadsString});
 			long end = System.currentTimeMillis();
 			long elapsedTime = (end - start)/1000;
+			System.out.println("ELAPSED: " + elapsedTime);
 			try {
+				outWriter.write(numThreadsString);
 				outWriter.write(String.valueOf(elapsedTime));
+				outWriter.endRecord();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		
 		}
 		
+		outWriter.close();
 		
 	}
 	
