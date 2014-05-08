@@ -4,7 +4,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 
-public class MyLogger {
+public class QueueLogger {
 
 	public static void setup(Level level) {
 		LogManager.getLogManager().getLogger("").setLevel(level);
