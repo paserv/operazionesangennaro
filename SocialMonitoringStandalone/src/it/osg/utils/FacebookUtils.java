@@ -35,7 +35,7 @@ public class FacebookUtils {
 			} else {
 				nextFBCredential++;
 			}
-			System.out.println(System.currentTimeMillis() + ";" + nextFBCredential);
+//			System.out.println(System.currentTimeMillis() + ";" + nextFBCredential);
 			return facebookPool.get(nextFBCredential);
 		}
 
@@ -445,7 +445,7 @@ public class FacebookUtils {
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
 
-		System.out.println(likeCount + " " + talkingAboutCount);
+//		System.out.println(likeCount + " " + talkingAboutCount);
 
 		if (!likeCount.equalsIgnoreCase("")) {
 			currRow.put("like_count", Integer.parseInt(likeCount));
