@@ -2,11 +2,11 @@ package it.osg.psar;
 
 import facebook4j.Post;
 import it.osg.data.PSAR;
-import it.osg.queue.Queue;
-import it.osg.queue.QueueThreadImpl;
-import it.osg.queue.QueueThreadImpl2;
+import it.osg.runnable.RunnableQueueImpl;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
+import it.queue.Queue;
+import it.queue.TimeoutException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
@@ -34,39 +35,20 @@ public class FacebookPSARQueueThreadPost {
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 
-	public static int QUEUELENGHT = 50; //lunghezza coda
-	public static long THREAD_SLEEP_INTERVAL = 5000L; //tempo massimo che deve aspettare ogni thread se non trova posto nella coda prima di ritentare l'inserimento nella coda
-	public static long QUEUE_SLEEP_INTERVAL = 5000L; //tempo dopo il quale la coda esegue il check per capire se il timeout è stato superato
-	public static long QUEUE_TIMEOUT = 1000L; //timeout della coda
+	public static int QUEUELENGHT = 10; //Numero massimo thread in stato running
+	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
+	public static long QUEUE_TIMEOUT = 10000000L; //timeout della coda
 
 	public static void main(String[] args) {
-		Queue queue = new Queue(QUEUELENGHT, THREAD_SLEEP_INTERVAL, QUEUE_SLEEP_INTERVAL);
-
-		PSAR myPSAR = new PSAR("userID", "userName");
-		for (int i = 0; i < 100; i++) {
-			QueueThreadImpl2 worker = new QueueThreadImpl2("userID", String.valueOf(i), myPSAR);
-			worker.setName("name_" + i);
-			worker.addToQueue(queue);
-		}
-
-		queue.execute();
-		long start = System.currentTimeMillis();
-		queue.awaitQueueTermination(QUEUE_TIMEOUT);
-		long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
-	
-
-		System.out.println("Num Likes: " + myPSAR.getLikes());
-
-	}
-
-	public static void main2(String[] args) {
-
-		long start = System.currentTimeMillis();
+		
+		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		System.getProperties().put("http.proxyPort", "8080");
+		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		System.getProperties().put("http.proxyPassword", "Paolos10");
 
 		CsvWriter outWriter = openOutputFile(outputPath + "_out_" + System.currentTimeMillis() + ".csv");
 
-		Queue queue = new Queue(10, 5000L, 5000L);
+		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
 
 		Hashtable<String, String> ids = getInputAccounts(inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
@@ -96,15 +78,22 @@ public class FacebookPSARQueueThreadPost {
 			Iterator<Post> iter = posts.iterator();
 			while (iter.hasNext()) {
 				Post currPost = iter.next();
-				QueueThreadImpl worker = new QueueThreadImpl(currID, currPost.getId(), idPSAR);
+				RunnableQueueImpl worker = new RunnableQueueImpl(currID, currPost.getId(), idPSAR);
 				worker.setName(currPost.getId());
-				worker.addToQueue(queue);
+				queue.addThread(worker);
 			}	
 
 		}
 
-		queue.execute();
-		queue.awaitQueueTermination(60L);
+		long start = System.currentTimeMillis();
+		try {
+			queue.executeAndWait();
+		} catch (TimeoutException e1) {
+			e1.printStackTrace();
+		}
+		
+		long end = System.currentTimeMillis();
+		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
 
 		Enumeration<PSAR> elements = result.elements();
 		while (elements.hasMoreElements()) {
@@ -127,9 +116,6 @@ public class FacebookPSARQueueThreadPost {
 
 		}
 		outWriter.close();
-
-		long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
 
 	}
 

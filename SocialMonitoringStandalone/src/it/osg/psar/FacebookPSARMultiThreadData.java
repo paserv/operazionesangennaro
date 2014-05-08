@@ -1,7 +1,7 @@
 package it.osg.psar;
 
 import it.osg.data.PSAR;
-import it.osg.runnable.AtomicJob;
+import it.osg.runnable.AtomicDataJob;
 import it.osg.utils.DateUtils;
 
 import java.io.File;
@@ -77,12 +77,12 @@ public class FacebookPSARMultiThreadData {
 					String to1 = DateUtils.formatDateAndTime(DateUtils.addHoursToDate(DateUtils.parseDateAndTime(from1), STEP));
 					Date t1 = DateUtils.parseDateAndTime(to1);
 					if (DateUtils.compareDate(t, t1) >= 0) {
-						Runnable worker = new AtomicJob(currID, from1, to1, currPSAR);
+						Runnable worker = new AtomicDataJob(currID, from1, to1, currPSAR);
 						executor.execute(worker);
 						f1 = t1;
 						from1 = DateUtils.formatDateAndTime(f1);
 					} else {
-						Runnable worker = new AtomicJob(currID, from1, toDay, currPSAR);
+						Runnable worker = new AtomicDataJob(currID, from1, toDay, currPSAR);
 						executor.execute(worker);
 						break;
 					}
