@@ -54,7 +54,7 @@ public abstract class RunnableQueue implements Runnable {
 			LOGGER.severe("Enqueue Failed Thread " + this.getName());
 			this.queue.addThread(this);
 			this.queue.getCounter().runningThread.decrementAndGet();
-			return;
+//			return;
 		}
 		
 	}
