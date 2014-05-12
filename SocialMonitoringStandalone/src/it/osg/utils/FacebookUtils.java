@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Random;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -22,6 +24,7 @@ import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.ResponseList;
 import facebook4j.auth.AccessToken;
+import facebook4j.internal.org.json.JSONException;
 
 public class FacebookUtils {
 
@@ -35,7 +38,7 @@ public class FacebookUtils {
 			} else {
 				nextFBCredential++;
 			}
-//			System.out.println(System.currentTimeMillis() + ";" + nextFBCredential);
+			//			System.out.println(System.currentTimeMillis() + ";" + nextFBCredential);
 			return facebookPool.get(nextFBCredential);
 		}
 
@@ -51,10 +54,90 @@ public class FacebookUtils {
 	}
 
 	public static void main(String[] args) {
-		Post ps = getPost("179618821150_10152142823961151");
-		System.out.println("jj");
+		Facebook fb = getFB();
+		try {
+			ResponseList<Post> result = fb.searchPosts("berlusconi");
+			System.out.println();
+		} catch (FacebookException e) {
+			e.printStackTrace();
+		}
+		getFeedByKeyword("berlusconi", "01-01-2014", "01-05-2014");
 	}
 
+	public static Hashtable<String, String> getPostByKeyword (String keyword, String since, String until) {
+		Hashtable<String, String> result = new Hashtable<String, String>();
+
+		ArrayList<Post> appoggio = new ArrayList<Post>();
+
+		Facebook facebook = getFB();
+		ResponseList<Post> postsByKey;
+		try {
+			postsByKey = facebook.searchPosts(keyword);
+			appoggio.addAll(postsByKey);
+
+			//Fetching Post
+			Paging<Post> pagingPost = postsByKey.getPaging();
+
+			while (true) {
+				if (pagingPost != null) {
+					ResponseList<Post> nextPosts;
+					nextPosts = facebook.fetchNext(pagingPost);
+					appoggio.addAll(nextPosts);
+					pagingPost = nextPosts.getPaging();
+
+				} else {
+					break;
+				}
+			}
+
+		} catch (FacebookException e1) {
+			e1.printStackTrace();
+		}
+
+
+		Iterator<Post> iterAppoggio = appoggio.iterator();
+		while(iterAppoggio.hasNext()) {
+			Post curr = iterAppoggio.next();
+			
+			
+		}
+
+
+
+		return result;
+	}
+
+	public static Hashtable<String, String> getFeedByKeyword (String keyword, String since, String until) {
+
+		int sizeVectorAccessToken = Constants.FACEBOOK_CREDENTIAL_VECTOR.size();
+		Random rnd = new Random();
+		int randomIndex = rnd.nextInt(sizeVectorAccessToken);
+		String access_token = Constants.FACEBOOK_CREDENTIAL_VECTOR.get(randomIndex).getAppAccessToken();
+
+		Hashtable<String, String> result = new Hashtable<String, String>();
+
+		String url = Constants.FACEBOOK_GRAPH_API_ROOT_URL + "search?q=" + keyword + "&since=" + since + "&until=" + until + "&access_token=" + access_token;
+
+		String jsonString = JSONObjectUtil.retrieveJson(url);
+
+		Object objJson = JSONValue.parse(jsonString);
+		JSONObject json =(JSONObject) objJson;
+		JSONArray arrayResult = (JSONArray) json.get("data");
+		JSONArray paging = (JSONArray) json.get("paging");
+
+		Iterator<JSONObject> iter = arrayResult.iterator();
+		while (iter.hasNext()) {
+			JSONObject current = iter.next();
+			String currentIdFeed = (String) current.get("id");
+			JSONObject currentFrom = (JSONObject) current.get("from");
+			String currentIdAuthor = (String) currentFrom.get("id");
+			result.put(currentIdFeed, currentIdAuthor);
+		}
+
+
+
+		return result;
+	}
 
 	public static Date getActivityInterval (String pageId){
 
@@ -445,7 +528,7 @@ public class FacebookUtils {
 		String likeCount = JSONObjectUtil.retrieveJsonPath(json, "likes");
 		String talkingAboutCount = JSONObjectUtil.retrieveJsonPath(json, "talking_about_count");
 
-//		System.out.println(likeCount + " " + talkingAboutCount);
+		//		System.out.println(likeCount + " " + talkingAboutCount);
 
 		if (!likeCount.equalsIgnoreCase("")) {
 			currRow.put("like_count", Integer.parseInt(likeCount));
