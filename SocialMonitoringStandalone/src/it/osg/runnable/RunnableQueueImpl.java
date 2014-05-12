@@ -36,30 +36,31 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 		if (completePost.getFrom().getId().equals(this.userID) && completePost.getMessage() != null) {
 
-			data.getPostFromPage().incrementAndGet();
-
 			ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
 			commentNum = commentsList.size();
-			data.addComments(commentNum);
-
+			
 			ArrayList<Like> likesList = FacebookUtils.getAllLikes(completePost);
 			likesNum = likesList.size();
-			data.addLikes(likesNum);
 
 			sharesNum = FacebookUtils.getSharesInteger(completePost);
-			data.addShares(sharesNum);
 
 			commentsPageToPagePost = FacebookUtils.getCommentsFromIdCountInteger(this.userID, commentsList);
-			data.addCommnetsFromPageToPostFromPage(commentsPageToPagePost);
 
+			data.getPostFromPage().incrementAndGet();
+			data.addComments(commentNum);
+			data.addLikes(likesNum);
+			data.addShares(sharesNum);
+			data.addCommnetsFromPageToPostFromPage(commentsPageToPagePost);
+			
 		} else {
-			data.getPostFromFan().incrementAndGet();
 
 			ArrayList<Comment> commentsToPostFromFanList = FacebookUtils.getAllComments(completePost);
 			commentToFanPost = commentsToPostFromFanList.size();
-			data.addCommentsToPostFromFan(commentToFanPost);
 
 			commentPageToFanPost = FacebookUtils.getCommentsFromIdCountInteger(this.userID, commentsToPostFromFanList);
+			
+			data.getPostFromFan().incrementAndGet();
+			data.addCommentsToPostFromFan(commentToFanPost);
 			data.addCommnetsFromPageToPostFromFan(commentPageToFanPost);
 
 		}
@@ -69,7 +70,11 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 	@Override
 	public void rollback() {
-		// TODO Auto-generated method stub
+		try {
+			Thread.sleep(600000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 	}
 
