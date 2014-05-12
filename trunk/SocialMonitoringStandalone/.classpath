@@ -1,62 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="output"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="lib" path="libs/csv/javacsv.jar"/>
-	<classpathentry kind="lib" path="libs/facebook/facebook4j-core-2.0.0.jar"/>
-	<classpathentry kind="lib" path="libs/facebook/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-analytics-2.1.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-analytics-meta-2.1.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-appsforyourdomain-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-appsforyourdomain-meta-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-base-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-blogger-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-blogger-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-books-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-books-meta-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-calendar-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-calendar-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-client-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-client-meta-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-codesearch-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-codesearch-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-contacts-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-contacts-meta-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-core-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-docs-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-docs-meta-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-finance-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-finance-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-gtt-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-gtt-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-health-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-health-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-maps-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-maps-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-media-1.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-photos-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-photos-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-projecthosting-2.1.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-projecthosting-meta-2.1.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-sidewiki-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-sidewiki-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-sites-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-sites-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-spreadsheet-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-spreadsheet-meta-3.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-webmastertools-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-webmastertools-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-youtube-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/gdata-youtube-meta-2.0.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/guava-11.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/spreadsheet/jsr305.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/commons-logging-1.1.3.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/fluent-hc-4.3.3.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/httpclient-4.3.3.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/httpclient-cache-4.3.3.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/httpcore-4.3.2.jar"/>
-	<classpathentry kind="lib" path="libs/apacheHttp/httpmime-4.3.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/APACHE HTTP"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/CSV LIB"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/F4J"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/GDATA"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JSON"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ThreadQueue"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
