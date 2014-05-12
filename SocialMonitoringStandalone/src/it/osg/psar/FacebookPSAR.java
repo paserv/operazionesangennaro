@@ -28,7 +28,7 @@ public class FacebookPSAR {
 	
 	public static String outputPath = "resources/facebookModa";
 	public static String from = "01-01-2014 00:00:00";
-	public static String to = "02-01-2014 23:59:59";
+	public static String to = "15-01-2014 23:59:59";
 	
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
