@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import com.csvreader.CsvWriter;
 
 import it.osg.psar.FacebookPSARQueueThreadPost;
-import it.osg.runnable.exception.ArgumentException;
+import it.osg.exception.ArgumentException;
 
 public class PerformaceTestMultiThread {
 
