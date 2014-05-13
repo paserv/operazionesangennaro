@@ -1,5 +1,8 @@
 package test;
 
+import facebook4j.Post;
+import it.osg.utils.FacebookUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +23,9 @@ public class Test {
 
 
 	public static void main(String[] args) {
+		
+		Post completePost = FacebookUtils.getPost("1377711462_10201907339029933");
+		
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost("https://1-dot-01-monitorfacebookpages.appspot.com/_ah/api/datastore/v1/registerEntity/paolo/servillo/aaa");
 //		List nameValuePairs = new ArrayList(3);
