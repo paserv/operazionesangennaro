@@ -3,7 +3,7 @@ package it.osg.psar;
 import facebook4j.Post;
 import it.osg.data.PSAR;
 import it.osg.runnable.RunnableQueueImpl;
-import it.osg.runnable.exception.ArgumentException;
+import it.osg.exception.ArgumentException;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.queue.Queue;
