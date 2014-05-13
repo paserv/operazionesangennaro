@@ -3,6 +3,7 @@ package it.osg.runnable;
 import java.util.ArrayList;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.data.PSAR;
@@ -24,8 +25,13 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 	@Override
 	public void executeJob() throws Exception {
+
 		Post completePost = FacebookUtils.getPost(this.postID);
 
+		if (completePost == null) {
+			return;
+		}
+		
 		int commentNum = 0;
 		int likesNum = 0;
 		int sharesNum = 0;
@@ -38,7 +44,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 			ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
 			commentNum = commentsList.size();
-			
+
 			ArrayList<Like> likesList = FacebookUtils.getAllLikes(completePost);
 			likesNum = likesList.size();
 
@@ -51,14 +57,14 @@ public class RunnableQueueImpl extends RunnableQueue {
 			data.addLikes(likesNum);
 			data.addShares(sharesNum);
 			data.addCommnetsFromPageToPostFromPage(commentsPageToPagePost);
-			
+
 		} else {
 
 			ArrayList<Comment> commentsToPostFromFanList = FacebookUtils.getAllComments(completePost);
 			commentToFanPost = commentsToPostFromFanList.size();
 
 			commentPageToFanPost = FacebookUtils.getCommentsFromIdCountInteger(this.userID, commentsToPostFromFanList);
-			
+
 			data.getPostFromFan().incrementAndGet();
 			data.addCommentsToPostFromFan(commentToFanPost);
 			data.addCommnetsFromPageToPostFromFan(commentPageToFanPost);
