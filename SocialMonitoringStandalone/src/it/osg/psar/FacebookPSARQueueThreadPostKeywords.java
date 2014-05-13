@@ -1,26 +1,20 @@
 package it.osg.psar;
 
-import facebook4j.Post;
 import it.osg.data.PSAR;
 import it.osg.runnable.RunnableQueueImpl;
-import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.queue.Queue;
 import it.queue.TimeoutException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 
 
@@ -31,14 +25,15 @@ public class FacebookPSARQueueThreadPostKeywords {
 	public static char inputCharDelimiter = ';';
 
 	public static String inputFile = "quotidiani.csv";
-	public static String from = "01-05-2014 00:00:00";
-	public static String to = "12-05-2014 23:59:59";
+	public static String from = "13-05-2014 00:00:00";
+	public static String to = "13-05-2014 23:59:59";
 
-	public static int QUEUELENGHT = 50; //Numero massimo thread in stato running
+	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
 	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
 	public static String keywordString = "renzi";
+	public static String keywordOperator = "OR";
 
 	public static void main(String[] args) {
 
@@ -47,28 +42,38 @@ public class FacebookPSARQueueThreadPostKeywords {
 		//		System.getProperties().put("http.proxyUser", "rete\\servill7");
 		//		System.getProperties().put("http.proxyPassword", "Paolos10");
 
-		if (args != null) {
+		if (args != null && args.length > 0) {
 			inputFile = args[0];
 			from = args[1];
 			to = args[2];
 			QUEUELENGHT = Integer.valueOf(args[3]);
 			QUEUE_CHECK_SLEEP = Long.valueOf(args[4]);
 			QUEUE_TIMEOUT = Long.valueOf(args[5]);
-			keywordString = args[6];			
+			keywordString = args[6];
+			keywordOperator = args[7];
 		}
 
-		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		//GET DATE
+		String fromDay = from.substring(0, 10) + " 00:00:00";
+		String toDay = to.substring(0, 10) + " 23:59:59";
 
+		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		queue.setRollback(false);
+		
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
-		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "TO" + to.substring(0,10) + ".csv");
+		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_KEY_" + keywordString + "_" + keywordOperator + "_" + System.currentTimeMillis() + ".csv");
 
 		String[] keywords = keywordString.split(",");
+		if (keywordOperator.equalsIgnoreCase("AND")) {
+			keywords = new String[1];
+			keywords[0] = keywordString;
+		}
 
 		ArrayList<Hashtable<String, Set<String>>> postsGroupedByAuthor = new ArrayList<Hashtable<String,Set<String>>>();
 		for (int i = 0; i < keywords.length; i++) {
 			String currKeyword = keywords[i];
-			Hashtable<String, Set<String>> currKeywordPosts = FacebookUtils.getPostByKeyword(currKeyword, from, to);
+			Hashtable<String, Set<String>> currKeywordPosts = FacebookUtils.getPostByKeyword(currKeyword, fromDay, toDay);
 			postsGroupedByAuthor.add(currKeywordPosts);
 		}
 
@@ -104,9 +109,10 @@ public class FacebookPSARQueueThreadPostKeywords {
 				String currPostID = iterator.next();
 				RunnableQueueImpl worker = new RunnableQueueImpl(currAuthorID, currPostID, idPSAR);
 				worker.setName(currPostID);
+				queue.addThread(worker);
 			}
 		}
-		
+
 		long start = System.currentTimeMillis();
 		try {
 			queue.executeAndWait();
@@ -115,24 +121,33 @@ public class FacebookPSARQueueThreadPostKeywords {
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
-		
+
 
 		Enumeration<PSAR> elements = result.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
-			try {
-				outWriter.write(curr.getNome());
-				outWriter.write(curr.getId());
-				outWriter.write(curr.getPostFromPage().toString());
-				outWriter.write(curr.getPostFromFan().toString());
-				outWriter.write(curr.getComments().toString());
-				outWriter.write(curr.getLikes().toString());
-				outWriter.write(curr.getShares().toString());
-				outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
-				outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
-				outWriter.endRecord();
-			} catch (IOException e) {
-				e.printStackTrace();
+
+			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfoFromJson(curr.getId());
+			if (baseInfo.get("likes") != null && !((String) baseInfo.get("likes")).equals("")) {
+				try {
+					if (baseInfo.get("name") != null && !((String) baseInfo.get("name")).equals("")) {
+						outWriter.write((String) baseInfo.get("name"));
+					} else {
+						outWriter.write(curr.getNome());
+					}
+					outWriter.write(curr.getId());
+					outWriter.write(curr.getPostFromPage().toString());
+					outWriter.write(curr.getPostFromFan().toString());
+					outWriter.write(curr.getComments().toString());
+					outWriter.write(curr.getLikes().toString());
+					outWriter.write(curr.getShares().toString());
+					outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
+					outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
+					outWriter.write((String) baseInfo.get("likes"));
+					outWriter.endRecord();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 		}

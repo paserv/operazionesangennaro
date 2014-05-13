@@ -37,7 +37,7 @@ public class FacebookPSARQueueThreadPost {
 	public static String from = "01-01-2014 00:00:00";
 	public static String to = "15-01-2014 23:59:59";
 
-	public static int QUEUELENGHT = 50; //Numero massimo thread in stato running
+	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
 	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
@@ -48,7 +48,7 @@ public class FacebookPSARQueueThreadPost {
 //		System.getProperties().put("http.proxyUser", "rete\\servill7");
 //		System.getProperties().put("http.proxyPassword", "Paolos10");
 		
-		if (args != null) {
+		if (args != null && args.length > 0) {
 			inputFile = args[0];
 			from = args[1];
 			to = args[2];
@@ -59,17 +59,18 @@ public class FacebookPSARQueueThreadPost {
 		
 		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
 		
-		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "TO" + to.substring(0,10) + ".csv");
+		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv");
 
-		Hashtable<String, String> ids = getInputAccounts(inputFile, idField, nomeField, inputCharDelimiter);
+		Hashtable<String, String> ids = getInputAccounts(resourcesFolder + inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
 		//GET TO DATE
+		String fromDay = from.substring(0, 10) + " 00:00:00";
 		String toDay = to.substring(0, 10) + " 23:59:59";
 		Date f = null;
 		Date t = null;
 		try {
-			f = DateUtils.parseDateAndTime(from);
+			f = DateUtils.parseDateAndTime(fromDay);
 			t = DateUtils.parseDateAndTime(toDay);
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -109,6 +110,7 @@ public class FacebookPSARQueueThreadPost {
 		Enumeration<PSAR> elements = result.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
+			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfoFromJson(curr.getId());
 			try {
 				outWriter.write(curr.getNome());
 				outWriter.write(curr.getId());
@@ -119,6 +121,7 @@ public class FacebookPSARQueueThreadPost {
 				outWriter.write(curr.getShares().toString());
 				outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
 				outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
+				outWriter.write((String) baseInfo.get("likes"));
 				outWriter.endRecord();
 			} catch (IOException e) {
 				e.printStackTrace();
