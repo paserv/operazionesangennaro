@@ -5,9 +5,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -64,8 +66,19 @@ public class FacebookUtils {
 		getFeedByKeyword("berlusconi", "01-01-2014", "01-05-2014");
 	}
 
-	public static Hashtable<String, String> getPostByKeyword (String keyword, String since, String until) {
-		Hashtable<String, String> result = new Hashtable<String, String>();
+	public static Hashtable<String, Set<String>> getPostByKeyword (String keyword, String since, String until) {
+		
+		Date from = null;
+		Date to = null;
+		try {
+			from = DateUtils.parseDateAndTime(since.substring(0,10));
+			to = DateUtils.parseDateAndTime(until.substring(0,10));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
+		Hashtable<String, Set<String>> result = new Hashtable<String, Set<String>>();
 
 		ArrayList<Post> appoggio = new ArrayList<Post>();
 
@@ -98,11 +111,19 @@ public class FacebookUtils {
 		Iterator<Post> iterAppoggio = appoggio.iterator();
 		while(iterAppoggio.hasNext()) {
 			Post curr = iterAppoggio.next();
-			
+			Date createdTime = curr.getCreatedTime();
+			if (DateUtils.between(createdTime, from, to)) {
+				if (result.containsKey(curr.getFrom().getId())) {
+					result.get(curr.getFrom().getId()).add(curr.getId());
+				} else {
+					Set<String> newSet = new HashSet<String>();
+					newSet.add(curr.getId());
+					result.put(curr.getFrom().getId(), newSet);
+				}
+				
+			}
 			
 		}
-
-
 
 		return result;
 	}
