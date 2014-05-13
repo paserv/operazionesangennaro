@@ -6,6 +6,7 @@ public class PSAR {
 
 	private String id;
 	private String nome;
+	private String fan;
 	private AtomicInteger postFromPage = new AtomicInteger(0);
 	private AtomicInteger postFromFan = new AtomicInteger(0);
 	private AtomicInteger comments = new AtomicInteger(0);
@@ -136,5 +137,15 @@ public class PSAR {
 	public AtomicInteger getCommnetsFromPageToPostFromFan() {
 		return commnetsFromPageToPostFromFan;
 	}
+
+	public String getFan() {
+		return fan;
+	}
+
+	public void setFan(String fan) {
+		this.fan = fan;
+	}
+	
+	
 
 }
