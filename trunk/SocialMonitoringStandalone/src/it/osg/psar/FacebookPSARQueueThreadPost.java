@@ -110,15 +110,14 @@ public class FacebookPSARQueueThreadPost {
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
 			try {
-				outWriter.write(curr.getId());
 				outWriter.write(curr.getNome());
+				outWriter.write(curr.getId());
 				outWriter.write(curr.getPostFromPage().toString());
 				outWriter.write(curr.getPostFromFan().toString());
 				outWriter.write(curr.getComments().toString());
 				outWriter.write(curr.getLikes().toString());
 				outWriter.write(curr.getShares().toString());
-				outWriter.write(curr.getCommentsToPostFromFan().toString());
-				outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());
+				outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
 				outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
 				outWriter.endRecord();
 			} catch (IOException e) {
@@ -151,16 +150,16 @@ public class FacebookPSARQueueThreadPost {
 
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists)	{
-				csvOutput.write("id");
 				csvOutput.write("nome");
-				csvOutput.write("PostFromPage");
-				csvOutput.write("PostFromFan");
-				csvOutput.write("Comments");
-				csvOutput.write("Likes");
-				csvOutput.write("Shares");
-				csvOutput.write("CommentsToPostFromFan");
-				csvOutput.write("CommnetsFromPageToPostFromPage");
-				csvOutput.write("CommnetsFromPageToPostFromFan");
+				csvOutput.write("id");
+				csvOutput.write("post");
+				csvOutput.write("fanPost");
+				csvOutput.write("comments");
+				csvOutput.write("likes");
+				csvOutput.write("shares");
+				csvOutput.write("commentsToOwnPost");
+				csvOutput.write("commentsToOtherPost");
+				csvOutput.write("fan");
 
 				csvOutput.endRecord();
 			}
