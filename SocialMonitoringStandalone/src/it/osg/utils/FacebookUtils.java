@@ -71,8 +71,8 @@ public class FacebookUtils {
 		Date from = null;
 		Date to = null;
 		try {
-			from = DateUtils.parseDateAndTime(since.substring(0,10));
-			to = DateUtils.parseDateAndTime(until.substring(0,10));
+			from = DateUtils.parseDateAndTime(since);
+			to = DateUtils.parseDateAndTime(until);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -85,7 +85,7 @@ public class FacebookUtils {
 		Facebook facebook = getFB();
 		ResponseList<Post> postsByKey;
 		try {
-			postsByKey = facebook.searchPosts(keyword);
+			postsByKey = facebook.searchPosts(keyword, new Reading().since(from).until(to));
 			appoggio.addAll(postsByKey);
 
 			//Fetching Post
@@ -111,8 +111,6 @@ public class FacebookUtils {
 		Iterator<Post> iterAppoggio = appoggio.iterator();
 		while(iterAppoggio.hasNext()) {
 			Post curr = iterAppoggio.next();
-			Date createdTime = curr.getCreatedTime();
-			if (DateUtils.between(createdTime, from, to)) {
 				if (result.containsKey(curr.getFrom().getId())) {
 					result.get(curr.getFrom().getId()).add(curr.getId());
 				} else {
@@ -120,9 +118,6 @@ public class FacebookUtils {
 					newSet.add(curr.getId());
 					result.put(curr.getFrom().getId(), newSet);
 				}
-				
-			}
-			
 		}
 
 		return result;
