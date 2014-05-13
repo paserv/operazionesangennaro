@@ -28,7 +28,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 		Post completePost = FacebookUtils.getPost(this.postID);
 
-		if (completePost == null) {
+		if (completePost == null && !this.getQueue().isRollback()) {
 			return;
 		}
 		
