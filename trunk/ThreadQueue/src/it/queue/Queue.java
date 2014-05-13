@@ -21,6 +21,7 @@ public class Queue {
 	private long queueTimeout;
 	private long startTime;
 	
+	private boolean rollback = true;	
 	
 	
 	public Queue (int lenght, long checkSleep, long queueTimeout) {
@@ -99,6 +100,14 @@ public class Queue {
 
 	public void setCounter(SyncCounter counter) {
 		this.counter = counter;
+	}
+
+	public boolean isRollback() {
+		return rollback;
+	}
+
+	public void setRollback(boolean rollback) {
+		this.rollback = rollback;
 	}
 	
 	
