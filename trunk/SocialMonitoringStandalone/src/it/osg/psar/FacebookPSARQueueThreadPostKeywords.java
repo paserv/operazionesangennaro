@@ -33,10 +33,10 @@ public class FacebookPSARQueueThreadPostKeywords {
 	public static char inputCharDelimiter = ';';
 
 	public static String inputFile = "quotidiani.csv";
-	public static String from = "13-05-2014 00:00:00";
+	public static String from = "10-05-2014 00:00:00";
 	public static String to = "13-05-2014 23:59:59";
 
-	public static int QUEUELENGHT = 25; //Numero massimo thread in stato running
+	public static int QUEUELENGHT = 20; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
 	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
