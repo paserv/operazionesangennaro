@@ -5,19 +5,18 @@ import java.util.Iterator;
 
 import facebook4j.Comment;
 import facebook4j.Post;
-import it.osg.data.Hashtags;
+import it.osg.data.Words;
 import it.osg.utils.FacebookUtils;
 import it.queue.RunnableQueue;
 
-public class RunnableQueueImpl4Hashtags extends RunnableQueue {
+public class RunnableQueueImpl4Words extends RunnableQueue {
 
-	private Hashtags tags;
 	private Post post;
+	private Words words;
 	
-	public RunnableQueueImpl4Hashtags(Post post, Hashtags tags) {
+	public RunnableQueueImpl4Words(Post post, Words words) {
 		super();
-		this.tags = tags;
-		this.post = post;
+		this.words = words;
 	}
 
 	@Override
@@ -35,9 +34,7 @@ public class RunnableQueueImpl4Hashtags extends RunnableQueue {
 			/*Split and add to multiset*/
 			String[] splitted = finalMsg.split(" ");
 			for (int j = 1; j < splitted.length; j++) {
-				if (splitted[j].startsWith("#")) {
-					this.tags.addToMultiset(splitted[j]);
-				}
+				this.words.addWord(splitted[j]);
 			}
 
 			/*Get Comments*/
@@ -55,9 +52,7 @@ public class RunnableQueueImpl4Hashtags extends RunnableQueue {
 					/*Split and add to multiset*/
 					String[] splittedComment = finalCommentMsg.split(" ");
 					for (int j = 1; j < splittedComment.length; j++) {
-						if (splittedComment[j].startsWith("#")) {
-							this.tags.addToMultiset(splittedComment[j]);
-						}
+						this.words.addWord(splitted[j]);
 					}
 
 				}
