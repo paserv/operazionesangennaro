@@ -38,9 +38,9 @@ public class RunnableQueueImpl4Hashtags extends RunnableQueue {
 			/*Split and add to multiset*/
 			String[] splitted = finalMsg.split(" ");
 			for (int j = 1; j < splitted.length; j++) {
-				if (splitted[j].startsWith("#")) {
+//				if (splitted[j].startsWith("#")) {
 					this.tags.addToMultiset(splitted[j]);
-				}
+//				}
 			}
 
 			/*Get Comments*/
