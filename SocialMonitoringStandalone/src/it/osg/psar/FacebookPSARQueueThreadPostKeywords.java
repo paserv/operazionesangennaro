@@ -3,6 +3,7 @@ package it.osg.psar;
 import facebook4j.Post;
 import it.osg.data.Hashtags;
 import it.osg.data.PSAR;
+import it.osg.runnable.RunnableQueueBaseInfoImpl;
 import it.osg.runnable.RunnableQueueImpl;
 import it.osg.runnable.RunnableQueueImpl4Hashtags;
 import it.osg.utils.FacebookUtils;
@@ -35,7 +36,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 	public static String from = "13-05-2014 00:00:00";
 	public static String to = "13-05-2014 23:59:59";
 
-	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
+	public static int QUEUELENGHT = 25; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
 	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
@@ -163,33 +164,57 @@ public class FacebookPSARQueueThreadPostKeywords {
 		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
 
 
+		/*Coda per le BaseInfo*/
+		Queue queueBaseInfo = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		queueBaseInfo.setRollback(false);
+		Enumeration<PSAR> psars = resultPSAR.elements();
+		while (psars.hasMoreElements()) {
+			PSAR curr = psars.nextElement();
+			/*Aggiungo un worker alla coda delle BaseInfo*/
+			RunnableQueueBaseInfoImpl workerBaseInfo = new RunnableQueueBaseInfoImpl(curr);
+			workerBaseInfo.setName(curr.getId());
+			queueBaseInfo.addThread(workerBaseInfo);
+		}
+		
+		/*Avvio la coda*/
+		start = System.currentTimeMillis();
+		try {
+			queueBaseInfo.executeAndWait();
+		} catch (TimeoutException e1) {
+			e1.printStackTrace();
+		}
+		end = System.currentTimeMillis();
+		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
+		
+		
 		/*File per i risultati di PSAR*/
 		Enumeration<PSAR> elements = resultPSAR.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
-
-			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfoFromJson(curr.getId());
-			if (baseInfo.get("likes") != null && !((String) baseInfo.get("likes")).equals("")) {
-				try {
-					if (baseInfo.get("name") != null && !((String) baseInfo.get("name")).equals("")) {
-						outWriterPSAR.write((String) baseInfo.get("name"));
-					} else {
-						outWriterPSAR.write(curr.getNome());
+			if (curr.getPostFromPage().intValue() != 0) {
+				if (curr.getFan() != null && !curr.getFan().equals("")) {
+					try {
+						if (curr.getNome() != null && !curr.getNome().equals("")) {
+							outWriterPSAR.write(curr.getNome());
+						} else {
+							outWriterPSAR.write("No Name Found");
+						}
+						outWriterPSAR.write(curr.getId());
+						outWriterPSAR.write(curr.getPostFromPage().toString());
+						outWriterPSAR.write(curr.getPostFromFan().toString());
+						outWriterPSAR.write(curr.getComments().toString());
+						outWriterPSAR.write(curr.getLikes().toString());
+						outWriterPSAR.write(curr.getShares().toString());
+						outWriterPSAR.write(curr.getCommnetsFromPageToPostFromPage().toString());				
+						outWriterPSAR.write(curr.getCommnetsFromPageToPostFromFan().toString());
+						outWriterPSAR.write(curr.getFan());
+						outWriterPSAR.endRecord();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-					outWriterPSAR.write(curr.getId());
-					outWriterPSAR.write(curr.getPostFromPage().toString());
-					outWriterPSAR.write(curr.getPostFromFan().toString());
-					outWriterPSAR.write(curr.getComments().toString());
-					outWriterPSAR.write(curr.getLikes().toString());
-					outWriterPSAR.write(curr.getShares().toString());
-					outWriterPSAR.write(curr.getCommnetsFromPageToPostFromPage().toString());				
-					outWriterPSAR.write(curr.getCommnetsFromPageToPostFromFan().toString());
-					outWriterPSAR.write((String) baseInfo.get("likes"));
-					outWriterPSAR.endRecord();
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
+
 
 		}
 		outWriterPSAR.close();
@@ -209,7 +234,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 			try {
 				outWriterHashtags.write(topHunHT.get(i).getElement());
 				outWriterHashtags.write(String.valueOf(topHunHT.get(i).getCount()));
-				outWriterPSAR.endRecord();
+				outWriterHashtags.endRecord();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
