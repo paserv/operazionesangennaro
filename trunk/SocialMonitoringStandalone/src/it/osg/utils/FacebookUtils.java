@@ -66,7 +66,7 @@ public class FacebookUtils {
 		getFeedByKeyword("berlusconi", "01-01-2014", "01-05-2014");
 	}
 
-	public static Hashtable<String, Set<String>> getPostByKeyword (String keyword, String since, String until) {
+	public static Hashtable<String, Hashtable<String, Post>> getPostByKeyword (String keyword, String since, String until) {
 		
 		Date from = null;
 		Date to = null;
@@ -78,7 +78,7 @@ public class FacebookUtils {
 		}
 		
 		
-		Hashtable<String, Set<String>> result = new Hashtable<String, Set<String>>();
+		Hashtable<String, Hashtable<String, Post>> result = new Hashtable<String, Hashtable<String, Post>>();
 
 		ArrayList<Post> appoggio = new ArrayList<Post>();
 
@@ -112,10 +112,10 @@ public class FacebookUtils {
 		while(iterAppoggio.hasNext()) {
 			Post curr = iterAppoggio.next();
 				if (result.containsKey(curr.getFrom().getId())) {
-					result.get(curr.getFrom().getId()).add(curr.getId());
+					result.get(curr.getFrom().getId()).put(curr.getId(), curr);
 				} else {
-					Set<String> newSet = new HashSet<String>();
-					newSet.add(curr.getId());
+					Hashtable<String, Post> newSet = new Hashtable<String, Post>();
+					newSet.put(curr.getId(), curr);
 					result.put(curr.getFrom().getId(), newSet);
 				}
 		}
