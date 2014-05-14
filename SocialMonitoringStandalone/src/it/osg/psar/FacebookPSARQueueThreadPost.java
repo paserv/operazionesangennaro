@@ -57,10 +57,11 @@ public class FacebookPSARQueueThreadPost {
 			QUEUE_TIMEOUT = Long.valueOf(args[5]);
 		}
 		
-		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		Queue queuePSAR = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
 		
 		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv");
-
+		outWriter.setDelimiter(';');
+		
 		Hashtable<String, String> ids = getInputAccounts(resourcesFolder + inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
@@ -92,14 +93,14 @@ public class FacebookPSARQueueThreadPost {
 				Post currPost = iter.next();
 				RunnableQueueImpl worker = new RunnableQueueImpl(currID, currPost.getId(), idPSAR);
 				worker.setName(currPost.getId());
-				queue.addThread(worker);
+				queuePSAR.addThread(worker);
 			}	
 
 		}
 
 		long start = System.currentTimeMillis();
 		try {
-			queue.executeAndWait();
+			queuePSAR.executeAndWait();
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
 		}

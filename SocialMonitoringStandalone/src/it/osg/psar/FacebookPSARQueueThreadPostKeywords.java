@@ -1,7 +1,10 @@
 package it.osg.psar;
 
+import facebook4j.Post;
+import it.osg.data.Hashtags;
 import it.osg.data.PSAR;
 import it.osg.runnable.RunnableQueueImpl;
+import it.osg.runnable.RunnableQueueImpl4Hashtags;
 import it.osg.utils.FacebookUtils;
 import it.queue.Queue;
 import it.queue.TimeoutException;
@@ -10,12 +13,16 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 
 import com.csvreader.CsvWriter;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multiset.Entry;
 
 
 public class FacebookPSARQueueThreadPostKeywords {
@@ -37,56 +44,77 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 	public static void main(String[] args) {
 
-		//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-		//		System.getProperties().put("http.proxyPort", "8080");
-		//		System.getProperties().put("http.proxyUser", "rete\\servill7");
-		//		System.getProperties().put("http.proxyPassword", "Paolos10");
+//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+//		System.getProperties().put("http.proxyPort", "8080");
+//		System.getProperties().put("http.proxyUser", "rete\\servill7");
+//		System.getProperties().put("http.proxyPassword", "Paolos10");
 
 		if (args != null && args.length > 0) {
-			inputFile = args[0];
-			from = args[1];
-			to = args[2];
-			QUEUELENGHT = Integer.valueOf(args[3]);
-			QUEUE_CHECK_SLEEP = Long.valueOf(args[4]);
-			QUEUE_TIMEOUT = Long.valueOf(args[5]);
-			keywordString = args[6];
-			keywordOperator = args[7];
+			from = args[0];
+			to = args[1];
+			QUEUELENGHT = Integer.valueOf(args[2]);
+			QUEUE_CHECK_SLEEP = Long.valueOf(args[3]);
+			QUEUE_TIMEOUT = Long.valueOf(args[4]);
+			keywordString = args[5];
+			keywordOperator = args[6];
 		}
 
 		//GET DATE
 		String fromDay = from.substring(0, 10) + " 00:00:00";
 		String toDay = to.substring(0, 10) + " 23:59:59";
 
-		Queue queue = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
-		queue.setRollback(false);
-		
-		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
+		/*Instanzio le code*/
+		Queue queuePSAR = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		queuePSAR.setRollback(false);
+		Queue queueHashtags = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		queueHashtags.setRollback(false);
 
-		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_KEY_" + keywordString + "_" + keywordOperator + "_" + System.currentTimeMillis() + ".csv");
+		/*Instanzio gli oggetti funzionali alla scrittura dei file di output*/
+		Hashtable<String, PSAR> resultPSAR = new Hashtable<String, PSAR>();
+		Hashtags resultHashtags = new Hashtags();
 
+		/*Instanzio i writer dei file di output*/
+		String psarFileName = "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_KEY_" + keywordString + "_" + keywordOperator + "_" + System.currentTimeMillis() + ".csv";
+		String hashTagFileName = psarFileName.substring(0, psarFileName.length() - 4) + ".hashtag";
+		CsvWriter outWriterPSAR = openOutputFile(outputFolder + psarFileName);
+		outWriterPSAR.setDelimiter(';');
+		CsvWriter outWriterHashtags = null;
+		try {
+			outWriterHashtags = new CsvWriter(new FileWriter(outputFolder + hashTagFileName, true), ';');
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		} 
+		outWriterHashtags.setDelimiter(';');
+
+		/*Gestione dell' AND o OR delle keyword*/
 		String[] keywords = keywordString.split(",");
 		if (keywordOperator.equalsIgnoreCase("AND")) {
 			keywords = new String[1];
 			keywords[0] = keywordString;
 		}
 
-		ArrayList<Hashtable<String, Set<String>>> postsGroupedByAuthor = new ArrayList<Hashtable<String,Set<String>>>();
+		/** Lancio le ricerca sulle keywords, se per esempio
+		 * in un post sono presenti 2 keywords,
+		 * allora nell'ArrayList sarà presente 2 volte lo stesso autore
+		 * nelle cui hashtable di post sarà presente 2 volte lo stesso post */
+		ArrayList<Hashtable<String, Hashtable<String, Post>>> postsGroupedByAuthor = new ArrayList<Hashtable<String,Hashtable<String, Post>>>();
 		for (int i = 0; i < keywords.length; i++) {
 			String currKeyword = keywords[i];
-			Hashtable<String, Set<String>> currKeywordPosts = FacebookUtils.getPostByKeyword(currKeyword, fromDay, toDay);
+			Hashtable<String, Hashtable<String, Post>> currKeywordPosts = FacebookUtils.getPostByKeyword(currKeyword, fromDay, toDay);
 			postsGroupedByAuthor.add(currKeywordPosts);
 		}
 
-		Hashtable<String, Set<String>> authorsWithPost = new Hashtable<String, Set<String>>();
-		Iterator<Hashtable<String, Set<String>>> iter = postsGroupedByAuthor.iterator();
+		/** Qui ri-raggruppo per autore in modo da deduplicare i post */
+		Hashtable<String, Hashtable<String, Post>> authorsWithPost = new Hashtable<String, Hashtable<String, Post>>();
+		Iterator<Hashtable<String, Hashtable<String, Post>>> iter = postsGroupedByAuthor.iterator();
 		while (iter.hasNext()) {
-			Hashtable<String, Set<String>> current = iter.next();
+			Hashtable<String, Hashtable<String, Post>> current = iter.next();
 			Enumeration<String> keys = current.keys();
 			while (keys.hasMoreElements()) {
 				String currKey = keys.nextElement();
 				if (authorsWithPost.containsKey(currKey)) {	
-					Set<String> alreadyExistentPostSet = authorsWithPost.get(currKey);
-					alreadyExistentPostSet.addAll(current.get(currKey));					
+					Hashtable<String, Post> alreadyExistentPostSet = authorsWithPost.get(currKey);
+					alreadyExistentPostSet.putAll(current.get(currKey));					
 				} else {
 					authorsWithPost.putAll(current);
 				}
@@ -96,26 +124,38 @@ public class FacebookPSARQueueThreadPostKeywords {
 		}
 
 
+		/** Per ogni autore e per ogni suo post metto un thread in coda per il calcolo di PSAR
+		 *  e un thread in coda per il calcolo delle frequenze degli hashtag */
 		Enumeration<String> authors = authorsWithPost.keys();
 		while (authors.hasMoreElements()) {
 			String currAuthorID = authors.nextElement();
-			PSAR idPSAR = getIdPSAR(result, currAuthorID, currAuthorID);
+			PSAR idPSAR = getIdPSAR(resultPSAR, currAuthorID, currAuthorID);
 
-			Set<String> posts = authorsWithPost.get(currAuthorID);
+			Hashtable<String, Post> posts = authorsWithPost.get(currAuthorID);
 
 			//SPLITTO 1 POST ALLA VOLTA ED INSERISCO UNA QUEUE DI THREAD
-			Iterator<String> iterator = posts.iterator();
-			while (iterator.hasNext()) {
-				String currPostID = iterator.next();
-				RunnableQueueImpl worker = new RunnableQueueImpl(currAuthorID, currPostID, idPSAR);
-				worker.setName(currPostID);
-				queue.addThread(worker);
+			Enumeration<Post> enumPosts = posts.elements();
+			while (enumPosts.hasMoreElements()) {
+				Post currPost = enumPosts.nextElement();
+
+				/*Aggiungo un worker alla coda degli hashtags*/
+				RunnableQueueImpl4Hashtags workerHashtags = new RunnableQueueImpl4Hashtags(currPost, resultHashtags);
+				workerHashtags.setName(currPost.getId() + "_ht");
+				queueHashtags.addThread(workerHashtags);
+
+				/*Aggiungo un worker alla coda dei PSAR*/
+				RunnableQueueImpl workerPSAR = new RunnableQueueImpl(currAuthorID, currPost.getId(), idPSAR);
+				workerPSAR.setName(currPost.getId());
+				queuePSAR.addThread(workerPSAR);
 			}
 		}
 
+
+		/*Avvio le code*/
 		long start = System.currentTimeMillis();
 		try {
-			queue.executeAndWait();
+			queuePSAR.executeAndWait();
+			queueHashtags.executeAndWait();
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
 		}
@@ -123,7 +163,8 @@ public class FacebookPSARQueueThreadPostKeywords {
 		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
 
 
-		Enumeration<PSAR> elements = result.elements();
+		/*File per i risultati di PSAR*/
+		Enumeration<PSAR> elements = resultPSAR.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
 
@@ -131,28 +172,66 @@ public class FacebookPSARQueueThreadPostKeywords {
 			if (baseInfo.get("likes") != null && !((String) baseInfo.get("likes")).equals("")) {
 				try {
 					if (baseInfo.get("name") != null && !((String) baseInfo.get("name")).equals("")) {
-						outWriter.write((String) baseInfo.get("name"));
+						outWriterPSAR.write((String) baseInfo.get("name"));
 					} else {
-						outWriter.write(curr.getNome());
+						outWriterPSAR.write(curr.getNome());
 					}
-					outWriter.write(curr.getId());
-					outWriter.write(curr.getPostFromPage().toString());
-					outWriter.write(curr.getPostFromFan().toString());
-					outWriter.write(curr.getComments().toString());
-					outWriter.write(curr.getLikes().toString());
-					outWriter.write(curr.getShares().toString());
-					outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
-					outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
-					outWriter.write((String) baseInfo.get("likes"));
-					outWriter.endRecord();
+					outWriterPSAR.write(curr.getId());
+					outWriterPSAR.write(curr.getPostFromPage().toString());
+					outWriterPSAR.write(curr.getPostFromFan().toString());
+					outWriterPSAR.write(curr.getComments().toString());
+					outWriterPSAR.write(curr.getLikes().toString());
+					outWriterPSAR.write(curr.getShares().toString());
+					outWriterPSAR.write(curr.getCommnetsFromPageToPostFromPage().toString());				
+					outWriterPSAR.write(curr.getCommnetsFromPageToPostFromFan().toString());
+					outWriterPSAR.write((String) baseInfo.get("likes"));
+					outWriterPSAR.endRecord();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 
 		}
-		outWriter.close();
+		outWriterPSAR.close();
 
+
+		/*File per i risultati Hashtags*/
+		List<Entry<String>> sortedHt = sortMultisetPerEntryCount(resultHashtags.getResultHashtags());
+		int topHTNumber;
+		if (sortedHt.size() < 100) {
+			topHTNumber = sortedHt.size();
+		} else {
+			topHTNumber = 100;
+		}
+
+		List<Entry<String>> topHunHT = sortedHt.subList(0, topHTNumber);
+		for (int i = 0; i < topHunHT.size(); i++) {
+			try {
+				outWriterHashtags.write(topHunHT.get(i).getElement());
+				outWriterHashtags.write(String.valueOf(topHunHT.get(i).getCount()));
+				outWriterPSAR.endRecord();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		outWriterHashtags.close();
+
+	}
+
+
+
+
+	private static <T> List<Entry<T>> sortMultisetPerEntryCount(Multiset<T> multiset) {
+		Comparator<Multiset.Entry<T>> occurence_comparator = new Comparator<Multiset.Entry<T>>() {
+			public int compare(Multiset.Entry<T> e1, Multiset.Entry<T> e2) {
+				return e2.getCount() - e1.getCount();
+			}
+		};
+		List<Entry<T>> sortedByCount = new ArrayList<Entry<T>>(multiset.entrySet());
+		Collections.sort(sortedByCount, occurence_comparator);
+
+		return sortedByCount;
 	}
 
 
@@ -173,7 +252,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 		try {
 			// use FileWriter constructor that specifies open for appending
-			CsvWriter csvOutput = new CsvWriter(new FileWriter(outFile, true), ',');
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(outFile, true), ';');
 
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists)	{
