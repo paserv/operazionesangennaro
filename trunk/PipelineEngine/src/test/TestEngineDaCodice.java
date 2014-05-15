@@ -26,7 +26,7 @@ public class TestEngineDaCodice {
 		PipelineEngine eng = new PipelineEngine();
 		eng.setInput(input);		
 		PipeBlock firstBlock = new RemoveWordList();
-		firstBlock.setProperty("vocabularyPath1", "stopwords_it.csv");
+		firstBlock.setProperty("vocabularyPath1", "resources/stopwords_it.csv");
 		PipeBlock secondBlock = new RemoveRegex();
 		secondBlock.setProperty("regex1", "^[0-9]+");
 		PipeBlock thirdBlock = new FrequencyWriter();
