@@ -10,6 +10,10 @@ import java.util.Iterator;
 
 public class SimpleCSVWriter extends Writer {
 
+	public SimpleCSVWriter() {
+		super();
+	}
+	
 	public SimpleCSVWriter(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

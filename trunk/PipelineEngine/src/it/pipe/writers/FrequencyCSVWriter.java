@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class FrequencyCSVWriter extends Writer {
 
+	public FrequencyCSVWriter() {
+		super();
+	}
+	
 	public FrequencyCSVWriter(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
