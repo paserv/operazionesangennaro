@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 public class DummyGenerator extends SourceGenerator {
 
+	public DummyGenerator() {
+		super();
+	}
+	
 	public DummyGenerator(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

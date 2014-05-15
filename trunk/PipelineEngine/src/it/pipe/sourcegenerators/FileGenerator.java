@@ -10,6 +10,10 @@ import java.util.Scanner;
 
 public class FileGenerator extends SourceGenerator {
 
+	public FileGenerator() {
+		super();
+	}
+	
 	public FileGenerator(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
