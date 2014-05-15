@@ -51,7 +51,7 @@ public class RemoveWordList extends Filter {
 			try {
 
 
-				File dictionary = new File("resources/" + currValue);
+				File dictionary = new File(currValue);
 				Scanner sc = new Scanner(dictionary);
 
 				while (sc.hasNext()) {
