@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.csvreader.CsvReader;
 
@@ -19,6 +20,7 @@ public class PipelineEngine {
 	private static ArrayList<PipeBlock> allBlocks;
 	private static ArrayList<String> input;
 	
+	private static Logger LOGGER = Logger.getLogger(PipelineEngine.class.getName());
 
 	public static void main(String[] args) {
 
@@ -50,15 +52,18 @@ public class PipelineEngine {
 		for (int i = 0; i < size; i++){
 			
 			PipeBlock currBlock = allBlocks.get(i);
-			System.out.println("Step " + i + ": " + currBlock.getModuleName());
-			System.out.println("\tInitial size: " + output.size());
+			LOGGER.info("Step " + i + ": " + currBlock.getClass().getName());
+			int initialSize = output.size();
+			LOGGER.info("\tInitial size: " + initialSize);
 			temp = currBlock.getOutput(output);
 			output = temp;
-			System.out.println("\tFinal size: " + output.size());
+			int finalSize = output.size();
+			LOGGER.info("\t\tRemoved: " + (initialSize - finalSize) + " Items");
+			LOGGER.info("\tFinal size: " + finalSize);
 			
 		}
 		
-		System.out.println("Final size is " + output.size());
+		LOGGER.info("Final size is " + output.size());
 		return output;
 	}
 	
@@ -84,11 +89,14 @@ public class PipelineEngine {
 						for (int j=0; j < met.length; j++) {
 							Method currMet = met[j];
 							if (currMet.getName().equalsIgnoreCase(methodName)) {
-								System.out.println("Step " + i + ": " + getName.invoke(currObj));
-								System.out.println("\tInitial size: " + output.size());
+								LOGGER.info("Step " + i + ": " + getName.invoke(currObj));
+								int initialSize = output.size();
+								LOGGER.info("\tInitial size: " + initialSize);
 								temp = (ArrayList<String>) currMet.invoke(currObj, output);
 								output = temp;
-								System.out.println("\tFinal size: " + output.size());
+								int finalSize = output.size();
+								LOGGER.info("\t\tRemoved: " + (initialSize - finalSize) + " Items");
+								LOGGER.info("\tFinal size: " + finalSize);
 							}
 						}
 						
@@ -110,7 +118,7 @@ public class PipelineEngine {
 				
 			}
 			
-			System.out.println("Final size is " + output.size());
+			LOGGER.info("Final size is " + output.size());
 			return output;
 		}
 		
