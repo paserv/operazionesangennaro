@@ -46,7 +46,7 @@ public class FrequencyWriter extends Writer {
 			List<Entry<String>> sortedHt = sortMultisetPerEntryCount(result);
 			int topHTNumber;
 			if (result.size() < 100) {
-				topHTNumber = result.size();
+				topHTNumber = sortedHt.size();
 			} else {
 				topHTNumber = max;
 			}
