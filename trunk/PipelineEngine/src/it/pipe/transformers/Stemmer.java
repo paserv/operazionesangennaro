@@ -9,6 +9,10 @@ import it.pipe.core.Transformer;
 
 public class Stemmer extends Transformer {
 
+	public Stemmer() {
+		super();
+	}
+	
 	public Stemmer(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

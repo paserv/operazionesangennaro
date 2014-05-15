@@ -5,6 +5,10 @@ import java.util.ArrayList;
 
 public class FrequencyTransformer extends Transformer {
 
+	public FrequencyTransformer() {
+		super();
+	}
+	
 	public FrequencyTransformer(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

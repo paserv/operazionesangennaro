@@ -7,6 +7,10 @@ import it.pipe.core.Transformer;
 
 public class NoWhiteSpace extends Transformer {
 
+	public NoWhiteSpace() {
+		super();
+	}
+	
 	public NoWhiteSpace(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

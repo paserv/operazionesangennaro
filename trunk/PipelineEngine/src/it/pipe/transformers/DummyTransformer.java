@@ -6,6 +6,10 @@ import it.pipe.core.Transformer;
 
 public class DummyTransformer extends Transformer {
 
+	public DummyTransformer() {
+		super();
+	}
+	
 	public DummyTransformer(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
