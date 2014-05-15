@@ -7,6 +7,10 @@ import java.util.Iterator;
 
 public class SentenceSplitter extends Transformer {
 
+	public SentenceSplitter() {
+		super();
+	}
+	
 	public SentenceSplitter(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

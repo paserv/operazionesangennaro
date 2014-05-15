@@ -6,7 +6,10 @@ import java.util.ArrayList;
 
 public class TransformRegex extends Filter {
 
-
+	public TransformRegex() {
+		super();
+	}
+	
 	public TransformRegex(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

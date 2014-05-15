@@ -7,7 +7,9 @@ import java.util.Iterator;
 
 public class Replacer extends Transformer {
 
-
+	public Replacer() {
+		super();
+	}
 
 	public Replacer(String modName, String conFilePath) {
 		super(modName, conFilePath);

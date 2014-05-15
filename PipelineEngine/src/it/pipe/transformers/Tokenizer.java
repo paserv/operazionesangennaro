@@ -14,7 +14,9 @@ import org.apache.lucene.util.Version;
 
 public class Tokenizer extends Transformer {
 
-
+	public Tokenizer() {
+		super();
+	}
 
 	public Tokenizer(String modName, String conFilePath) {
 		super(modName, conFilePath);
