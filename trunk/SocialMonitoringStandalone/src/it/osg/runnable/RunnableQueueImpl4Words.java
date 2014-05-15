@@ -16,6 +16,7 @@ public class RunnableQueueImpl4Words extends RunnableQueue {
 	
 	public RunnableQueueImpl4Words(Post post, Words words) {
 		super();
+		this.post = post;
 		this.words = words;
 	}
 
@@ -33,7 +34,7 @@ public class RunnableQueueImpl4Words extends RunnableQueue {
 
 			/*Split and add to multiset*/
 			String[] splitted = finalMsg.split(" ");
-			for (int j = 1; j < splitted.length; j++) {
+			for (int j = 0; j < splitted.length; j++) {
 				this.words.addWord(splitted[j]);
 			}
 
@@ -51,7 +52,7 @@ public class RunnableQueueImpl4Words extends RunnableQueue {
 
 					/*Split and add to multiset*/
 					String[] splittedComment = finalCommentMsg.split(" ");
-					for (int j = 1; j < splittedComment.length; j++) {
+					for (int j = 0; j < splittedComment.length; j++) {
 						this.words.addWord(splitted[j]);
 					}
 
