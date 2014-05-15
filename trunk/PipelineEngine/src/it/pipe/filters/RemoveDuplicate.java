@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public class RemoveDuplicate extends Filter {
 
+	public RemoveDuplicate() {
+		super();
+	}
 	
 	public RemoveDuplicate(String modName, String conFilePath) {
 		super(modName, conFilePath);

@@ -13,7 +13,10 @@ import java.util.Scanner;
 
 public class FilterWordFromSentence extends Filter {
 
-
+	public FilterWordFromSentence() {
+		super();
+	}
+	
 	public FilterWordFromSentence(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}

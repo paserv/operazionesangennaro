@@ -8,6 +8,9 @@ import java.util.Iterator;
 
 public class RemoveRegex extends Filter {
 
+	public RemoveRegex() {
+		super();
+	}
 
 	public RemoveRegex(String modName, String conFilePath) {
 		super(modName, conFilePath);
