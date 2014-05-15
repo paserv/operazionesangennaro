@@ -1,12 +1,17 @@
 package it.osg.psar;
 
 import facebook4j.Post;
-import it.osg.data.Hashtags;
 import it.osg.data.PSAR;
+import it.osg.data.Words;
 import it.osg.runnable.RunnableQueueBaseInfoImpl;
 import it.osg.runnable.RunnableQueueImpl;
-import it.osg.runnable.RunnableQueueImpl4Hashtags;
+import it.osg.runnable.RunnableQueueImpl4Words;
 import it.osg.utils.FacebookUtils;
+import it.pipe.core.PipeBlock;
+import it.pipe.core.PipelineEngine;
+import it.pipe.filters.RemoveRegex;
+import it.pipe.filters.RemoveWordList;
+import it.pipe.writers.FrequencyWriter;
 import it.queue.Queue;
 import it.queue.TimeoutException;
 
@@ -14,16 +19,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
-
 import com.csvreader.CsvWriter;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Multiset.Entry;
 
 
 public class FacebookPSARQueueThreadPostKeywords {
@@ -33,7 +32,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 	public static char inputCharDelimiter = ';';
 
 	public static String inputFile = "quotidiani.csv";
-	public static String from = "10-05-2014 00:00:00";
+	public static String from = "13-05-2014 00:00:00";
 	public static String to = "13-05-2014 23:59:59";
 
 	public static int QUEUELENGHT = 20; //Numero massimo thread in stato running
@@ -72,20 +71,20 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 		/*Instanzio gli oggetti funzionali alla scrittura dei file di output*/
 		Hashtable<String, PSAR> resultPSAR = new Hashtable<String, PSAR>();
-		Hashtags resultHashtags = new Hashtags();
+//		Hashtags resultHashtags = new Hashtags();
 
 		/*Instanzio i writer dei file di output*/
 		String psarFileName = "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_KEY_" + keywordString + "_" + keywordOperator + "_" + System.currentTimeMillis() + ".csv";
 		String hashTagFileName = psarFileName.substring(0, psarFileName.length() - 4) + ".hashtag";
 		CsvWriter outWriterPSAR = openOutputFile(outputFolder + psarFileName);
-		outWriterPSAR.setDelimiter(';');
-		CsvWriter outWriterHashtags = null;
-		try {
-			outWriterHashtags = new CsvWriter(new FileWriter(outputFolder + hashTagFileName, true), ';');
-		} catch (IOException e2) {
-			e2.printStackTrace();
-		} 
-		outWriterHashtags.setDelimiter(';');
+//		outWriterPSAR.setDelimiter(';');
+//		CsvWriter outWriterHashtags = null;
+//		try {
+//			outWriterHashtags = new CsvWriter(new FileWriter(outputFolder + hashTagFileName, true), ';');
+//		} catch (IOException e2) {
+//			e2.printStackTrace();
+//		} 
+//		outWriterHashtags.setDelimiter(';');
 
 		/*Gestione dell' AND o OR delle keyword*/
 		String[] keywords = keywordString.split(",");
@@ -127,6 +126,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 		/** Per ogni autore e per ogni suo post metto un thread in coda per il calcolo di PSAR
 		 *  e un thread in coda per il calcolo delle frequenze degli hashtag */
+		Words arrayWord = new Words();
 		Enumeration<String> authors = authorsWithPost.keys();
 		while (authors.hasMoreElements()) {
 			String currAuthorID = authors.nextElement();
@@ -140,7 +140,10 @@ public class FacebookPSARQueueThreadPostKeywords {
 				Post currPost = enumPosts.nextElement();
 
 				/*Aggiungo un worker alla coda degli hashtags*/
-				RunnableQueueImpl4Hashtags workerHashtags = new RunnableQueueImpl4Hashtags(currPost, resultHashtags);
+//				RunnableQueueImpl4Hashtags workerHashtags = new RunnableQueueImpl4Hashtags(currPost, resultHashtags);
+//				workerHashtags.setName(currPost.getId() + "_ht");
+//				queueHashtags.addThread(workerHashtags);
+				RunnableQueueImpl4Words workerHashtags = new RunnableQueueImpl4Words(currPost, arrayWord);
 				workerHashtags.setName(currPost.getId() + "_ht");
 				queueHashtags.addThread(workerHashtags);
 
@@ -221,43 +224,59 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 
 		/*File per i risultati Hashtags*/
-		List<Entry<String>> sortedHt = sortMultisetPerEntryCount(resultHashtags.getResultHashtags());
-		int topHTNumber;
-		if (sortedHt.size() < 100) {
-			topHTNumber = sortedHt.size();
-		} else {
-			topHTNumber = 100;
-		}
-
-		List<Entry<String>> topHunHT = sortedHt.subList(0, topHTNumber);
-		for (int i = 0; i < topHunHT.size(); i++) {
-			try {
-				outWriterHashtags.write(topHunHT.get(i).getElement());
-				outWriterHashtags.write(String.valueOf(topHunHT.get(i).getCount()));
-				outWriterHashtags.endRecord();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-		outWriterHashtags.close();
+//		List<Entry<String>> sortedHt = sortMultisetPerEntryCount(resultHashtags.getResultHashtags());
+//		int topHTNumber;
+//		if (sortedHt.size() < 100) {
+//			topHTNumber = sortedHt.size();
+//		} else {
+//			topHTNumber = 100;
+//		}
+//
+//		List<Entry<String>> topHunHT = sortedHt.subList(0, topHTNumber);
+//		for (int i = 0; i < topHunHT.size(); i++) {
+//			try {
+//				outWriterHashtags.write(topHunHT.get(i).getElement());
+//				outWriterHashtags.write(String.valueOf(topHunHT.get(i).getCount()));
+//				outWriterHashtags.endRecord();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
+//		outWriterHashtags.close();
+		
+		/*Cleansing e File per i risultati Hashtags*/
+		PipelineEngine eng = new PipelineEngine();
+		eng.setInput(arrayWord.getWords());		
+		PipeBlock firstBlock = new RemoveWordList();
+		firstBlock.setProperty("vocabularyPath1", resourcesFolder + "stopwords_it.csv");
+		PipeBlock secondBlock = new RemoveRegex();
+		secondBlock.setProperty("regex1", "^[0-9]+");
+		PipeBlock thirdBlock = new FrequencyWriter();
+		thirdBlock.setProperty("path", outputFolder + hashTagFileName);
+		thirdBlock.setProperty("max", "100");
+		eng.addBlock(firstBlock);
+		eng.addBlock(secondBlock);
+		eng.addBlock(thirdBlock);
+		eng.run();
+		
 
 	}
 
 
 
 
-	private static <T> List<Entry<T>> sortMultisetPerEntryCount(Multiset<T> multiset) {
-		Comparator<Multiset.Entry<T>> occurence_comparator = new Comparator<Multiset.Entry<T>>() {
-			public int compare(Multiset.Entry<T> e1, Multiset.Entry<T> e2) {
-				return e2.getCount() - e1.getCount();
-			}
-		};
-		List<Entry<T>> sortedByCount = new ArrayList<Entry<T>>(multiset.entrySet());
-		Collections.sort(sortedByCount, occurence_comparator);
-
-		return sortedByCount;
-	}
+//	private static <T> List<Entry<T>> sortMultisetPerEntryCount(Multiset<T> multiset) {
+//		Comparator<Multiset.Entry<T>> occurence_comparator = new Comparator<Multiset.Entry<T>>() {
+//			public int compare(Multiset.Entry<T> e1, Multiset.Entry<T> e2) {
+//				return e2.getCount() - e1.getCount();
+//			}
+//		};
+//		List<Entry<T>> sortedByCount = new ArrayList<Entry<T>>(multiset.entrySet());
+//		Collections.sort(sortedByCount, occurence_comparator);
+//
+//		return sortedByCount;
+//	}
 
 
 
