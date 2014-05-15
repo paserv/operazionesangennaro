@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
 import com.csvreader.CsvReader;
 
 public class PipelineEngine {
@@ -15,13 +16,15 @@ public class PipelineEngine {
 	private static String confFolder = "conf/";
 	
 	private static ArrayList<PipeModule> allModules;
+	private static ArrayList<PipeBlock> allBlocks;
+	private static ArrayList<String> input;
 	
 
 	public static void main(String[] args) {
 
 		PipelineEngine eng = new PipelineEngine("conf/pipeline/tagPipeline.txt");
 		eng.run();
-		
+				
 	}
 
 	public PipelineEngine() {
@@ -34,7 +37,8 @@ public class PipelineEngine {
 	}
 	
 	
-	public ArrayList<String> run(ArrayList<PipeBlock> blocks, ArrayList<String> input) {
+	private ArrayList<String> runBlocks() {
+		
 		ArrayList<String> output = new ArrayList<String>();
 		if (input != null) {
 			output = input;
@@ -42,10 +46,10 @@ public class PipelineEngine {
 		
 		ArrayList<String> temp = new ArrayList<String>();
 				
-		int size = blocks.size();
+		int size = allBlocks.size();
 		for (int i = 0; i < size; i++){
 			
-			PipeBlock currBlock = blocks.get(i);
+			PipeBlock currBlock = allBlocks.get(i);
 			System.out.println("Step " + i + ": " + currBlock.getModuleName());
 			System.out.println("\tInitial size: " + output.size());
 			temp = currBlock.getOutput(output);
@@ -59,51 +63,58 @@ public class PipelineEngine {
 	}
 	
 	public ArrayList<String> run() {
-		ArrayList<String> output = new ArrayList<String>();
-		ArrayList<String> temp = new ArrayList<String>();
 		
-		int size = allModules.size();
-		for (int i = 0; i < size; i++){
-				String currModule = allModules.get(i).getModuleName();
-				try {
-					Class currMod = Class.forName(currModule);
-					Constructor constr = currMod.getConstructor(String.class, String.class);
-					Object currObj = constr.newInstance(allModules.get(i).getModuleName(), confFolder + allModules.get(i).getConfPath());
-					
-					Method getName = currMod.getMethod("getModuleName", null);
-					
-					Method[] met = currMod.getMethods();
-					for (int j=0; j < met.length; j++) {
-						Method currMet = met[j];
-						if (currMet.getName().equalsIgnoreCase(methodName)) {
-							System.out.println("Step " + i + ": " + getName.invoke(currObj));
-							System.out.println("\tInitial size: " + output.size());
-							temp = (ArrayList<String>) currMet.invoke(currObj, output);
-							output = temp;
-							System.out.println("\tFinal size: " + output.size());
-						}
-					}
-					
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				}
+		if (this.getConfigFilePath() == null) {
+			return runBlocks();
+		} else {
+			ArrayList<String> output = new ArrayList<String>();
+			ArrayList<String> temp = new ArrayList<String>();
 			
+			int size = allModules.size();
+			for (int i = 0; i < size; i++){
+					String currModule = allModules.get(i).getModuleName();
+					try {
+						Class currMod = Class.forName(currModule);
+						Constructor constr = currMod.getConstructor(String.class, String.class);
+						Object currObj = constr.newInstance(allModules.get(i).getModuleName(), confFolder + allModules.get(i).getConfPath());
+						
+						Method getName = currMod.getMethod("getModuleName", null);
+						
+						Method[] met = currMod.getMethods();
+						for (int j=0; j < met.length; j++) {
+							Method currMet = met[j];
+							if (currMet.getName().equalsIgnoreCase(methodName)) {
+								System.out.println("Step " + i + ": " + getName.invoke(currObj));
+								System.out.println("\tInitial size: " + output.size());
+								temp = (ArrayList<String>) currMet.invoke(currObj, output);
+								output = temp;
+								System.out.println("\tFinal size: " + output.size());
+							}
+						}
+						
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					} catch (SecurityException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (NoSuchMethodException e) {
+						e.printStackTrace();
+					}
+				
+			}
+			
+			System.out.println("Final size is " + output.size());
+			return output;
 		}
 		
-		System.out.println("Final size is " + output.size());
-		return output;
+		
 	}
 
 	
@@ -147,6 +158,21 @@ public class PipelineEngine {
 	
 	public static void addAllModules(PipeModule module) {
 		PipelineEngine.allModules.add(module);
+	}
+
+	public ArrayList<String> getInput() {
+		return input;
+	}
+
+	public void setInput(ArrayList<String> input) {
+		PipelineEngine.input = input;
+	}
+	
+	public void addBlock(PipeBlock block) {
+		if (this.allBlocks == null) {
+			this.allBlocks = new ArrayList<PipeBlock>();
+		}
+		this.allBlocks.add(block);
 	}
 	
 
