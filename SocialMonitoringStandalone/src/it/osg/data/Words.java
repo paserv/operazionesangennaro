@@ -13,5 +13,15 @@ public class Words {
 	public synchronized void addWord (String otherWord) {
 		this.words.add(otherWord);
 	}
+
+	public ArrayList<String> getWords() {
+		return words;
+	}
+
+	public void setWords(ArrayList<String> words) {
+		this.words = words;
+	}
+	
+	
 	
 }
