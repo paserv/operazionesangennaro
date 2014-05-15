@@ -17,6 +17,13 @@ public abstract class PipeBlock {
 	public abstract ArrayList<String> getOutput(ArrayList<String> input);
 
 	
+	public PipeBlock() {
+	}
+	
+	public void setProperty (String propertyName, String propertyValue) {
+		this.config.put(propertyName, propertyValue);
+	}
+	
 	
 	public PipeBlock(String modName, String conFilePath) {
 		if (conFilePath != null) {
