@@ -12,7 +12,10 @@ import java.util.Scanner;
 
 public class RemoveWordList extends Filter {
 
-
+	public RemoveWordList() {
+		super();
+	}
+	
 	public RemoveWordList(String modName, String conFilePath) {
 		super(modName, conFilePath);
 	}
