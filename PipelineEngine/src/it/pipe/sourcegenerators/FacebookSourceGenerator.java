@@ -22,6 +22,10 @@ import org.json.simple.JSONValue;
 
 public class FacebookSourceGenerator extends SourceGenerator {
 
+	public FacebookSourceGenerator() {
+		super();
+	}
+	
 	public FacebookSourceGenerator(String modName, String conFilePath) {
 		super(modName, conFilePath);
 		//System.setProperty("java.net.useSystemProxies", "true");

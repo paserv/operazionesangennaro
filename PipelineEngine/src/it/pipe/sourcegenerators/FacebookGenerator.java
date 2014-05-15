@@ -14,6 +14,10 @@ import facebook4j.auth.AccessToken;
 
 public class FacebookGenerator extends SourceGenerator {
 
+	public FacebookGenerator() {
+		super();
+	}
+	
 	public FacebookGenerator(String modName, String conFilePath) {
 		super(modName, conFilePath);
 		System.setProperty("java.net.useSystemProxies", "true");
