@@ -55,7 +55,7 @@ public class JSONObjectUtil {
 			if (json.get(path) !=null) {
 				return json.get(path).toString();
 			} else {
-				System.out.println("No Path found");
+//				System.out.println("No Path found");
 				return "";
 			}
 			
