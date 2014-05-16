@@ -32,6 +32,7 @@ public class FrequencyWriter extends Writer {
 		try {
 			out = new FileOutputStream(config.get("path"));
 			int max = Integer.valueOf(config.get("max"));
+			String separator = config.get("separator");
 
 			byte[] aCapo = "\n".getBytes();
 
@@ -55,7 +56,7 @@ public class FrequencyWriter extends Writer {
 			for (int i = 0; i < topHunHT.size(); i++) {
 				try {
 					out.write(topHunHT.get(i).getElement().getBytes());
-					out.write(";".getBytes());
+					out.write(separator.getBytes());
 					out.write(String.valueOf(topHunHT.get(i).getCount()).getBytes());
 					out.write(aCapo);
 				} catch (IOException e) {
