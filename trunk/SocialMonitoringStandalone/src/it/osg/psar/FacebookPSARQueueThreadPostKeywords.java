@@ -11,6 +11,7 @@ import it.pipe.core.PipeBlock;
 import it.pipe.core.PipelineEngine;
 import it.pipe.filters.RemoveRegex;
 import it.pipe.filters.RemoveWordList;
+import it.pipe.transformers.Tokenizer;
 import it.pipe.writers.FrequencyWriter;
 import it.queue.Queue;
 import it.queue.TimeoutException;
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.logging.Logger;
+
 import com.csvreader.CsvWriter;
 
 
@@ -41,13 +44,15 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 	public static String keywordString = "renzi";
 	public static String keywordOperator = "OR";
+	
+	private static Logger LOGGER = Logger.getLogger(FacebookPSARQueueThreadPostKeywords.class.getName());
 
 	public static void main(String[] args) {
 
-//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-//		System.getProperties().put("http.proxyPort", "8080");
-//		System.getProperties().put("http.proxyUser", "rete\\servill7");
-//		System.getProperties().put("http.proxyPassword", "Paolos10");
+		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		System.getProperties().put("http.proxyPort", "8080");
+		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		System.getProperties().put("http.proxyPassword", "Paolos10");
 
 		if (args != null && args.length > 0) {
 			from = args[0];
@@ -57,6 +62,8 @@ public class FacebookPSARQueueThreadPostKeywords {
 			QUEUE_TIMEOUT = Long.valueOf(args[4]);
 			keywordString = args[5];
 			keywordOperator = args[6];
+			outputFolder= args[7];
+            resourcesFolder= args[7];
 		}
 
 		//GET DATE
@@ -66,26 +73,24 @@ public class FacebookPSARQueueThreadPostKeywords {
 		/*Instanzio le code*/
 		Queue queuePSAR = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
 		queuePSAR.setRollback(false);
+		queuePSAR.setName("PSAR Queue");
 		Queue queueHashtags = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
 		queueHashtags.setRollback(false);
+		queuePSAR.setName("Word Queue");
+		Queue queueBaseInfo = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		queueBaseInfo.setRollback(false);
 
 		/*Instanzio gli oggetti funzionali alla scrittura dei file di output*/
 		Hashtable<String, PSAR> resultPSAR = new Hashtable<String, PSAR>();
 //		Hashtags resultHashtags = new Hashtags();
 
-		/*Instanzio i writer dei file di output*/
+		/*Instanzio il writer dei file di output per il calcolo PSAR*/
 		String psarFileName = "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_KEY_" + keywordString + "_" + keywordOperator + "_" + System.currentTimeMillis() + ".csv";
-		String hashTagFileName = psarFileName.substring(0, psarFileName.length() - 4) + ".hashtag";
 		CsvWriter outWriterPSAR = openOutputFile(outputFolder + psarFileName);
-//		outWriterPSAR.setDelimiter(';');
-//		CsvWriter outWriterHashtags = null;
-//		try {
-//			outWriterHashtags = new CsvWriter(new FileWriter(outputFolder + hashTagFileName, true), ';');
-//		} catch (IOException e2) {
-//			e2.printStackTrace();
-//		} 
-//		outWriterHashtags.setDelimiter(';');
-
+		/*Imposto il nome per il file degli hashtag*/ 
+		String hashTagFileName = psarFileName.substring(0, psarFileName.length() - 4) + ".hashtag";
+		LOGGER.info("Output File name: " + psarFileName);
+		
 		/*Gestione dell' AND o OR delle keyword*/
 		String[] keywords = keywordString.split(",");
 		if (keywordOperator.equalsIgnoreCase("AND")) {
@@ -97,14 +102,17 @@ public class FacebookPSARQueueThreadPostKeywords {
 		 * in un post sono presenti 2 keywords,
 		 * allora nell'ArrayList sarà presente 2 volte lo stesso autore
 		 * nelle cui hashtable di post sarà presente 2 volte lo stesso post */
+		LOGGER.info("Facebook Search API started");
 		ArrayList<Hashtable<String, Hashtable<String, Post>>> postsGroupedByAuthor = new ArrayList<Hashtable<String,Hashtable<String, Post>>>();
 		for (int i = 0; i < keywords.length; i++) {
 			String currKeyword = keywords[i];
+			LOGGER.info("\t\tKeyword: " + currKeyword);
 			Hashtable<String, Hashtable<String, Post>> currKeywordPosts = FacebookUtils.getPostByKeyword(currKeyword, fromDay, toDay);
 			postsGroupedByAuthor.add(currKeywordPosts);
 		}
 
 		/** Qui ri-raggruppo per autore in modo da deduplicare i post */
+		LOGGER.info("Remove duplicate Post");
 		Hashtable<String, Hashtable<String, Post>> authorsWithPost = new Hashtable<String, Hashtable<String, Post>>();
 		Iterator<Hashtable<String, Hashtable<String, Post>>> iter = postsGroupedByAuthor.iterator();
 		while (iter.hasNext()) {
@@ -125,7 +133,8 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 
 		/** Per ogni autore e per ogni suo post metto un thread in coda per il calcolo di PSAR
-		 *  e un thread in coda per il calcolo delle frequenze degli hashtag */
+		 *  e un thread in coda per il calcolo delle frequenze delle words */
+		LOGGER.info("Creating Working Queues: PSAR Queue - Word Queue");
 		Words arrayWord = new Words();
 		Enumeration<String> authors = authorsWithPost.keys();
 		while (authors.hasMoreElements()) {
@@ -143,6 +152,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 //				RunnableQueueImpl4Hashtags workerHashtags = new RunnableQueueImpl4Hashtags(currPost, resultHashtags);
 //				workerHashtags.setName(currPost.getId() + "_ht");
 //				queueHashtags.addThread(workerHashtags);
+				/*Aggiungo un worker alla coda delle words*/
 				RunnableQueueImpl4Words workerHashtags = new RunnableQueueImpl4Words(currPost, arrayWord);
 				workerHashtags.setName(currPost.getId() + "_ht");
 				queueHashtags.addThread(workerHashtags);
@@ -157,19 +167,26 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 		/*Avvio le code*/
 		long start = System.currentTimeMillis();
+		long end = System.currentTimeMillis();
 		try {
+			LOGGER.info("Starting PSAR Queue");
+			start = System.currentTimeMillis();
 			queuePSAR.executeAndWait();
+			end = System.currentTimeMillis();
+			LOGGER.info("Elapsed Time for PSAR Queue: " + (end - start)/1000 + " seconds");
+			
+			LOGGER.info("Starting Word Queue");
+			start = System.currentTimeMillis();
 			queueHashtags.executeAndWait();
+			end = System.currentTimeMillis();
+			LOGGER.info("Elapsed Time for Word Queue: " + (end - start)/1000 + " seconds");
+			
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
 		}
-		long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
-
 
 		/*Coda per le BaseInfo*/
-		Queue queueBaseInfo = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
-		queueBaseInfo.setRollback(false);
+		LOGGER.info("Creating Base Info Queue");	
 		Enumeration<PSAR> psars = resultPSAR.elements();
 		while (psars.hasMoreElements()) {
 			PSAR curr = psars.nextElement();
@@ -180,16 +197,17 @@ public class FacebookPSARQueueThreadPostKeywords {
 		}
 		
 		/*Avvio la coda*/
-		start = System.currentTimeMillis();
 		try {
+			LOGGER.info("Starting Base Info Queue");
+			start = System.currentTimeMillis();
 			queueBaseInfo.executeAndWait();
+			end = System.currentTimeMillis();
+			LOGGER.info("Elapsed Time for Base Info Queue: " + (end - start)/1000 + " seconds");
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
-		}
-		end = System.currentTimeMillis();
-		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
+		}		
 		
-		
+		LOGGER.info("Creating PSAR file");
 		/*File per i risultati di PSAR*/
 		Enumeration<PSAR> elements = resultPSAR.elements();
 		while (elements.hasMoreElements()) {
@@ -245,39 +263,35 @@ public class FacebookPSARQueueThreadPostKeywords {
 //		}
 //		outWriterHashtags.close();
 		
+		LOGGER.info("Creating Word Cloud file");
 		/*Cleansing e File per i risultati Hashtags*/
 		PipelineEngine eng = new PipelineEngine();
-		eng.setInput(arrayWord.getWords());		
-		PipeBlock firstBlock = new RemoveWordList();
-		firstBlock.setProperty("vocabularyPath1", resourcesFolder + "stopwords_it.csv");
-		PipeBlock secondBlock = new RemoveRegex();
-		secondBlock.setProperty("regex1", "^[0-9]+");
-		PipeBlock thirdBlock = new FrequencyWriter();
-		thirdBlock.setProperty("path", outputFolder + hashTagFileName);
-		thirdBlock.setProperty("max", "100");
+		/*Imposto come input l'array di words calcolato*/
+		eng.setInput(arrayWord.getWords());
+		/*Modulo di tokenizzazione*/
+		PipeBlock firstBlock = new Tokenizer();
+		/*Modulo per rimuovere stopwords*/
+		PipeBlock secondBlock = new RemoveWordList();
+		secondBlock.setProperty("vocabularyPath1", resourcesFolder + "gazetteers/stopwords_it.gaz");
+		/*Modulo per rimuovere regular expressions*/		
+		PipeBlock thirdBlock = new RemoveRegex();
+		thirdBlock.setProperty("regex1", "^[0-9]+");
+		/*Modulo per la scrittura del file con le frequenze delle words*/
+		PipeBlock fourthBlock = new FrequencyWriter();
+		fourthBlock.setProperty("path", outputFolder + hashTagFileName);
+		fourthBlock.setProperty("max", "100");
+		fourthBlock.setProperty("separator", ";");
+		/*aggiungo i moduli all'engine*/
 		eng.addBlock(firstBlock);
 		eng.addBlock(secondBlock);
 		eng.addBlock(thirdBlock);
+		eng.addBlock(fourthBlock);
+		/*faccio partire l'engine*/
 		eng.run();
+		LOGGER.info("STABBENE!!!");
 		
 
 	}
-
-
-
-
-//	private static <T> List<Entry<T>> sortMultisetPerEntryCount(Multiset<T> multiset) {
-//		Comparator<Multiset.Entry<T>> occurence_comparator = new Comparator<Multiset.Entry<T>>() {
-//			public int compare(Multiset.Entry<T> e1, Multiset.Entry<T> e2) {
-//				return e2.getCount() - e1.getCount();
-//			}
-//		};
-//		List<Entry<T>> sortedByCount = new ArrayList<Entry<T>>(multiset.entrySet());
-//		Collections.sort(sortedByCount, occurence_comparator);
-//
-//		return sortedByCount;
-//	}
-
 
 
 	private static PSAR getIdPSAR(Hashtable<String, PSAR> result, String currID, String string) {
