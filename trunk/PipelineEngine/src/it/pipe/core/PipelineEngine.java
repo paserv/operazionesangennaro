@@ -14,7 +14,6 @@ public class PipelineEngine {
 
 	private String configFilePath;
 	private static String methodName = "getOutput";
-	private static String confFolder = "conf/";
 	
 	private static ArrayList<PipeModule> allModules;
 	private static ArrayList<PipeBlock> allBlocks;
@@ -33,8 +32,8 @@ public class PipelineEngine {
 
 	}
 	
-	public PipelineEngine(String path) {
-		setConfigFilePath(path);
+	public PipelineEngine(String configEngineFilePath) {
+		setConfigFilePath(configEngineFilePath);
 		allModules = getModules();
 	}
 	
@@ -58,7 +57,12 @@ public class PipelineEngine {
 			temp = currBlock.getOutput(output);
 			output = temp;
 			int finalSize = output.size();
-			LOGGER.info("\t\tRemoved: " + (initialSize - finalSize) + " Items");
+			if ((initialSize - finalSize) > 0) {
+				LOGGER.info("\t\tRemoved: " + (initialSize - finalSize) + " Items");
+			} else {
+				LOGGER.info("\t\tAdded: " + (initialSize - finalSize) + " Items");
+			}
+			
 			LOGGER.info("\tFinal size: " + finalSize);
 			
 		}
@@ -81,7 +85,7 @@ public class PipelineEngine {
 					try {
 						Class currMod = Class.forName(currModule);
 						Constructor constr = currMod.getConstructor(String.class, String.class);
-						Object currObj = constr.newInstance(allModules.get(i).getModuleName(), confFolder + allModules.get(i).getConfPath());
+						Object currObj = constr.newInstance(allModules.get(i).getModuleName(), allModules.get(i).getConfPath());
 						
 						Method getName = currMod.getMethod("getModuleName", null);
 						
@@ -176,12 +180,13 @@ public class PipelineEngine {
 		PipelineEngine.input = input;
 	}
 	
+	
+	
 	public void addBlock(PipeBlock block) {
 		if (this.allBlocks == null) {
 			this.allBlocks = new ArrayList<PipeBlock>();
 		}
 		this.allBlocks.add(block);
 	}
-	
 
 }
