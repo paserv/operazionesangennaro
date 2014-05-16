@@ -33,10 +33,10 @@ public class RunnableQueueImpl4Words extends RunnableQueue {
 			String finalMsg = message.toLowerCase();
 
 			/*Split and add to multiset*/
-			String[] splitted = finalMsg.split(" ");
-			for (int j = 0; j < splitted.length; j++) {
-				this.words.addWord(splitted[j]);
-			}
+//			String[] splitted = finalMsg.split(" ");
+//			for (int j = 0; j < splitted.length; j++) {
+				this.words.addWord(finalMsg);
+//			}
 
 			/*Get Comments*/
 			ArrayList<Comment> comments = FacebookUtils.getAllComments(post);
@@ -51,10 +51,10 @@ public class RunnableQueueImpl4Words extends RunnableQueue {
 					String finalCommentMsg = messageComm.toLowerCase();
 
 					/*Split and add to multiset*/
-					String[] splittedComment = finalCommentMsg.split(" ");
-					for (int j = 0; j < splittedComment.length; j++) {
-						this.words.addWord(splitted[j]);
-					}
+//					String[] splittedComment = finalCommentMsg.split(" ");
+//					for (int j = 0; j < splittedComment.length; j++) {
+						this.words.addWord(finalCommentMsg);
+//					}
 
 				}
 			}
