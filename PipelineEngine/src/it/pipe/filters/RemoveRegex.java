@@ -31,14 +31,12 @@ public class RemoveRegex extends Filter {
 				String currValue = iter.next();
 				if (currToken.matches(currValue)) {
 					match = true;//result.add(currToken);
-					//System.out.println("Removed: " + currToken);
 				}
 			}
 			if (!match){
 				result.add(currToken);
 			}
 		}
-		System.out.println("\t-> Rimossi " + (input.size() - result.size()) + " items");
 		return result;
 	}
 

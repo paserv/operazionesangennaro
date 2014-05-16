@@ -30,7 +30,6 @@ public class RemoveDuplicate extends Filter {
 				size--;
 			}
 		}
-		System.out.println("\t-> Removed " + duplicates + " duplicates");
 		return input;
 	}
 
