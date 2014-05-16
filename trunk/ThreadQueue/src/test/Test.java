@@ -13,6 +13,7 @@ public class Test {
 		
 		SimpleSyncCounter count = new SimpleSyncCounter();
 		Queue queue = new Queue(10, 1000L, 100000L);
+		
 				
 		for (int i = 0; i < 100; i++) {
 			RunnableQueueImpl cur = new  RunnableQueueImpl(count);
