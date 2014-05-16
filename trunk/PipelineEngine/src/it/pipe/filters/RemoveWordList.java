@@ -35,7 +35,6 @@ public class RemoveWordList extends Filter {
 			}
 
 		}
-		System.out.println("\t-> Rimossi " + (input.size() - result.size()) + " items");
 		return result;
 	}
 
