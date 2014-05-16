@@ -55,7 +55,7 @@ public class FrequencyWriter extends Writer {
 			for (int i = 0; i < topHunHT.size(); i++) {
 				try {
 					out.write(topHunHT.get(i).getElement().getBytes());
-					out.write(",".getBytes());
+					out.write(";".getBytes());
 					out.write(String.valueOf(topHunHT.get(i).getCount()).getBytes());
 					out.write(aCapo);
 				} catch (IOException e) {
