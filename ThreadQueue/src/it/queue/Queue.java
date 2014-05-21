@@ -10,7 +10,7 @@ import java.util.logging.SimpleFormatter;
 
 public class Queue {
 
-	private static Logger LOGGER = Logger.getLogger(Queue.class.getName());
+	private Logger LOGGER = Logger.getLogger(Queue.class.getName());
 	
 	private SyncCounter counter = new SyncCounter();
 	

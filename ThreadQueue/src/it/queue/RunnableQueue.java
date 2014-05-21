@@ -8,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 public abstract class RunnableQueue implements Runnable {
 	
-	private static Logger LOGGER = Logger.getLogger(RunnableQueue.class.getName());
+	private Logger LOGGER = Logger.getLogger(RunnableQueue.class.getName());
 
 	public String name;
 	private Queue queue;
@@ -59,10 +59,10 @@ public abstract class RunnableQueue implements Runnable {
 		}
 		
 	}
-	public static Logger getLOGGER() {
+	public Logger getLOGGER() {
 		return LOGGER;
 	}
-	public static void setLOGGER(Logger lOGGER) {
+	public void setLOGGER(Logger lOGGER) {
 		LOGGER = lOGGER;
 	}
 	
