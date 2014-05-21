@@ -58,7 +58,7 @@ public class RemoveWordList extends Filter {
 					String[] spl = currTerm.split(" ");
 					vocabularyMap.put(spl[0].toLowerCase(), spl[0].toLowerCase());
 				}
-
+				sc.close();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
