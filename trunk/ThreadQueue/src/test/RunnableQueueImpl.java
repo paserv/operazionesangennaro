@@ -18,12 +18,12 @@ public class RunnableQueueImpl extends RunnableQueue {
 		this.count.count.incrementAndGet();
 		incrementExecuted = true;
 		if (this.count.count.intValue() == 1) {
-			RunnableQueue.getLOGGER().fine("Abdulla");
+			this.getLOGGER().fine("Abdulla");
 			System.out.println("Eccezione");
 			throw new Exception();
 		}
 		if (this.count.count.intValue() == 1) {
-			RunnableQueue.getLOGGER().fine("Abdulla");
+			this.getLOGGER().fine("Abdulla");
 			System.out.println("Infinite Thread");
 			Thread.sleep(1000000L);
 		}
