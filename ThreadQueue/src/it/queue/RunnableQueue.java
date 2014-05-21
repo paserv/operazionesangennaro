@@ -8,7 +8,7 @@ import java.util.logging.SimpleFormatter;
 
 public abstract class RunnableQueue implements Runnable {
 	
-	private Logger LOGGER = Logger.getLogger(RunnableQueue.class.getName());
+	private static Logger LOGGER = Logger.getLogger(RunnableQueue.class.getName());
 
 	public String name;
 	private Queue queue;
