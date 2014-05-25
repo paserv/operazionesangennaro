@@ -27,39 +27,40 @@ import com.csvreader.CsvWriter;
 public class FacebookPSARQueueThreadPost {
 
 	public static String resourcesFolder = "resources/";
-	public static String outputFolder = "output/";
+//	public static String outputFolder = "output/";
 	public static char inputCharDelimiter = ';';
 
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 	
-	public static String inputFile = "quotidiani.csv";
-	public static String from = "01-01-2014 00:00:00";
-	public static String to = "15-01-2014 23:59:59";
+//	public static String inputFile = "quotidiani.csv";
+//	public static String from = "01-01-2014 00:00:00";
+//	public static String to = "15-01-2014 23:59:59";
 
-	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
+//	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
-	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
+//	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
-	public static void main(String[] args) throws ArgumentException {
+	public static void compute(String inputFile, String from, String to, int lenght, long timeout, String outFold) throws ArgumentException {
 		
 //		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
 //		System.getProperties().put("http.proxyPort", "8080");
 //		System.getProperties().put("http.proxyUser", "rete\\servill7");
 //		System.getProperties().put("http.proxyPassword", "Paolos10");
 		
-		if (args != null && args.length > 0) {
-			inputFile = args[0];
-			from = args[1];
-			to = args[2];
-			QUEUELENGHT = Integer.valueOf(args[3]);
-			QUEUE_CHECK_SLEEP = Long.valueOf(args[4]);
-			QUEUE_TIMEOUT = Long.valueOf(args[5]);
-		}
+//		if (args != null && args.length > 0) {
+//			inputFile = args[0];
+//			from = args[1];
+//			to = args[2];
+//			QUEUELENGHT = Integer.valueOf(args[3]);
+////			QUEUE_CHECK_SLEEP = Long.valueOf(args[4]);
+//			QUEUE_TIMEOUT = Long.valueOf(args[4]);
+//			outputFolder = args[5];
+//		}
 		
-		Queue queuePSAR = new Queue(QUEUELENGHT, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT);
+		Queue queuePSAR = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
 		
-		CsvWriter outWriter = openOutputFile(outputFolder + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv");
+		CsvWriter outWriter = openOutputFile(outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv");
 		outWriter.setDelimiter(';');
 		
 		Hashtable<String, String> ids = getInputAccounts(resourcesFolder + inputFile, idField, nomeField, inputCharDelimiter);
