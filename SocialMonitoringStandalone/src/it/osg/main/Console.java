@@ -1,5 +1,8 @@
 package it.osg.main;
 
+import it.osg.exception.ArgumentException;
+import it.osg.psar.FacebookPSARQueueThreadPost;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -18,36 +21,118 @@ public class Console {
 	private static String fileName;
 	private static String from;
 	private static String to;
+	private static int QUEUELENGHT;
+	private static long QUEUE_TIMEOUT;
+	public static long QUEUE_CHECK_SLEEP = 5000L;
+	public static String outputFilePath;
 
 	public static void main(String[] args) {
 
-		System.out.println("Actions: run - exit - help");
-		System.out.print("> ");
-		String action = getParameter();
-		if (action.equalsIgnoreCase("run")) {
-			running = true;
-			System.out.println("Set input file from list");
-			ArrayList<String> filesName = readInputFile("resources");
-			getFileName(filesName);
+		if (args == null || args.length == 0) {
+			System.out.println("Actions: run - exit - help");
+			System.out.print("> ");
+			String action = getParameter();
+			if (action.equalsIgnoreCase("run")) {
+				running = true;
+				System.out.println("Set input file from list");
+				ArrayList<String> filesName = readInputFile("resources");
+				getFileName(filesName);
 
-			System.out.println("Set FROM date (dd-mm-yyyy HH:mm:ss)");
-			getFromDate();
-			
-			System.out.println("Set TO date (dd-mm-yyyy HH:mm:ss)");
-			getToDate();
-			
-			
-			System.out.println(fileName);
-			System.out.println(from);
-			System.out.println(to);
-			
-			running = false;
-			main(null);
+				System.out.println("Set FROM date (dd-mm-yyyy HH:mm:ss)");
+				getFromDate();
+				
+				System.out.println("Set TO date (dd-mm-yyyy HH:mm:ss)");
+				getToDate();
+				
+				System.out.println("Set Queue lenght");
+				getQueueLenght();
+				
+				System.out.println("Set Queue timeout");
+				getQueueTimeout();
+				
+				System.out.println("Set Output path");
+				getOutputPath();
+				
+				System.out.println(fileName);
+				System.out.println(from);
+				System.out.println(to);
+				System.out.println(QUEUELENGHT);
+				System.out.println(QUEUE_TIMEOUT);
+				System.out.println(outputFilePath);
+				
+				running = false;
+				
+				
+				try {
+					FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, outputFilePath);
+				} catch (ArgumentException e) {
+					e.printStackTrace();
+				}
+				
+				main(null);
+				
+			} else {
+				main(null);
+			}
 		} else {
-			main(null);
+			fileName = args[0];
+			from = args[1];
+			to = args[2];
+			QUEUELENGHT = Integer.valueOf(args[3]);
+			QUEUE_TIMEOUT = Long.valueOf(args[4]);
+			outputFilePath = args[5];
+			try {
+				FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, outputFilePath);
+			} catch (ArgumentException e) {
+				e.printStackTrace();
+			}
 		}
+		
 
 
+	}
+
+	private static void getOutputPath() {
+		System.out.print("> ");
+		String param = getParameter();
+		File folderFile = new File(param);
+		if (folderFile.isDirectory()) {
+			outputFilePath = param;
+		} else {
+			System.out.println("Invalid Path, retry");
+			getOutputPath();
+		}
+		
+
+		
+	}
+
+	private static void getQueueTimeout() {
+		System.out.print("> ");
+		String param = getParameter();
+
+		try {
+			long timeout = Long.valueOf(param);
+			QUEUE_TIMEOUT = timeout;
+		} catch (Exception ex) {
+			System.out.println("Long not parsable, retry!");
+			getQueueTimeout();
+		}
+		
+	}
+
+	private static void getQueueLenght() {
+		System.out.print("> ");
+		String param = getParameter();
+
+		try {
+			int lenght = Integer.valueOf(param);
+			QUEUELENGHT = lenght;
+		} catch (Exception ex) {
+			System.out.println("Integer not parsable, retry!");
+			getQueueLenght();
+		}
+		
 	}
 
 	private static void getToDate() {
@@ -69,14 +154,12 @@ public class Console {
 				to = param;
 			} else {
 				System.out.println("TO date is before FROM date, retry!");
-				System.out.print("> ");
 				getToDate();
 			}
 			
 			
 		} catch (ParseException e) {
 			System.out.println("Wrong date, retry!");
-			System.out.print("> ");
 			getToDate();
 		}
 		
@@ -95,7 +178,6 @@ public class Console {
 
 		} catch (ParseException e) {
 			System.out.println("Wrong date, retry!");
-			System.out.print("> ");
 			getFromDate();
 		}
 
