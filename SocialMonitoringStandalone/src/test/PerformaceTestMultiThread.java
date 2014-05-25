@@ -19,7 +19,7 @@ public class PerformaceTestMultiThread {
 	public static String to = "15-01-2014 23:59:59";
 
 	public static String QUEUE_CHECK_SLEEP = "5000"; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
-	public static String QUEUE_TIMEOUT = "1000000000"; //timeout della coda
+	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 	
 	public static void main(String[] args) {
 
@@ -40,9 +40,10 @@ public class PerformaceTestMultiThread {
 			for (int i = 1; i <= 8; i++) {
 				mult = 2 * mult;
 				String numThreadsString = String.valueOf(mult);
+				int lenght = Integer.valueOf(numThreadsString);
 				long start = System.currentTimeMillis();
 				try {
-					FacebookPSARQueueThreadPost.main(new String[]{inputFile, from, to, numThreadsString, QUEUE_CHECK_SLEEP, QUEUE_TIMEOUT});
+					FacebookPSARQueueThreadPost.compute(inputFile, from, to, lenght, QUEUE_TIMEOUT, "output");
 				} catch (ArgumentException e) {
 					e.printStackTrace();
 				}
