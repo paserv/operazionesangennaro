@@ -20,25 +20,14 @@ import com.google.gdata.client.spreadsheet.CellQuery;
 import com.google.gdata.client.spreadsheet.FeedURLFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetQuery;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.data.BaseEntry;
-import com.google.gdata.data.Link;
-import com.google.gdata.data.batch.BatchOperationType;
-import com.google.gdata.data.batch.BatchStatus;
-import com.google.gdata.data.batch.BatchUtils;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
-import com.google.gdata.data.spreadsheet.WorksheetEntry;
-import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -73,7 +62,9 @@ public class Cell {
 		try {
 			SpreadsheetFeed feed = service.getFeed(query, SpreadsheetFeed.class);
 			System.out.println(feed.getEntries());
-		} catch (IOException | ServiceException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
 	}
