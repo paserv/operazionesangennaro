@@ -2,13 +2,17 @@ package it.pipe.filters;
 
 import it.pipe.core.Filter;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Scanner;
+import java.util.List;
+import java.util.logging.Logger;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class RemoveWordList extends Filter {
 
@@ -49,17 +53,21 @@ public class RemoveWordList extends Filter {
 
 			try {
 
-
-				File dictionary = new File(currValue);
-				Scanner sc = new Scanner(dictionary);
-
-				while (sc.hasNext()) {
-					String currTerm = sc.nextLine();
+				CSVReader reader = new CSVReader(new FileReader(currValue), ';');
+				List<String[]> rows = reader.readAll();
+				reader.close();
+				
+				Iterator<String[]> iterRows = rows.iterator();
+				while (iterRows.hasNext()) {
+					String[] currRow = iterRows.next();
+					String currTerm = currRow[0];
 					String[] spl = currTerm.split(" ");
 					vocabularyMap.put(spl[0].toLowerCase(), spl[0].toLowerCase());
 				}
-				sc.close();
+
 			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
