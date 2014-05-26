@@ -28,6 +28,11 @@ public class Console {
 
 	public static void main(String[] args) {
 
+		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		System.getProperties().put("http.proxyPort", "8080");
+		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		System.getProperties().put("http.proxyPassword", "Paolos11");
+		
 		if (args == null || args.length == 0) {
 			System.out.println("Actions: run - exit - help");
 			System.out.print("> ");
@@ -53,12 +58,12 @@ public class Console {
 				System.out.println("Set Output path");
 				getOutputPath();
 				
-				System.out.println(fileName);
-				System.out.println(from);
-				System.out.println(to);
-				System.out.println(QUEUELENGHT);
-				System.out.println(QUEUE_TIMEOUT);
-				System.out.println(outputFilePath);
+//				System.out.println(fileName);
+//				System.out.println(from);
+//				System.out.println(to);
+//				System.out.println(QUEUELENGHT);
+//				System.out.println(QUEUE_TIMEOUT);
+//				System.out.println(outputFilePath);
 				
 				running = false;
 				
@@ -204,7 +209,12 @@ public class Console {
 			if (s.equalsIgnoreCase("exit")) {
 				System.exit(0);
 			} else if (s.equalsIgnoreCase("help") && running == false) {
-				System.out.println("HELP");
+				System.out.println("Parameters:");
+				System.out.println("1) filename: csv file with facebook ids to monitor");
+				System.out.println("2) from: monitoring start date in the format dd-mm-yyyy HH:mm:ss");
+				System.out.println("3) to: monitoring end date in the format dd-mm-yyyy HH:mm:ss");
+				System.out.println("4) lenght: max active concurrent threads in queue");
+				System.out.println("5) timeout: job's timeout in milliseconds");
 				System.out.print("> ");
 			}
 			return s;
