@@ -2,6 +2,7 @@ package it.osg.psar;
 
 import facebook4j.Post;
 import it.osg.data.PSAR;
+import it.osg.runnable.RunnableQueueBaseInfoImpl;
 import it.osg.runnable.RunnableQueueImpl;
 import it.osg.exception.ArgumentException;
 import it.osg.utils.DateUtils;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
@@ -27,41 +29,29 @@ import com.csvreader.CsvWriter;
 public class FacebookPSARQueueThreadPost {
 
 	public static String resourcesFolder = "resources/";
-//	public static String outputFolder = "output/";
 	public static char inputCharDelimiter = ';';
 
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 	
-//	public static String inputFile = "quotidiani.csv";
-//	public static String from = "01-01-2014 00:00:00";
-//	public static String to = "15-01-2014 23:59:59";
-
-//	public static int QUEUELENGHT = 32; //Numero massimo thread in stato running
 	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
-//	public static long QUEUE_TIMEOUT = 1000000000L; //timeout della coda
 
+	private static Logger LOGGER = Logger.getLogger(FacebookPSARQueueThreadPost.class.getName());
+	
 	public static void compute(String inputFile, String from, String to, int lenght, long timeout, String outFold) throws ArgumentException {
-		
-//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-//		System.getProperties().put("http.proxyPort", "8080");
-//		System.getProperties().put("http.proxyUser", "rete\\servill7");
-//		System.getProperties().put("http.proxyPassword", "Paolos10");
-		
-//		if (args != null && args.length > 0) {
-//			inputFile = args[0];
-//			from = args[1];
-//			to = args[2];
-//			QUEUELENGHT = Integer.valueOf(args[3]);
-////			QUEUE_CHECK_SLEEP = Long.valueOf(args[4]);
-//			QUEUE_TIMEOUT = Long.valueOf(args[4]);
-//			outputFolder = args[5];
-//		}
-		
+
 		Queue queuePSAR = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
+		queuePSAR.setName("PSAR");
+		queuePSAR.setRollback(false);
+		Queue queueBaseInfo = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
+		queueBaseInfo.setName("BASE INFO");
+		queueBaseInfo.setRollback(false);
+
 		
-		CsvWriter outWriter = openOutputFile(outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv");
-		outWriter.setDelimiter(';');
+		String psarFileName = outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv";
+		CsvWriter outWriter = openOutputFile(psarFileName);
+		outWriter.setDelimiter(inputCharDelimiter);
+		LOGGER.info("Output File name: " + psarFileName);
 		
 		Hashtable<String, String> ids = getInputAccounts(resourcesFolder + inputFile, idField, nomeField, inputCharDelimiter);
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
@@ -79,16 +69,18 @@ public class FacebookPSARQueueThreadPost {
 		}
 
 		Enumeration<String> keys = ids.keys();
+		LOGGER.info("Facebook Search API started");
 		while (keys.hasMoreElements()) {
 			String currID = keys.nextElement();
-			System.out.println("nome: " + ids.get(currID));
 			PSAR idPSAR = getIdPSAR(result, currID, ids.get(currID));
-
+			LOGGER.info("Searching for " + ids.get(currID) + " posts");
+			
 			//Get all Post
 			ArrayList<Post> posts = new ArrayList<Post>();
 			posts =	FacebookUtils.getAllPosts(currID, f, t, new String[]{"id"});
 
 			//SPLITTO 1 POST ALLA VOLTA ED INSERISCO UNA QUEUE DI THREAD
+			LOGGER.info("Creating workers for " + ids.get(currID));
 			Iterator<Post> iter = posts.iterator();
 			while (iter.hasNext()) {
 				Post currPost = iter.next();
@@ -100,19 +92,44 @@ public class FacebookPSARQueueThreadPost {
 		}
 
 		long start = System.currentTimeMillis();
+		long end = System.currentTimeMillis();
 		try {
+			start = System.currentTimeMillis();
+			LOGGER.info("Starting PSAR Queue");
 			queuePSAR.executeAndWait();
+			end = System.currentTimeMillis();
+			LOGGER.info("Elapsed Time for Queue: " + queuePSAR.getName() + ": " + (end - start)/1000 + " seconds");
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
 		}
 		
-		long end = System.currentTimeMillis();
-		System.out.println("Elapsed Time: " + (end - start)/1000 + " seconds");
-
+		
+		/*Coda per le BaseInfo*/
+		LOGGER.info("Creating Base Info Queue");	
+		Enumeration<PSAR> psars = result.elements();
+		while (psars.hasMoreElements()) {
+			PSAR curr = psars.nextElement();
+			/*Aggiungo un worker alla coda delle BaseInfo*/
+			RunnableQueueBaseInfoImpl workerBaseInfo = new RunnableQueueBaseInfoImpl(curr);
+			workerBaseInfo.setName(curr.getId());
+			queueBaseInfo.addThread(workerBaseInfo);
+		}
+		
+		/*Avvio la coda*/
+		try {
+			LOGGER.info("Starting Base Info Queue");
+			start = System.currentTimeMillis();
+			queueBaseInfo.executeAndWait();
+			end = System.currentTimeMillis();
+			LOGGER.info("Elapsed Time for Base Info Queue: " + (end - start)/1000 + " seconds");
+		} catch (TimeoutException e1) {
+			e1.printStackTrace();
+		}
+		
+		LOGGER.info("Writing result to file");
 		Enumeration<PSAR> elements = result.elements();
 		while (elements.hasMoreElements()) {
 			PSAR curr = elements.nextElement();
-			Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfoFromJson(curr.getId());
 			try {
 				outWriter.write(curr.getNome());
 				outWriter.write(curr.getId());
@@ -123,7 +140,7 @@ public class FacebookPSARQueueThreadPost {
 				outWriter.write(curr.getShares().toString());
 				outWriter.write(curr.getCommnetsFromPageToPostFromPage().toString());				
 				outWriter.write(curr.getCommnetsFromPageToPostFromFan().toString());
-				outWriter.write((String) baseInfo.get("likes"));
+				outWriter.write(curr.getFan());
 				outWriter.endRecord();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -131,6 +148,7 @@ public class FacebookPSARQueueThreadPost {
 
 		}
 		outWriter.close();
+		LOGGER.info("STABBENE!!!");
 
 	}
 
@@ -192,7 +210,6 @@ public class FacebookPSARQueueThreadPost {
 				String accountID = idFile.get(idField2);
 				String name = idFile.get(nomeField2);
 				result.put(accountID, name);
-				System.out.println(accountID + ":" + name);
 			}
 
 			idFile.close();
