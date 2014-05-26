@@ -49,10 +49,10 @@ public class FacebookPSARQueueThreadPostKeywords {
 
 	public static void main(String[] args) {
 
-		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-		System.getProperties().put("http.proxyPort", "8080");
-		System.getProperties().put("http.proxyUser", "rete\\servill7");
-		System.getProperties().put("http.proxyPassword", "Paolos10");
+//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+//		System.getProperties().put("http.proxyPort", "8080");
+//		System.getProperties().put("http.proxyUser", "rete\\servill7");
+//		System.getProperties().put("http.proxyPassword", "Paolos10");
 
 		if (args != null && args.length > 0) {
 			from = args[0];
