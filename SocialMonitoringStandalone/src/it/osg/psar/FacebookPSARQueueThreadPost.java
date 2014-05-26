@@ -50,7 +50,6 @@ public class FacebookPSARQueueThreadPost {
 		
 		String psarFileName = outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv";
 		CsvWriter outWriter = openOutputFile(psarFileName);
-		outWriter.setDelimiter(inputCharDelimiter);
 		LOGGER.info("Output File name: " + psarFileName);
 		
 		Hashtable<String, String> ids = getInputAccounts(resourcesFolder + inputFile, idField, nomeField, inputCharDelimiter);
@@ -169,7 +168,7 @@ public class FacebookPSARQueueThreadPost {
 
 		try {
 			// use FileWriter constructor that specifies open for appending
-			CsvWriter csvOutput = new CsvWriter(new FileWriter(outFile, true), ',');
+			CsvWriter csvOutput = new CsvWriter(new FileWriter(outFile, true), inputCharDelimiter);
 
 			// if the file didn't already exist then we need to write out the header line
 			if (!alreadyExists)	{
