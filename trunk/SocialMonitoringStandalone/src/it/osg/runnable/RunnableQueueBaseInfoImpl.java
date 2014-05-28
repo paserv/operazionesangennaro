@@ -21,10 +21,14 @@ public class RunnableQueueBaseInfoImpl extends RunnableQueue {
 		Hashtable<String, Object> baseInfo = FacebookUtils.getBaseInfoFromJson(this.data.getId());
 		if (baseInfo.get("likes") != null && !((String) baseInfo.get("likes")).equals("")) {
 			this.data.setFan((String) baseInfo.get("likes"));
+		} else {
+			this.data.setFan("0");
 		}
 		
 		if (baseInfo.get("name") != null && !((String) baseInfo.get("name")).equals("")) {
 			this.data.setNome((String) baseInfo.get("name"));
+		} else {
+			this.data.setNome("NotFound");
 		}
 
 	}
