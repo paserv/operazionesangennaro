@@ -3,7 +3,6 @@ package it.osg.runnable;
 import java.util.ArrayList;
 
 import facebook4j.Comment;
-import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.data.PSAR;
