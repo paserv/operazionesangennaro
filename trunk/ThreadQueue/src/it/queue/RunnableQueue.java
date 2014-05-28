@@ -49,6 +49,7 @@ public abstract class RunnableQueue implements Runnable {
 			this.queue.getCounter().runningThread.decrementAndGet();
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.severe(e.getMessage());
 			if (this.queue.isRollback()) {
 				LOGGER.severe("Rolling Back Thread: " + this.getName() + " for Queue " + this.getQueue().getName());
 				this.rollback();
