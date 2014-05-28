@@ -21,7 +21,8 @@ public class Queue {
 	private long queueTimeout;
 	private long startTime;
 	
-	private boolean rollback = true;	
+	private boolean rollback = true;
+	private ThrottlingManager throttlingManager;
 	
 	private String name = "esposito";
 	
@@ -56,6 +57,22 @@ public class Queue {
 			if (elapsedTime > this.queueTimeout) {
 				LOGGER.severe("Queue " + this.getName() + " in timeout");
 				throw new TimeoutException();
+			}
+			if (throttlingManager != null) {
+				LOGGER.info("Throttling check");
+				while (true) {
+					if (!throttlingManager.canGo()) {
+						try {
+							Thread.sleep(throttlingManager.getPauseInterval());
+							LOGGER.warning("Throttling risk... Pausing queue");
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					} else {
+						LOGGER.info(" -----> Can Go");
+						break;
+					}
+				}	
 			}
 			this.run();
 			try {
@@ -118,6 +135,14 @@ public class Queue {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public ThrottlingManager getThrottlingManager() {
+		return throttlingManager;
+	}
+
+	public void setThrottlingManager(ThrottlingManager throttlingManager) {
+		this.throttlingManager = throttlingManager;
 	}
 	
 	
