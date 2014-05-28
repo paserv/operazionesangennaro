@@ -7,6 +7,7 @@ import it.osg.runnable.RunnableQueueImpl;
 import it.osg.exception.ArgumentException;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
+import it.osg.utils.SocialLogger;
 import it.queue.Queue;
 import it.queue.TimeoutException;
 
@@ -15,11 +16,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.csvreader.CsvReader;
@@ -38,17 +42,33 @@ public class FacebookPSARQueueThreadPost {
 
 	private static Logger LOGGER = Logger.getLogger(FacebookPSARQueueThreadPost.class.getName());
 	
+	public static void main(String[] args) {
+		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		System.getProperties().put("http.proxyPort", "8080");
+		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		System.getProperties().put("http.proxyPassword", "Paolos11");
+		SocialLogger.setup(Level.INFO);
+		try {
+			compute("quotidiani.csv", "01-01-2014 00:00:00", "01-02-2014 00:00:00", 30, 1000000L, "output/");
+		} catch (ArgumentException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void compute(String inputFile, String from, String to, int lenght, long timeout, String outFold) throws ArgumentException {
 
 		Queue queuePSAR = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
 		queuePSAR.setName("PSAR");
-		queuePSAR.setRollback(false);
 		Queue queueBaseInfo = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
 		queueBaseInfo.setName("BASE INFO");
 		queueBaseInfo.setRollback(false);
-
 		
-		String psarFileName = outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + System.currentTimeMillis() + ".csv";
+		long currentTime = System.currentTimeMillis();
+		Date currentDate = new Date(currentTime);
+		SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
+		String time = sdf.format(currentDate);
+		String input = inputFile.split("\\.")[0];
+		String psarFileName = outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + input + "-" + time + ".csv";
 		CsvWriter outWriter = openOutputFile(psarFileName);
 		LOGGER.info("Output File name: " + psarFileName);
 		
