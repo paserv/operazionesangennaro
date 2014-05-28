@@ -2,7 +2,7 @@ package it.osg.main;
 
 import it.osg.exception.ArgumentException;
 import it.osg.psar.FacebookPSARQueueThreadPost;
-
+import it.osg.utils.SocialLogger;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -13,25 +13,31 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Console {
 	private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
 	private static boolean running = false;
-	
+
 	private static String fileName;
 	private static String from;
 	private static String to;
 	private static int QUEUELENGHT;
 	private static long QUEUE_TIMEOUT;
 	public static long QUEUE_CHECK_SLEEP = 5000L;
-	public static String outputFilePath;
+	public static String outputFilePath = "output/";
 
+	private static Logger LOGGER = Logger.getLogger(Console.class.getName());
+	
 	public static void main(String[] args) {
 
-//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-//		System.getProperties().put("http.proxyPort", "8080");
-//		System.getProperties().put("http.proxyUser", "rete\\servill7");
-//		System.getProperties().put("http.proxyPassword", "Paolos11");
+		//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+		//		System.getProperties().put("http.proxyPort", "8080");
+		//		System.getProperties().put("http.proxyUser", "rete\\servill7");
+		//		System.getProperties().put("http.proxyPassword", "Paolos11");
+
+		SocialLogger.setup(Level.INFO);
 		
 		if (args == null || args.length == 0) {
 			System.out.println("Actions: run - exit - help");
@@ -45,37 +51,32 @@ public class Console {
 
 				System.out.println("Set FROM date (dd-mm-yyyy HH:mm:ss)");
 				getFromDate();
-				
+
 				System.out.println("Set TO date (dd-mm-yyyy HH:mm:ss)");
 				getToDate();
-				
+
 				System.out.println("Set Queue lenght");
 				getQueueLenght();
-				
+
 				System.out.println("Set Queue timeout");
 				getQueueTimeout();
-				
-				System.out.println("Set Output path");
-				getOutputPath();
-				
-//				System.out.println(fileName);
-//				System.out.println(from);
-//				System.out.println(to);
-//				System.out.println(QUEUELENGHT);
-//				System.out.println(QUEUE_TIMEOUT);
-//				System.out.println(outputFilePath);
+
+//				System.out.println("Set Output path");
+//				getOutputPath();
+
+				LOGGER.info("JOB PARAMETERS:\n\tFile name: " + fileName + "\n\tFrom: " + from + "\n\tTo: " + to + "\n\tQueue lenght: " + QUEUELENGHT + "\n\tQueue timeout: " + QUEUE_TIMEOUT);
 				
 				running = false;
-				
-				
+
+
 				try {
 					FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, outputFilePath);
 				} catch (ArgumentException e) {
 					e.printStackTrace();
 				}
-				
+
 				main(null);
-				
+
 			} else {
 				main(null);
 			}
@@ -92,7 +93,7 @@ public class Console {
 				e.printStackTrace();
 			}
 		}
-		
+
 
 
 	}
@@ -107,9 +108,9 @@ public class Console {
 			System.out.println("Invalid Path, retry");
 			getOutputPath();
 		}
-		
 
-		
+
+
 	}
 
 	private static void getQueueTimeout() {
@@ -123,7 +124,7 @@ public class Console {
 			System.out.println("Long not parsable, retry!");
 			getQueueTimeout();
 		}
-		
+
 	}
 
 	private static void getQueueLenght() {
@@ -137,7 +138,7 @@ public class Console {
 			System.out.println("Integer not parsable, retry!");
 			getQueueLenght();
 		}
-		
+
 	}
 
 	private static void getToDate() {
@@ -145,29 +146,29 @@ public class Console {
 		String param = getParameter();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		sdf.setLenient(false);
-		
+
 		try {
 			Date toDate = sdf.parse(param);
 			Date fromDate = sdf.parse(from);
-			
+
 			Calendar toCal = new GregorianCalendar();
 			Calendar fromCal = new GregorianCalendar();
 			toCal.setTime(toDate);
 			fromCal.setTime(fromDate);
-			
+
 			if (fromCal.before(toCal)) {
 				to = param;
 			} else {
 				System.out.println("TO date is before FROM date, retry!");
 				getToDate();
 			}
-			
-			
+
+
 		} catch (ParseException e) {
 			System.out.println("Wrong date, retry!");
 			getToDate();
 		}
-		
+
 	}
 
 	private static void getFromDate() {
@@ -195,11 +196,11 @@ public class Console {
 			if (string.equals(param)) {
 				fileName = param;
 				return;
-			} else {
-				System.out.println("File name not present, retry!");
-				getFileName(list);
 			}
 		}
+
+		System.out.println("File name not present, retry!");
+		getFileName(list);
 	}
 
 	private static String getParameter() {
