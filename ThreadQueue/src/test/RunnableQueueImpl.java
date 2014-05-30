@@ -14,19 +14,22 @@ public class RunnableQueueImpl extends RunnableQueue {
 	
 	@Override
 	public void executeJob() throws Exception {
-		Thread.sleep(1000L);
+		try {
+			Thread.sleep(1000L);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		this.count.count.incrementAndGet();
 		incrementExecuted = true;
-		if (this.count.count.intValue() == 1) {
-			this.getLOGGER().fine("Abdulla");
+		try {
+			if (this.count.count.intValue() == 1) {
+				Integer.valueOf("assa");
+			}
+		} catch (Exception e) {
 			System.out.println("Eccezione");
-			throw new Exception();
 		}
-		if (this.count.count.intValue() == 1) {
-			this.getLOGGER().fine("Abdulla");
-			System.out.println("Infinite Thread");
-			Thread.sleep(1000000L);
-		}
+		
+		
 	}
 
 	@Override
