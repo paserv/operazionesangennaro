@@ -1,5 +1,6 @@
 package it.osg.psar;
 
+import facebook4j.FacebookException;
 import facebook4j.Post;
 import it.osg.data.PSAR;
 import it.osg.data.Words;
@@ -47,7 +48,7 @@ public class FacebookPSARQueueThreadPostKeywords {
 	
 	private static Logger LOGGER = Logger.getLogger(FacebookPSARQueueThreadPostKeywords.class.getName());
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 
 //		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
 //		System.getProperties().put("http.proxyPort", "8080");

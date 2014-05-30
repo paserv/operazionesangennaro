@@ -1,10 +1,12 @@
 package it.osg.psar;
 
+import facebook4j.FacebookException;
 import facebook4j.Post;
 import it.osg.data.PSAR;
 import it.osg.runnable.RunnableQueueBaseInfoImpl;
 import it.osg.runnable.RunnableQueueImpl;
 import it.osg.exception.ArgumentException;
+import it.osg.utils.Configuration;
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 import it.osg.utils.SocialLogger;
@@ -18,7 +20,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -38,7 +39,7 @@ public class FacebookPSARQueueThreadPost {
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 	
-	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
+//	public static long QUEUE_CHECK_SLEEP = 5000L; //tempo dopo il quale viene eseguito il check per capire: 1)se il timeout è stato superato; 2)se può far partire nuovi thread prelevandoli dalla coda
 
 	private static Logger LOGGER = Logger.getLogger(FacebookPSARQueueThreadPost.class.getName());
 	
@@ -57,9 +58,10 @@ public class FacebookPSARQueueThreadPost {
 	
 	public static void compute(String inputFile, String from, String to, int lenght, long timeout, String outFold) throws ArgumentException {
 
-		Queue queuePSAR = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
+		Queue queuePSAR = new Queue(lenght, Configuration.QUEUE_CHECK_SLEEP, timeout);
 		queuePSAR.setName("PSAR");
-		Queue queueBaseInfo = new Queue(lenght, QUEUE_CHECK_SLEEP, timeout);
+		queuePSAR.setRollback(true);
+		Queue queueBaseInfo = new Queue(lenght, Configuration.QUEUE_CHECK_SLEEP, timeout);
 		queueBaseInfo.setName("BASE INFO");
 		queueBaseInfo.setRollback(false);
 		
@@ -68,7 +70,7 @@ public class FacebookPSARQueueThreadPost {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH-mm-ss");
 		String time = sdf.format(currentDate);
 		String input = inputFile.split("\\.")[0];
-		String psarFileName = outFold + "FB_" + from.substring(0, 10) + "_TO_" + to.substring(0,10) + "_PSAR_" + input + "-" + time + ".csv";
+		String psarFileName = outFold + "FB_" + from + "_TO_" + to + "_PSAR_" + input + "-" + time + ".csv";
 		CsvWriter outWriter = openOutputFile(psarFileName);
 		LOGGER.info("Output File name: " + psarFileName);
 		
@@ -76,8 +78,8 @@ public class FacebookPSARQueueThreadPost {
 		Hashtable<String, PSAR> result = new Hashtable<String, PSAR>();
 
 		//GET TO DATE
-		String fromDay = from.substring(0, 10) + " 00:00:00";
-		String toDay = to.substring(0, 10) + " 23:59:59";
+		String fromDay = from + " 00:00:00";
+		String toDay = to + " 23:59:59";
 		Date f = null;
 		Date t = null;
 		try {
@@ -96,7 +98,11 @@ public class FacebookPSARQueueThreadPost {
 			
 			//Get all Post
 			ArrayList<Post> posts = new ArrayList<Post>();
-			posts =	FacebookUtils.getAllPosts(currID, f, t, new String[]{"id"});
+			try {
+				posts =	FacebookUtils.getAllPosts(currID, f, t, new String[]{"id"});
+			} catch (FacebookException e) {
+				e.printStackTrace();
+			}
 
 			//SPLITTO 1 POST ALLA VOLTA ED INSERISCO UNA QUEUE DI THREAD
 			LOGGER.info("Creating workers for " + ids.get(currID));
@@ -120,6 +126,7 @@ public class FacebookPSARQueueThreadPost {
 			LOGGER.info("Elapsed Time for Queue: " + queuePSAR.getName() + ": " + (end - start)/1000 + " seconds");
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
+			LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
 		}
 		
 		
@@ -143,6 +150,7 @@ public class FacebookPSARQueueThreadPost {
 			LOGGER.info("Elapsed Time for Base Info Queue: " + (end - start)/1000 + " seconds");
 		} catch (TimeoutException e1) {
 			e1.printStackTrace();
+			LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
 		}
 		
 		LOGGER.info("Writing result to file");
@@ -163,6 +171,7 @@ public class FacebookPSARQueueThreadPost {
 				outWriter.endRecord();
 			} catch (IOException e) {
 				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 
 		}
@@ -209,6 +218,7 @@ public class FacebookPSARQueueThreadPost {
 			return csvOutput;
 		} catch (IOException e) {
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		return null;
@@ -234,8 +244,10 @@ public class FacebookPSARQueueThreadPost {
 			idFile.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
 			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 
 		return result;

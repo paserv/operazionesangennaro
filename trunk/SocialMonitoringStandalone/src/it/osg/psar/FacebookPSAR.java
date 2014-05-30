@@ -1,6 +1,7 @@
 package it.osg.psar;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.utils.DateUtils;
@@ -33,7 +34,7 @@ public class FacebookPSAR {
 	public static String idField = "pageID";
 	public static String nomeField = "nome";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 
 		long start = System.currentTimeMillis();
 		
