@@ -1,7 +1,5 @@
 package it.osg.utils;
 
-import it.queue.QueueLogger;
-
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -19,7 +17,7 @@ public class SocialLogger {
 		}
 		FileHandler fileHandler;
 		try {
-			fileHandler = new FileHandler("logs/" + QueueLogger.class.getName() + ".log", 5242880, 10, true);
+			fileHandler = new FileHandler("logs/" + SocialLogger.class.getName() + ".log", 52428800, 10, true);
 			SimpleFormatter formatter = new SimpleFormatter();  
 			fileHandler.setFormatter(formatter); 
 			LogManager.getLogManager().getLogger("").addHandler(fileHandler);
