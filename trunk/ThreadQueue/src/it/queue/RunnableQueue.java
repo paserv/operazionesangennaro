@@ -1,10 +1,7 @@
 package it.queue;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public abstract class RunnableQueue implements Runnable {
 	
@@ -16,10 +13,10 @@ public abstract class RunnableQueue implements Runnable {
 	public abstract void rollback();
 	
 	public RunnableQueue() {
-		Handler handler = new ConsoleHandler();
-		Formatter formatter = new SimpleFormatter();
-		handler.setFormatter(formatter);
-		LOGGER.addHandler(handler);
+//		Handler handler = new ConsoleHandler();
+//		Formatter formatter = new SimpleFormatter();
+//		handler.setFormatter(formatter);
+//		LOGGER.addHandler(handler);
 	}
 	
 	public void setName (String name) {
@@ -49,7 +46,7 @@ public abstract class RunnableQueue implements Runnable {
 			this.queue.getCounter().runningThread.decrementAndGet();
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOGGER.severe(e.getMessage());
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			if (this.queue.isRollback()) {
 				LOGGER.severe("Rolling Back Thread: " + this.getName() + " for Queue " + this.getQueue().getName());
 				this.rollback();
