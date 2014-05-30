@@ -32,13 +32,13 @@ public class FacebookUtils {
 	private static int nextFBCredential = 0;
 	private static RequestCounter reqCounter = new RequestCounter();
 
-	private static final long SLIDING_WINDOW = 6000L;
-	private static final int MAX_REQUEST = 600;
-	private static final long THROTTLING_SLEEP = 10000L;
+//	private static final long SLIDING_WINDOW = 6000L;
+//	private static final int MAX_REQUEST = 600;
+//	private static final long THROTTLING_SLEEP = 10000L;
 
 	private static Logger LOGGER = Logger.getLogger(FacebookUtils.class.getName());
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 		
 		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
 		System.getProperties().put("http.proxyPort", "8080");
@@ -83,7 +83,7 @@ public class FacebookUtils {
 
 
 
-	public static Hashtable<String, Hashtable<String, Post>> getPostByKeyword (String keyword, String since, String until) {
+	public static Hashtable<String, Hashtable<String, Post>> getPostByKeyword (String keyword, String since, String until) throws FacebookException {
 
 		Date from = null;
 		Date to = null;
@@ -101,8 +101,8 @@ public class FacebookUtils {
 
 		Facebook facebook = getFB();
 		ResponseList<Post> postsByKey;
-		try {
-//			checkThrottling();
+//		try {
+			checkThrottling();
 			postsByKey = facebook.searchPosts(keyword, new Reading().since(from).until(to));
 			appoggio.addAll(postsByKey);
 
@@ -124,9 +124,10 @@ public class FacebookUtils {
 				}
 			}
 
-		} catch (FacebookException e1) {
-			e1.printStackTrace();
-		}
+//		} catch (FacebookException e1) {
+//			e1.printStackTrace();
+//			LOGGER.log(Level.SEVERE, e1.getMessage(), e1);
+//		}
 
 
 		Iterator<Post> iterAppoggio = appoggio.iterator();
@@ -176,7 +177,7 @@ public class FacebookUtils {
 	//		return result;
 	//	}
 
-	public static Date getActivityInterval (String pageId){
+	public static Date getActivityInterval (String pageId) throws FacebookException{
 
 		Facebook facebook = getFB();
 		Date f = null;
@@ -188,14 +189,14 @@ public class FacebookUtils {
 			e.printStackTrace();
 		}
 
-		try {
+//		try {
 			while (true) {
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-//				checkThrottling();
+				checkThrottling();
 				ResponseList<Post> facResults = facebook.getFeed(pageId, new Reading().since(f).until(t).fields("created_time").limit(1));
 				if (facResults != null && facResults.size() != 0) {
 					Post currPost = facResults.get(0);
@@ -206,10 +207,11 @@ public class FacebookUtils {
 				}
 			}
 
-		} catch (FacebookException e) {
-			e.printStackTrace();
-		}
-		return null;
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//		}
+//		return null;
 
 	}
 
@@ -222,7 +224,7 @@ public class FacebookUtils {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//		checkThrottling();
+		checkThrottling();
 		Hashtable<String, Object> result = new Hashtable<String, Object>();
 		String jsonString = JSONObjectUtil.retrieveJson(Constants.FACEBOOK_GRAPH_API_ROOT_URL + pageId);
 		//		DatastoreUtils.addRow("test", "json", new Text(jsonString));
@@ -243,7 +245,7 @@ public class FacebookUtils {
 	}
 
 
-	public static ArrayList<Post> getAllOwnPosts (String pageId, Date f, Date t, String[] campi) {
+	public static ArrayList<Post> getAllOwnPosts (String pageId, Date f, Date t, String[] campi) throws FacebookException {
 		ArrayList<Post> result = new ArrayList<Post>();
 		ArrayList<Post> posts = getAllPosts(pageId, f, t, campi);
 		Iterator<Post> iter = posts.iterator();
@@ -256,27 +258,28 @@ public class FacebookUtils {
 		return result;
 	}
 
-	public static Post getPost (String postId) {
+	public static Post getPost (String postId) throws FacebookException {
 		Facebook facebook = getFB();
 		Post result = null;
-		try {
-//			checkThrottling();
+//		try {
+			checkThrottling();
 			result = facebook.getPost(postId);
-		} catch (FacebookException e) {
-			e.printStackTrace();
-		}
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//		}
 		return result;
 	}
 
-	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) {
+	public static ArrayList<Post> getAllPosts (String pageId, Date f, Date t, String[] campi) throws FacebookException {
 
 		ArrayList<Post> result = new ArrayList<Post>();
 
 		Facebook facebook = getFB();	
 
 		ResponseList<Post> facResults;
-//		checkThrottling();
-		try {
+		checkThrottling();
+//		try {
 			if (campi != null) {
 				facResults = facebook.getFeed(pageId, new Reading().since(f).until(t).fields(campi));
 			} else {
@@ -286,11 +289,11 @@ public class FacebookUtils {
 			result.addAll(facResults);
 
 			//			//Fetching Post
-//			checkThrottling();
+			checkThrottling();
 			Paging<Post> pagingPost = facResults.getPaging();
 			while (true) {
 				if (pagingPost != null) {
-//					checkThrottling();
+					checkThrottling();
 					ResponseList<Post> nextPosts = facebook.fetchNext(pagingPost);
 					if (nextPosts != null && nextPosts.size() > 0) {
 						Post firstPost = nextPosts.get(0);
@@ -307,25 +310,26 @@ public class FacebookUtils {
 					} else {
 						break;
 					}
-//					checkThrottling();
+					checkThrottling();
 					pagingPost = nextPosts.getPaging();
 				} else {
 					break;
 				}
 			}
-		} catch (FacebookException e) {
-			e.printStackTrace();
-		}
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//		}
 
 		return result;
 
 	} 
 
-	public static ArrayList<Comment> getAllComments(Post curr) {
+	public static ArrayList<Comment> getAllComments(Post curr) throws FacebookException {
 		ArrayList<Comment> result = new ArrayList<Comment>();
 		Facebook facebook = getFB();
 
-//		checkThrottling();
+		checkThrottling();
 		PagableList<Comment> comments = curr.getComments();
 
 		if (comments != null) {
@@ -340,13 +344,13 @@ public class FacebookUtils {
 
 			}
 			//Itero sulla paginazione per salvare tutti i commenti
-//			checkThrottling();
+			checkThrottling();
 			Paging<Comment> paging = comments.getPaging();
 			while (true) {
 				if (paging != null) {
 					ResponseList<Comment> nextPage;
-					try {
-//						checkThrottling();
+//					try {
+						checkThrottling();
 						nextPage = facebook.fetchNext(paging);
 						if (nextPage != null) {
 							Iterator<Comment> itr = nextPage.iterator();
@@ -359,11 +363,12 @@ public class FacebookUtils {
 						} else {
 							break;
 						}
-//						checkThrottling();
+						checkThrottling();
 						paging = nextPage.getPaging();
-					} catch (FacebookException e) {
-						e.printStackTrace();
-					}
+//					} catch (FacebookException e) {
+//						e.printStackTrace();
+//						LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//					}
 				} else {
 					break;
 				}
@@ -375,22 +380,22 @@ public class FacebookUtils {
 		return result;
 	}
 
-	public static ArrayList<Like> getAllLikes (Post post) {
+	public static ArrayList<Like> getAllLikes (Post post) throws FacebookException {
 		ArrayList<Like> result = new ArrayList<Like>();
 		Facebook facebook = getFB();
 		ResponseList<Like> likes;
-		try {
-//			checkThrottling();
+//		try {
+			checkThrottling();
 			likes = facebook.getPostLikes(post.getId());
 			if (likes != null)  {
 				result.addAll(likes);
 			}
-//			checkThrottling();
+			checkThrottling();
 			Paging<Like> paging = likes.getPaging();
 			while (true) {
 				if (paging != null) {
 					ResponseList<Like> nextPage;
-					try {
+//					try {
 						checkThrottling();
 						nextPage = facebook.fetchNext(paging);
 						if (nextPage != null) {
@@ -406,24 +411,26 @@ public class FacebookUtils {
 						}
 						checkThrottling();
 						paging = nextPage.getPaging();
-					} catch (FacebookException e) {
-						e.printStackTrace();
-					}
+//					} catch (FacebookException e) {
+//						e.printStackTrace();
+//						LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//					}
 				} else {
 					break;
 				}
 
 			}
 
-		} catch (FacebookException e) {
-			e.printStackTrace();
-		}
+//		} catch (FacebookException e) {
+//			e.printStackTrace();
+//			LOGGER.log(Level.SEVERE, e.getMessage(), e);
+//		}
 
 		return result;
 
 	}
 
-	public static ArrayList<Comment> getComments (ArrayList<Post> posts) {
+	public static ArrayList<Comment> getComments (ArrayList<Post> posts) throws FacebookException {
 		ArrayList<Comment> result = new ArrayList<Comment>();
 		Iterator<Post> iterPost = posts.iterator();
 		while (iterPost.hasNext()) {
@@ -436,7 +443,7 @@ public class FacebookUtils {
 	}
 
 
-	public static ArrayList<Like> getLikes (ArrayList<Post> posts) {
+	public static ArrayList<Like> getLikes (ArrayList<Post> posts) throws FacebookException {
 		ArrayList<Like> result = new ArrayList<Like>();
 		Iterator<Post> iterPost = posts.iterator();
 		while (iterPost.hasNext()) {
@@ -632,17 +639,18 @@ public class FacebookUtils {
 	public static void checkThrottling() {
 		while (true) {
 			long currentTime = System.currentTimeMillis();
-			long sixhundredSecondsAgo = currentTime - SLIDING_WINDOW;
+			long sixhundredSecondsAgo = currentTime - Configuration.SLIDING_WINDOW;
 			long requests = reqCounter.greaterThanNumber(sixhundredSecondsAgo);
 
-			LOGGER.info("Current requests in sliding window: " + requests);
-			if (requests < MAX_REQUEST) {
+			LOGGER.fine("Current requests in sliding window: " + requests);
+			if (requests < Configuration.MAX_REQUEST) {
 				reqCounter.addRequest(currentTime);
 				break;
 			} else {
+				LOGGER.warning(requests + " requests in the last " + Configuration.SLIDING_WINDOW/1000 + " seconds");
 				LOGGER.warning("Too much requests, throttling risk: Sleeping");
 				try {
-					Thread.sleep(THROTTLING_SLEEP);
+					Thread.sleep(Configuration.THROTTLING_SLEEP);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
