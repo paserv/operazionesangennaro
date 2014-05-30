@@ -2,11 +2,7 @@ package it.queue;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 public class Queue {
 
@@ -32,10 +28,10 @@ public class Queue {
 		this.queueLenght = lenght;
 		this.checkSleep = checkSleep;
 		this.queueTimeout = queueTimeout;
-		Handler handler = new ConsoleHandler();
-		Formatter formatter = new SimpleFormatter();
-		handler.setFormatter(formatter);
-		LOGGER.addHandler(handler);
+//		Handler handler = new ConsoleHandler();
+//		Formatter formatter = new SimpleFormatter();
+//		handler.setFormatter(formatter);
+//		LOGGER.addHandler(handler);
 	}
 	
 	public synchronized void addThread (RunnableQueue thread) {
