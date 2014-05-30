@@ -27,7 +27,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 
 		Post completePost = FacebookUtils.getPost(this.postID);
 
-		if (completePost == null && !this.getQueue().isRollback()) {
+		if (completePost == null || completePost.getFrom() == null || completePost.getFrom().getId() == null || completePost.getMessage() == null) {
 			return;
 		}
 		
@@ -39,7 +39,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 		int commentToFanPost = 0;
 		int commentPageToFanPost = 0;
 
-		if (completePost.getFrom().getId().equals(this.userID) && completePost.getMessage() != null) {
+		if (completePost.getFrom().getId().equals(this.userID)) {
 
 			ArrayList<Comment> commentsList = FacebookUtils.getAllComments(completePost);
 			commentNum = commentsList.size();
@@ -76,7 +76,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 	@Override
 	public void rollback() {
 		try {
-			Thread.sleep(600000);
+			Thread.sleep(60000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

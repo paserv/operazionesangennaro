@@ -1,6 +1,7 @@
 package it.osg.runnable;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.data.PSAR;
@@ -27,7 +28,13 @@ public class AtomicPostJob implements Runnable {
 	public void run() {
 
 //		System.out.println("Running Post ID: " + postID);
-		Post completePost = FacebookUtils.getPost(postID);
+		Post completePost = null;
+		try {
+			completePost = FacebookUtils.getPost(postID);
+		} catch (FacebookException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		int commentNum = 0;
 		int likesNum = 0;

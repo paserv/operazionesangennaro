@@ -1,6 +1,7 @@
 package it.osg.runnable;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.data.PSAR;
@@ -39,7 +40,12 @@ public class AtomicJob implements Runnable {
 		
 		//Get all Post
 		ArrayList<Post> posts = new ArrayList<Post>();
-		posts =	FacebookUtils.getAllPosts(id, f, t, null);
+		try {
+			posts =	FacebookUtils.getAllPosts(id, f, t, null);
+		} catch (FacebookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("Post Number: " + posts.size());
 		
@@ -62,16 +68,34 @@ public class AtomicJob implements Runnable {
 		data.addPostFromFan(postFromFanList.size());
 
 		//Comments to Post from page
-		ArrayList<Comment> commentsList = FacebookUtils.getComments(postFromPageList);
+		ArrayList<Comment> commentsList = null;
+		try {
+			commentsList = FacebookUtils.getComments(postFromPageList);
+		} catch (FacebookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//C^{x}_{Post^{x}}[i,j] 
 		data.addComments(commentsList.size());
 		
 		//Get all Comments from FAN
-		ArrayList<Comment> commentsToPostFromFanList = FacebookUtils.getComments(postFromFanList);
+		ArrayList<Comment> commentsToPostFromFanList = null;
+		try {
+			commentsToPostFromFanList = FacebookUtils.getComments(postFromFanList);
+		} catch (FacebookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		data.addCommentsToPostFromFan(commentsToPostFromFanList.size());
 
 		//Get all Likes to Posts
-		ArrayList<Like> likesList = FacebookUtils.getLikes(postFromPageList);
+		ArrayList<Like> likesList = null;
+		try {
+			likesList = FacebookUtils.getLikes(postFromPageList);
+		} catch (FacebookException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//L_{P^{x}}[i,j] 
 		data.addLikes(likesList.size());
 		
