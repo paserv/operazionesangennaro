@@ -1,5 +1,6 @@
 package test;
 
+import facebook4j.FacebookException;
 import facebook4j.Post;
 import it.osg.utils.FacebookUtils;
 
@@ -22,7 +23,7 @@ import org.apache.http.message.BasicNameValuePair;
 public class Test {
 
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 		
 		Post completePost = FacebookUtils.getPost("1377711462_10201907339029933");
 		
