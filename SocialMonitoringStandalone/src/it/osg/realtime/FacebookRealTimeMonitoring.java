@@ -1,6 +1,7 @@
 package it.osg.realtime;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.utils.Constants;
@@ -21,7 +22,7 @@ public class FacebookRealTimeMonitoring {
 
 	private final static Logger LOGGER = Logger.getLogger(FacebookRealTimeMonitoring.class .getName()); 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 		
 		LOGGER.setLevel(Level.INFO); 
 		
