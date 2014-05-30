@@ -2,7 +2,9 @@ package it.osg.main;
 
 import it.osg.exception.ArgumentException;
 import it.osg.psar.FacebookPSARQueueThreadPost;
+import it.osg.utils.Configuration;
 import it.osg.utils.SocialLogger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Console {
-	private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
+	private static final String DATE_FORMAT = "dd-MM-yyyy";
 	private static boolean running = false;
 
 	private static String fileName;
@@ -25,17 +27,17 @@ public class Console {
 	private static String to;
 	private static int QUEUELENGHT;
 	private static long QUEUE_TIMEOUT;
-	public static long QUEUE_CHECK_SLEEP = 5000L;
+//	public static long QUEUE_CHECK_SLEEP = 5000L;
 	public static String outputFilePath = "output/";
 
 	private static Logger LOGGER = Logger.getLogger(Console.class.getName());
 	
 	public static void main(String[] args) {
 
-		//		System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
-		//		System.getProperties().put("http.proxyPort", "8080");
-		//		System.getProperties().put("http.proxyUser", "rete\\servill7");
-		//		System.getProperties().put("http.proxyPassword", "Paolos11");
+//				System.getProperties().put("http.proxyHost", "proxy.gss.rete.poste");
+//				System.getProperties().put("http.proxyPort", "8080");
+//				System.getProperties().put("http.proxyUser", "rete\\servill7");
+//				System.getProperties().put("http.proxyPassword", "Paolos11");
 
 		SocialLogger.setup(Level.INFO);
 		
@@ -49,10 +51,10 @@ public class Console {
 				ArrayList<String> filesName = readInputFile("resources");
 				getFileName(filesName);
 
-				System.out.println("Set FROM date (dd-mm-yyyy HH:mm:ss)");
+				System.out.println("Set FROM date (dd-mm-yyyy)");
 				getFromDate();
 
-				System.out.println("Set TO date (dd-mm-yyyy HH:mm:ss)");
+				System.out.println("Set TO date (dd-mm-yyyy)");
 				getToDate();
 
 				System.out.println("Set Queue lenght");
@@ -65,14 +67,16 @@ public class Console {
 //				getOutputPath();
 
 				LOGGER.info("JOB PARAMETERS:\n\tFile name: " + fileName + "\n\tFrom: " + from + "\n\tTo: " + to + "\n\tQueue lenght: " + QUEUELENGHT + "\n\tQueue timeout: " + QUEUE_TIMEOUT);
+				LOGGER.info("\nCONFIGURATION PARAMETERS:\n\tROLLBACK_SLEEP: " + Configuration.ROLLBACK_SLEEP + "\n\tQUEUE_CHECK_SLEEP: " + Configuration.QUEUE_CHECK_SLEEP + "\n\tSLIDING_WINDOW: " + Configuration.SLIDING_WINDOW + "\n\tMAX_REQUEST: " + Configuration.MAX_REQUEST + "\n\tTHROTTLING_SLEEP: " + Configuration.THROTTLING_SLEEP + "\n\tOUTPUT_FOLDER: " + Configuration.OUTPUT_FOLDER);
 				
 				running = false;
 
 
 				try {
-					FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, outputFilePath);
+					FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, Configuration.OUTPUT_FOLDER);
 				} catch (ArgumentException e) {
 					e.printStackTrace();
+					LOGGER.log(Level.SEVERE, e.getMessage(), e);
 				}
 
 				main(null);
@@ -91,6 +95,7 @@ public class Console {
 				FacebookPSARQueueThreadPost.compute(fileName, from, to, QUEUELENGHT, QUEUE_TIMEOUT, outputFilePath);
 			} catch (ArgumentException e) {
 				e.printStackTrace();
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			}
 		}
 
@@ -156,7 +161,7 @@ public class Console {
 			toCal.setTime(toDate);
 			fromCal.setTime(fromDate);
 
-			if (fromCal.before(toCal)) {
+			if (fromCal.before(toCal) || fromCal.equals(toCal)) {
 				to = param;
 			} else {
 				System.out.println("TO date is before FROM date, retry!");
@@ -212,8 +217,8 @@ public class Console {
 			} else if (s.equalsIgnoreCase("help") && running == false) {
 				System.out.println("Parameters:");
 				System.out.println("1) filename: csv file with facebook ids to monitor");
-				System.out.println("2) from: monitoring start date in the format dd-mm-yyyy HH:mm:ss");
-				System.out.println("3) to: monitoring end date in the format dd-mm-yyyy HH:mm:ss");
+				System.out.println("2) from: monitoring start date in the format dd-mm-yyyy");
+				System.out.println("3) to: monitoring end date in the format dd-mm-yyyy");
 				System.out.println("4) lenght: max active concurrent threads in queue");
 				System.out.println("5) timeout: job's timeout in milliseconds");
 				System.out.print("> ");
