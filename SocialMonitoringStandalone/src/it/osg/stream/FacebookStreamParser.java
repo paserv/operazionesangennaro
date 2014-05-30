@@ -1,8 +1,8 @@
 package it.osg.stream;
 
 import facebook4j.Comment;
+import facebook4j.FacebookException;
 import facebook4j.Post;
-
 import it.osg.utils.DateUtils;
 import it.osg.utils.FacebookUtils;
 
@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class FacebookStreamParser {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FacebookException {
 
 //		String id = "258372870902870";//Federico Pizzarotti
 //		String id = "63360159216";//Ignazio Marino
