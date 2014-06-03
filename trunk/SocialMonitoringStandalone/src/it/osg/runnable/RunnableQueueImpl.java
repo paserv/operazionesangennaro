@@ -6,6 +6,7 @@ import facebook4j.Comment;
 import facebook4j.Like;
 import facebook4j.Post;
 import it.osg.data.PSAR;
+import it.osg.utils.Configuration;
 import it.osg.utils.FacebookUtils;
 import it.queue.RunnableQueue;
 
@@ -76,7 +77,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 	@Override
 	public void rollback() {
 		try {
-			Thread.sleep(60000);
+			Thread.sleep(Configuration.ROLLBACK_SLEEP);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
