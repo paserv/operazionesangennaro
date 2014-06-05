@@ -13,10 +13,7 @@ public abstract class RunnableQueue implements Runnable {
 	public abstract void rollback();
 	
 	public RunnableQueue() {
-//		Handler handler = new ConsoleHandler();
-//		Formatter formatter = new SimpleFormatter();
-//		handler.setFormatter(formatter);
-//		LOGGER.addHandler(handler);
+
 	}
 	
 	public void setName (String name) {
@@ -44,6 +41,7 @@ public abstract class RunnableQueue implements Runnable {
 			this.executeJob();
 			LOGGER.fine("Decrement Running Thread:" + this.getName());
 			this.queue.getCounter().runningThread.decrementAndGet();
+			this.queue.removeRunningThread(this.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);

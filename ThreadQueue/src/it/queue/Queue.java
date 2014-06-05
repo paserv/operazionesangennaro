@@ -7,39 +7,42 @@ import java.util.logging.Logger;
 public class Queue {
 
 	private static Logger LOGGER = Logger.getLogger(Queue.class.getName());
-	
+
 	private SyncCounter counter = new SyncCounter();
-	
+
 	private Hashtable<String, RunnableQueue> threads;
+	private Hashtable<String, Thread> runningThreads;
+
 	private int queueLenght = 0;
-	
+
 	private long checkSleep;
 	private long queueTimeout;
 	private long startTime;
-	
+
 	private boolean rollback = true;
 	private ThrottlingManager throttlingManager;
-	
+
 	private String name = "esposito";
-	
-	
+
+
 	public Queue (int lenght, long checkSleep, long queueTimeout) {
 		this.threads = new Hashtable<String, RunnableQueue>();
+		this.runningThreads = new Hashtable<String, Thread>();
 		this.queueLenght = lenght;
 		this.checkSleep = checkSleep;
 		this.queueTimeout = queueTimeout;
-//		Handler handler = new ConsoleHandler();
-//		Formatter formatter = new SimpleFormatter();
-//		handler.setFormatter(formatter);
-//		LOGGER.addHandler(handler);
+		//		Handler handler = new ConsoleHandler();
+		//		Formatter formatter = new SimpleFormatter();
+		//		handler.setFormatter(formatter);
+		//		LOGGER.addHandler(handler);
 	}
-	
+
 	public synchronized void addThread (RunnableQueue thread) {
 		thread.setQueue(this);
 		this.threads.put(String.valueOf(this.counter.idIncrement.incrementAndGet()), thread);
 		LOGGER.info("Queue " + this.getName() + " lenght: " + this.threads.size());
 	}
-	
+
 	public boolean executeAndWait() throws TimeoutException {
 		LOGGER.info("Running Queue: " + this.getName());
 		this.startTime = System.currentTimeMillis();
@@ -52,6 +55,7 @@ public class Queue {
 			long elapsedTime = currentTime - startTime;
 			if (elapsedTime > this.queueTimeout) {
 				LOGGER.severe("Queue " + this.getName() + " in timeout");
+				stopQueue();
 				throw new TimeoutException();
 			}
 			if (throttlingManager != null) {
@@ -77,9 +81,18 @@ public class Queue {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
-	
+
+	private void stopQueue() {
+		Enumeration<Thread> tds = this.runningThreads.elements();
+		while (tds.hasMoreElements()) {
+			Thread curr = tds.nextElement();
+			curr.interrupt();
+		}
+
+	}
+
 	private void run() {
 		Enumeration<String> keys = this.threads.keys();
 		while (keys.hasMoreElements()) {
@@ -91,6 +104,7 @@ public class Queue {
 					worker.setName(current.getName());
 				}
 				worker.start();
+				addRunningThread(currKey, worker);
 				LOGGER.info("New thread running in Queue " + this.getName() + ": " + worker.getName());
 				int runThread = this.counter.runningThread.incrementAndGet();
 				LOGGER.info("Running " + runThread + " threads in Queue " + this.getName());
@@ -140,7 +154,13 @@ public class Queue {
 	public void setThrottlingManager(ThrottlingManager throttlingManager) {
 		this.throttlingManager = throttlingManager;
 	}
-	
-	
-	
+
+	public synchronized void removeRunningThread(String id) {
+		this.runningThreads.remove(id);
+	}
+
+	public synchronized void addRunningThread (String currKey, Thread worker) {
+		this.runningThreads.put(currKey, worker);
+	}
+
 }
