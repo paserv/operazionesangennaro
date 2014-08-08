@@ -27,6 +27,7 @@ public class RunnableQueueImpl extends RunnableQueue {
 			}
 		} catch (Exception e) {
 			System.out.println("Eccezione");
+			e.printStackTrace();
 		}
 		
 		
