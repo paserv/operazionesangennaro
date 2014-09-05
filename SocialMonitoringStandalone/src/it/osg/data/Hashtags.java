@@ -1,15 +1,10 @@
 package it.osg.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.Multiset.Entry;
-import com.google.common.collect.Multisets;
 
 public class Hashtags {
 	private Multiset<String> resultHashtags = HashMultiset.create();
