@@ -128,6 +128,7 @@ public class Console {
 		} catch (Exception ex) {
 			System.out.println("Long not parsable, retry!");
 			getQueueTimeout();
+			ex.printStackTrace();
 		}
 
 	}
@@ -142,6 +143,7 @@ public class Console {
 		} catch (Exception ex) {
 			System.out.println("Integer not parsable, retry!");
 			getQueueLenght();
+			ex.printStackTrace();
 		}
 
 	}
@@ -214,7 +216,7 @@ public class Console {
 			String s = bufferRead.readLine();
 			if (s.equalsIgnoreCase("exit")) {
 				System.exit(0);
-			} else if (s.equalsIgnoreCase("help") && running == false) {
+			} else if (s.equalsIgnoreCase("help") && !running) {
 				System.out.println("Parameters:");
 				System.out.println("1) filename: csv file with facebook ids to monitor");
 				System.out.println("2) from: monitoring start date in the format dd-mm-yyyy");
