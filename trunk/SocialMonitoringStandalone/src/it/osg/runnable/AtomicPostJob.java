@@ -92,6 +92,7 @@ public class AtomicPostJob implements Runnable {
 //			Runnable retry = new AtomicPostJob(userID, postID, data, executor);
 //			executor.execute(retry);
 			System.out.println("ERRORE");
+			e.printStackTrace();
 		}
 		
 	}
