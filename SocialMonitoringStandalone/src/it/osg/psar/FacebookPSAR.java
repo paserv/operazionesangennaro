@@ -47,8 +47,8 @@ public class FacebookPSAR {
 		Date t = null;
 		try {
 
-			f = DateUtils.parseDateAndTime((String) from);
-			t = DateUtils.parseDateAndTime((String) to);
+			f = DateUtils.parseDateAndTime(from);
+			t = DateUtils.parseDateAndTime(to);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

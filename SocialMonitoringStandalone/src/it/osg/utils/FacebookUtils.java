@@ -612,7 +612,7 @@ public class FacebookUtils {
 					int comments_like = 0;
 					for (int j = 0; j < currCommentsArray.size(); j++) {
 						JSONObject currJsonComment =(JSONObject) currCommentsArray.get(j);
-						String like_count = JSONObjectUtil.retrieveJsonPath(currJsonComment, "like_count");;
+						String like_count = JSONObjectUtil.retrieveJsonPath(currJsonComment, "like_count");
 						int currCommLike = Integer.parseInt(like_count);
 						comments_like = comments_like + currCommLike;
 					}
