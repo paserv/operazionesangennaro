@@ -1,0 +1,69 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="3" >
+
+    <TableRow android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/passatoButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/text_passato"
+            android:onClick="passato"
+            android:src="@android:drawable/toast_frame" />
+
+        <ImageView
+            android:id="@+id/passatoImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/text_passato"
+            android:onClick="passato"
+            android:layout_weight="1" />
+    </TableRow>
+
+    <TableRow android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/presenteButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/text_presente"
+            android:onClick="presente"
+            android:src="@android:drawable/toast_frame" />
+
+        <ImageView
+            android:id="@+id/presenteImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/text_presente"
+            android:layout_weight="1"
+            android:onClick="presente" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/futuroButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/text_futuro"
+            android:onClick="futuro"
+            android:src="@android:drawable/toast_frame" />
+
+        <ImageView
+            android:id="@+id/futuroImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/text_futuro"
+            android:layout_weight="1"
+            android:onClick="futuro" />
+    </TableRow>
+
+</TableLayout>

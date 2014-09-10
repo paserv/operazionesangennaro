@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">La Luna Nera</string>
+    <string name="text_passato">Passato</string>
+    <string name="text_presente">Presente</string>
+    <string name="text_futuro">Futuro</string>
+    
+</resources>
