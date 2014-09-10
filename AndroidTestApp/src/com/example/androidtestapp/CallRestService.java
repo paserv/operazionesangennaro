@@ -4,8 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Random;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -40,7 +49,8 @@ public class CallRestService extends AsyncTask<String, Integer, Bitmap> {
 				
 		String extractedImage = getCardImageURL(params[0]);
 				
-		String imageURL = Configuration.IMAGES_ROOT_URL + extractedImage;
+//		String imageURL = Configuration.IMAGES_ROOT_URL + extractedImage;
+		String imageURL = "https://drive.google.com/file/d/0B5FZC7m0E5ixNUtGZzFhOER3a3M/edit?usp=sharing";
 		
 		return getBitmapFromURL(imageURL);
 	}
@@ -89,6 +99,49 @@ public class CallRestService extends AsyncTask<String, Integer, Bitmap> {
 	}
 	
 	private Bitmap getBitmapFromURL(String imageUrl) {
+		
+//		System.getProperties().put("http.proxyHost", Configuration.HTTP_PROXY_HOST);
+//		System.getProperties().put("http.proxyPort", Configuration.HTTP_PROXY_PORT);
+//		System.getProperties().put("http.proxyUser", Configuration.DOMAIN + "\\" + Configuration.HTTP_PROXY_USER);
+//		System.getProperties().put("http.proxyPassword", Configuration.HTTP_PROXY_PASSWORD);
+		
+//		Integer proxyport = Integer.valueOf(Configuration.HTTP_PROXY_PORT);
+//		InetSocketAddress inetSocketAddress = new InetSocketAddress(
+//				Configuration.HTTP_PROXY_HOST, proxyport);
+//		Proxy proxy = new Proxy(Proxy.Type.HTTP, inetSocketAddress);
+//		Authenticator authenticator = new Authenticator() {
+//			public PasswordAuthentication getPasswordAuthentication() {
+//				char[] proxypasswd = Configuration.HTTP_PROXY_PASSWORD
+//						.toCharArray();
+//				String doman_user = Configuration.DOMAIN + "\\"
+//						+ Configuration.HTTP_PROXY_USER;
+//				PasswordAuthentication passwordAuthentication = new PasswordAuthentication(
+//						doman_user, proxypasswd);
+//				return passwordAuthentication;
+//			}
+//		};
+//		Authenticator.setDefault(authenticator);
+//		
+//		URLConnection conn;
+//		try {
+//			conn = new URL(imageUrl).openConnection(proxy);
+//			conn.connect();
+//			InputStream in = conn.getInputStream();
+//
+//			StringWriter writer = new StringWriter();
+//			IOUtils.copy(in, writer);
+//			String resultString = writer.toString();
+//			
+//			System.out.println(resultString);
+//			System.out.println("URL: " + conn.getURL());
+//		} catch (MalformedURLException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		} catch (IOException e2) {
+//			// TODO Auto-generated catch block
+//			e2.printStackTrace();
+//		}
+		
 		
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpGet getRequest = new HttpGet(imageUrl);
