@@ -14,9 +14,10 @@ public class Configuration {
 	public static final String PRES_PARAM = "presente";
 	public static final String FUTU_PARAM = "futuro";
 	
-	public static final String SERVICE_ROOT_URL = "https://1-dot-appservices-01.appspot.com/_ah/api/cards/v1/stringcollection/";
+	public static final String SERVICE_ROOT_URL = "https://script.google.com/macros/s/AKfycby_p7ZTKVlnI2r5I2xBjrmHt36Lc-Yh68Jr05fNHiOQdLHWJ6Xi/dev?category=";
 
-	public static final String IMAGES_ROOT_URL = "http://10.0.2.2:8092/AppImage/images/";
-//	public static final String IMAGES_ROOT_URL = "http://1-dot-appservices-01.appspot.com/images/";
+	public static final String IMAGE_ROOT_URL = "https://docs.google.com/uc?id=";
+	public static final String IMAGE_URL_TAIL = "&export=download";
+	
 
 }
