@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="3" >
-
+    
     <TableRow android:layout_weight="1" >
 
         <ImageButton
@@ -19,7 +19,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_passato"
-            android:onClick="passato"
             android:layout_weight="1" />
     </TableRow>
 
@@ -39,8 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_presente"
-            android:layout_weight="1"
-            android:onClick="presente" />
+            android:layout_weight="1" />
     </TableRow>
 
     <TableRow
@@ -62,8 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_futuro"
-            android:layout_weight="1"
-            android:onClick="futuro" />
+            android:background="@android:color/darker_gray"
+            android:layout_weight="1" />
     </TableRow>
 
 </TableLayout>
