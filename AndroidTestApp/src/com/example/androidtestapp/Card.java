@@ -1,8 +1,6 @@
 package com.example.androidtestapp;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 
 public class Card {
 
