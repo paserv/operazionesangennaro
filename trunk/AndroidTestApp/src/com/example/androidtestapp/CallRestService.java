@@ -26,16 +26,14 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 
 	private ImageButton btn;
 	private ImageView img;
-	Card card;
 
 	private ProgressDialog pd;
 	private Context context;
 
 
-	public CallRestService(MainActivity mainActivity, ImageButton btn, ImageView img, Card currCard) {
+	public CallRestService(Context mainActivity, ImageButton btn, ImageView img) {
 		this.btn = btn;
 		this.img = img;
-		this.card = currCard;
 		context = mainActivity;
 	}
 
@@ -52,11 +50,11 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 
 	@Override
 	protected Card doInBackground(String... params) {
-		card = getCardImageURL(params[0]);
-		String imageURL = Configuration.IMAGE_ROOT_URL + card.getIdImg() + Configuration.IMAGE_URL_TAIL;
+		Card extractedCard = getCardImageURL(params[0]);
+		String imageURL = Config.IMAGE_ROOT_URL + extractedCard.getIdImg() + Config.IMAGE_URL_TAIL;
 		Bitmap bmp = getBitmapFromURL(imageURL);
-		card.setImageBmp(bmp);
-		return card;
+		extractedCard.setImageBmp(bmp);
+		return extractedCard;
 	}
 
 	protected void onPostExecute(Card result) {
@@ -71,9 +69,9 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 	private Card getCardImageURL(String param) {
 
 		String resultString = "";
-//		Card extractedCard = new Card();
+		Card extractedCard = new Card();
 		DefaultHttpClient request = new DefaultHttpClient();
-		HttpGet get = new HttpGet(Configuration.SERVICE_ROOT_URL + param);
+		HttpGet get = new HttpGet(Config.SERVICE_ROOT_URL + param);
 		HttpResponse response;
 		try {
 			response = request.execute(get);
@@ -96,12 +94,12 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 					String descrizCarta = jsonObj.getString("descrizCarta");
 					String categoria = jsonObj.getString("categoria");
 					String url = jsonObj.getString("url");
-					card.setNomeImmagine(nomeImg);
-					card.setNomeCarta(nomeCarta);
-					card.setDescrizioneCarta(descrizCarta);
-					card.setCategoria(categoria);
-					card.setIdImg(url);
-					return card;
+					extractedCard.setNomeImmagine(nomeImg);
+					extractedCard.setNomeCarta(nomeCarta);
+					extractedCard.setDescrizioneCarta(descrizCarta);
+					extractedCard.setCategoria(categoria);
+					extractedCard.setIdImg(url);
+					return extractedCard;
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -112,7 +110,7 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return card;
+		return extractedCard;
 	}
 
 	private Bitmap getBitmapFromURL(String imageUrl) {

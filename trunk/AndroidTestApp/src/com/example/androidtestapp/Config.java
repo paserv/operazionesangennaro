@@ -1,6 +1,6 @@
 package com.example.androidtestapp;
 
-public class Configuration {
+public class Config {
 
 	public static boolean isProxied = true;
 	
