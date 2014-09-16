@@ -40,13 +40,7 @@ public class MainActivity extends Activity {
 	
 	public void test (View v) {
 		
-		LoginData login = new LoginData();
-		login.setUsername("paserv");
-		login.setPassword("fanPaolos80");
-		
 		SiteParser sp = new SiteParser();
-		sp.login(login);
-		
 		Classifica classifica = sp.getClassifica();
 			
 		TextView text = (TextView) findViewById(R.id.textView1);
