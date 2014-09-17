@@ -1,8 +1,6 @@
 package it.pablo.fantagazzetta;
 
-import it.pablo.fantagazzetta.bean.Classifica;
-import it.pablo.fantagazzetta.bean.LoginData;
-import it.pablo.fantagazzetta.utils.SiteParser;
+import it.pablo.fantagazzetta.task.GetClassifica;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -39,13 +37,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void test (View v) {
-		
-		SiteParser sp = new SiteParser();
-		Classifica classifica = sp.getClassifica();
-			
 		TextView text = (TextView) findViewById(R.id.textView1);
-		text.setText(classifica.toString());
-		
-		
+		new GetClassifica(text).execute(new String[]{});
 	}
 }
