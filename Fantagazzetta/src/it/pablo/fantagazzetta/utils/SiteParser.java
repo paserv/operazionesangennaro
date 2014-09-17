@@ -1,16 +1,11 @@
 package it.pablo.fantagazzetta.utils;
 
 import it.pablo.fantagazzetta.bean.Classifica;
-import it.pablo.fantagazzetta.bean.LoginData;
-
+import it.pablo.fantagazzetta.bean.Classifica.ClassificaItem;
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Jsoup;
@@ -23,22 +18,6 @@ public class SiteParser {
 	private HttpURLConnection conn;
 	private List<String> cookies;
 	
-//	public boolean login(LoginData login) {
-//		if (login.getUsername()!= null && login.getPassword() != null) {
-//			String page;
-//			try {
-//				page = this.getPageContent(Configuration.FANTAGAZZETTA_URL);
-//				String postParams = getFormParams(page, login.getUsername(), login.getPassword());
-//				sendPost(Configuration.FANTAGAZZETTA_URL, postParams);
-//				return true;
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				return false;
-//			}
-//		}
-//		return false;
-//		
-//	}
 	
 	public Classifica getClassifica() {
 		Classifica result = new Classifica();
@@ -50,17 +29,19 @@ public class SiteParser {
 				for (Element row : table.select("tr")) {
 					Elements tds = row.select("td");
 					if (tds != null && tds.size() > 0) {
-						result.setPosizione(Integer.valueOf(tds.get(0).text()));
-						result.setNomeSquadra(tds.get(1).text());
-						result.setPunti(Integer.valueOf(tds.get(2).text()));
-						result.setGiocate(Integer.valueOf(tds.get(3).text()));
-						result.setVinte(Integer.valueOf(tds.get(4).text()));
-						result.setNulle(Integer.valueOf(tds.get(5).text()));
-						result.setPerse(Integer.valueOf(tds.get(6).text()));
-						result.setGolFatti(Integer.valueOf(tds.get(7).text()));
-						result.setGolSubiti(Integer.valueOf(tds.get(8).text()));
-						result.setDifferenzaReti(Integer.valueOf(tds.get(9).text()));
-						result.setTotale(Float.valueOf(tds.get(10).text()));
+						ClassificaItem ci = result.new ClassificaItem();
+						ci.setPosizione(Integer.valueOf(tds.get(0).text()));
+						ci.setNomeSquadra(tds.get(1).text());
+						ci.setPunti(Integer.valueOf(tds.get(2).text()));
+						ci.setGiocate(Integer.valueOf(tds.get(3).text()));
+						ci.setVinte(Integer.valueOf(tds.get(4).text()));
+						ci.setNulle(Integer.valueOf(tds.get(5).text()));
+						ci.setPerse(Integer.valueOf(tds.get(6).text()));
+						ci.setGolFatti(Integer.valueOf(tds.get(7).text()));
+						ci.setGolSubiti(Integer.valueOf(tds.get(8).text()));
+						ci.setDifferenzaReti(Integer.valueOf(tds.get(9).text()));
+						ci.setTotale(Float.valueOf(tds.get(10).text().replaceAll(",", "\\.")));
+						result.addItem(ci);
 					}
 				}
 			}
@@ -70,7 +51,71 @@ public class SiteParser {
 		
 		return result;
 	}
+	
+	private String getPageContent(String url) throws Exception {
+		URL obj = new URL(url);
+		conn = (HttpURLConnection) obj.openConnection();
 
+		// default is GET
+		conn.setRequestMethod("GET");
+
+		conn.setUseCaches(false);
+
+		// act like a browser
+		conn.setRequestProperty("User-Agent", Configuration.USER_AGENT);
+		conn.setRequestProperty("Accept",
+				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+		if (cookies != null) {
+			for (String cookie : this.cookies) {
+				conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
+			}
+		}
+		int responseCode = conn.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = 
+				new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		// Get the response cookies
+		setCookies(conn.getHeaderFields().get("Set-Cookie"));
+
+		return response.toString();
+
+	}
+	
+	public List<String> getCookies() {
+		return cookies;
+	}
+
+	public void setCookies(List<String> cookies) {
+		this.cookies = cookies;
+	}
+
+//	public boolean login(LoginData login) {
+//	if (login.getUsername()!= null && login.getPassword() != null) {
+//		String page;
+//		try {
+//			page = this.getPageContent(Configuration.FANTAGAZZETTA_URL);
+//			String postParams = getFormParams(page, login.getUsername(), login.getPassword());
+//			sendPost(Configuration.FANTAGAZZETTA_URL, postParams);
+//			return true;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//	}
+//	return false;
+//	
+//}
 	
 //	private void sendPost(String url, String postParams) throws Exception {
 //
@@ -120,45 +165,7 @@ public class SiteParser {
 //
 //	}
 
-	private String getPageContent(String url) throws Exception {
-		URL obj = new URL(url);
-		conn = (HttpURLConnection) obj.openConnection();
-
-		// default is GET
-		conn.setRequestMethod("GET");
-
-		conn.setUseCaches(false);
-
-		// act like a browser
-		conn.setRequestProperty("User-Agent", Configuration.USER_AGENT);
-		conn.setRequestProperty("Accept",
-				"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		conn.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-		if (cookies != null) {
-			for (String cookie : this.cookies) {
-				conn.addRequestProperty("Cookie", cookie.split(";", 1)[0]);
-			}
-		}
-		int responseCode = conn.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = 
-				new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-
-		// Get the response cookies
-		setCookies(conn.getHeaderFields().get("Set-Cookie"));
-
-		return response.toString();
-
-	}
+	
 
 
 //	public String getFormParams(String html, String username, String password)
@@ -196,13 +203,7 @@ public class SiteParser {
 //	}
 
 
-	public List<String> getCookies() {
-		return cookies;
-	}
-
-	public void setCookies(List<String> cookies) {
-		this.cookies = cookies;
-	}
+	
 
 	
 	
