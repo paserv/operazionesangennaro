@@ -12,7 +12,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/text_passato"
             android:onClick="passato"
-            android:src="@android:drawable/toast_frame" />
+            android:src="@drawable/hand" />
 
         <ImageView
             android:id="@+id/passatoImage"
@@ -31,7 +31,7 @@
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/text_presente"
             android:onClick="presente"
-            android:src="@android:drawable/toast_frame" />
+            android:src="@drawable/hand" />
 
         <ImageView
             android:id="@+id/presenteImage"
@@ -52,8 +52,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/text_futuro"
+             android:background="@android:color/white"
             android:onClick="futuro"
-            android:src="@android:drawable/toast_frame" />
+            android:src="@drawable/hand" />
 
         <ImageView
             android:id="@+id/futuroImage"
