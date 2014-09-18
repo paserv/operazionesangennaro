@@ -1,34 +1,49 @@
 package it.pablo.cards.activity;
 
-import com.example.androidtestapp.R;
-import com.example.androidtestapp.R.id;
-import com.example.androidtestapp.R.layout;
-import com.example.androidtestapp.R.menu;
-
-import it.pablo.cards.bean.Card;
 import it.pablo.cards.task.CallRestService;
+import it.pablo.cards.util.CardFragment;
 import it.pablo.cards.util.Config;
 import android.app.Activity;
-import android.content.res.Configuration;
+import android.app.FragmentManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	private Card pastCard;
-//	private Card presCard;
-//	private Card futuCard;
+	private static final String ACTIVITY_STATUS_FRAGMENT = "activity_status";
+	private CardFragment myFragment;
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		FragmentManager fm = getFragmentManager();
+		myFragment = (CardFragment) fm.findFragmentByTag(ACTIVITY_STATUS_FRAGMENT);
+		if (myFragment == null) {
+			myFragment = new CardFragment();
+			fm.beginTransaction().add(myFragment, ACTIVITY_STATUS_FRAGMENT).commit();
+		}
+
+		if (myFragment.getPastImage() != null) {
+			ImageView img = (ImageView) findViewById(R.id.passatoImage);
+			img.setImageBitmap(myFragment.getPastImage());
+		}
+		if (myFragment.getPresImage() != null) {
+			ImageView img = (ImageView) findViewById(R.id.presenteImage);
+			img.setImageBitmap(myFragment.getPresImage());
+		}
+		if (myFragment.getFutuImage() != null) {
+			ImageView img = (ImageView) findViewById(R.id.futuroImage);
+			img.setImageBitmap(myFragment.getFutuImage());
+		}
+
 	}
 
 	@Override
@@ -50,10 +65,30 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-//	@Override
-//	public void onConfigurationChanged(Configuration newConfig) {
-//		super.onConfigurationChanged(newConfig);
-//	}
+	@Override
+	public void onDestroy() {		
+		ImageView imgPast = (ImageView) findViewById(R.id.passatoImage);
+		ImageView imgPres = (ImageView) findViewById(R.id.presenteImage);
+		ImageView imgFutu = (ImageView) findViewById(R.id.futuroImage);
+		
+		if (imgPast.getDrawable() != null) {
+			Bitmap bitmapPast = ((BitmapDrawable) imgPast.getDrawable()).getBitmap();
+			myFragment.setPastImage(bitmapPast);
+		}
+		
+		if (imgPres.getDrawable() != null) {
+			Bitmap bitmapPres = ((BitmapDrawable) imgPres.getDrawable()).getBitmap();
+			myFragment.setPresImage(bitmapPres);
+		}
+		
+		if (imgFutu.getDrawable() != null) {
+			Bitmap bitmapFutu = ((BitmapDrawable) imgFutu.getDrawable()).getBitmap();
+			myFragment.setFutuImage(bitmapFutu);
+		}
+		
+		super.onDestroy();
+	}
+	
 
 	public void passato (View v) {
 		ImageButton pastBtn = (ImageButton) findViewById(R.id.passatoButton);
