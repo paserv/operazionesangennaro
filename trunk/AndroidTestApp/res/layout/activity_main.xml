@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_passato"
+            android:onClick="passatoDescr"
             android:layout_weight="1" />
     </TableRow>
 
@@ -38,6 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_presente"
+            android:onClick="presenteDescr"
             android:layout_weight="1" />
     </TableRow>
 
@@ -52,7 +54,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/text_futuro"
-             android:background="@android:color/white"
             android:onClick="futuro"
             android:src="@drawable/hand" />
 
@@ -61,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/text_futuro"
-            android:background="@android:color/darker_gray"
+            android:onClick="futuroDescr"
             android:layout_weight="1" />
     </TableRow>
 
