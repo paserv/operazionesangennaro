@@ -10,7 +10,7 @@ public class Card {
 	private String categoria;
 	private String idImg;
 	private Bitmap imageBmp;
-	
+
 	public String getNomeImmagine() {
 		return nomeImmagine;
 	}
@@ -47,7 +47,13 @@ public class Card {
 	public void setImageBmp(Bitmap imageBmp) {
 		this.imageBmp = imageBmp;
 	}
-	
-	
-	
+
+	public static void overwriteCard (Card toOverwrite, Card card) {
+		toOverwrite.setCategoria(card.getCategoria());
+		toOverwrite.setDescrizioneCarta(card.getDescrizioneCarta());
+		toOverwrite.setIdImg(card.getIdImg());
+		toOverwrite.setImageBmp(card.getImageBmp());
+		toOverwrite.setNomeCarta(card.getNomeCarta());
+		toOverwrite.setNomeImmagine(card.getNomeImmagine());
+	}
 }
