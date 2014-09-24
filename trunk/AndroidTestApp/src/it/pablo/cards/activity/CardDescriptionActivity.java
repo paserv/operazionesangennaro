@@ -16,10 +16,10 @@ public class CardDescriptionActivity extends Activity {
 	        setContentView(R.layout.activity_card);
 	        
 	        Intent intent = getIntent();
-	        Bitmap image = intent.getParcelableExtra(MainActivity.PASS_IMAGE);
+//	        Bitmap image = intent.getParcelableExtra(MainActivity.PASS_IMAGE);
 	        
 	        ImageView imgView = (ImageView) findViewById(R.id.image);
-	        imgView.setImageBitmap(image);
+//	        imgView.setImageBitmap(image);
 
 	    }
 

@@ -1,12 +1,19 @@
 package it.pablo.cards.task;
 
+import it.pablo.cards.activity.R;
 import it.pablo.cards.bean.Card;
 import it.pablo.cards.util.Config;
+import it.pablo.cards.util.FlushedInputStream;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,7 +29,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -30,14 +36,16 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 
 	private ImageButton btn;
 	private ImageView img;
+	private boolean shakeEvent;
 
 	private ProgressDialog pd;
 	private Context context;
 
 
-	public CallRestService(Context mainActivity, ImageButton btn, ImageView img) {
+	public CallRestService(Context mainActivity, ImageButton btn, ImageView img, boolean onEvent) {
 		this.btn = btn;
 		this.img = img;
+		this.shakeEvent = onEvent;
 		context = mainActivity;
 	}
 
@@ -67,8 +75,9 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 		if (pd!=null) {
 			pd.dismiss();
 		}
+		shakeEvent = false;
 	}
-	
+
 
 	private Card getCardImageURL(String param) {
 
@@ -119,6 +128,7 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 
 	private Bitmap getBitmapFromURL(String imageUrl) {
 
+
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpGet getRequest = new HttpGet(imageUrl);
 
@@ -136,10 +146,18 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 				try {
 					// getting contents from the stream 
 					inputStream = entity.getContent();
-
+					
 					// decoding stream data back into image Bitmap that android understands
-					Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-
+//					Bitmap bitmap = BitmapFactory.decodeStream(new FlushedInputStream(inputStream));
+					
+					String image = "hand_red";
+					
+					String resName = context.getResources().getResourceName(R.drawable.hand_red);
+					
+					int drawableResourceId = context.getResources().getIdentifier(image, "drawable", R.class.getPackage().getName());
+					
+					Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawableResourceId);
+					
 					return bitmap;
 				} finally {
 					if (inputStream != null) {
@@ -153,5 +171,6 @@ public class CallRestService extends AsyncTask<String, Integer, Card> {
 		} 
 		return null;
 	}
+
 
 }
