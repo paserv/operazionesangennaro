@@ -53,7 +53,7 @@ public class Queue {
 			}
 			long currentTime = System.currentTimeMillis();
 			long elapsedTime = currentTime - startTime;
-			if (elapsedTime > this.queueTimeout) {
+			if (this.queueTimeout != 0L && elapsedTime > this.queueTimeout) {
 				LOGGER.severe("Queue " + this.getName() + " in timeout");
 				stopQueue();
 				throw new TimeoutException();
